@@ -1,0 +1,845 @@
+<div class="card entrada" onclick="abrirModalSalario()" style="cursor: pointer;">
+    <div class="card-header">
+        <span class="card-title">
+            Salário
+        </span>
+        <i class="fa-solid fa-money-bill-wave"></i>
+    </div>
+    <h2 id="salario">
+        R$ 0,00
+    </h2>
+</div>
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>FinControl</title>
+
+    <!-- CSS -->
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/login.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- Font Awesome -->
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    <!-- Google Fonts -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ========================================================= -->
+<!-- LOGIN -->
+<!-- ========================================================= -->
+
+<section id="loginScreen" class="login-screen">
+
+    <div class="login-box">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-wallet"></i>
+
+            <h1>FinControl</h1>
+
+            <p>Seu banco financeiro pessoal.</p>
+
+        </div>
+
+        <div class="campo">
+
+            <label>Usuário</label>
+
+            <input
+                type="text"
+                id="loginUsuario"
+                placeholder="Digite seu usuário">
+
+        </div>
+
+        <div class="campo">
+
+            <label>Senha</label>
+
+            <input
+                type="password"
+                id="loginSenha"
+                placeholder="Digite sua senha">
+
+        </div>
+
+        <button
+            id="btnEntrar"
+            class="btn-primary">
+
+            Entrar
+
+        </button>
+
+        <button
+            id="btnAbrirCadastro"
+            class="btn-secondary">
+
+            Criar Conta
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- CADASTRO -->
+<!-- ========================================================= -->
+
+<section
+    id="cadastroScreen"
+    class="login-screen"
+    style="display:none;">
+
+    <div class="login-box">
+
+        <div class="logo">
+
+            <i class="fa-solid fa-user-plus"></i>
+
+            <h1>Criar Conta</h1>
+
+        </div>
+
+        <div class="campo">
+
+            <label>Nome Completo</label>
+
+            <input
+                id="cadNome"
+                type="text"
+                placeholder="Seu nome">
+
+        </div>
+
+        <div class="campo">
+
+            <label>Usuário</label>
+
+            <input
+                id="cadUsuario"
+                type="text"
+                placeholder="Usuário">
+
+        </div>
+
+        <div class="campo">
+
+            <label>Senha</label>
+
+            <input
+                id="cadSenha"
+                type="password"
+                placeholder="Senha">
+
+        </div>
+
+        <div class="campo">
+
+            <label>Confirmar Senha</label>
+
+            <input
+                id="cadConfirmar"
+                type="password"
+                placeholder="Repita a senha">
+
+        </div>
+
+        <button
+            id="btnSalvarCadastro"
+            class="btn-primary">
+
+            Criar Conta
+
+        </button>
+
+        <button
+            id="btnVoltarLogin"
+            class="btn-secondary">
+
+            Voltar
+
+        </button>
+
+    </div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- SISTEMA -->
+<!-- ========================================================= -->
+
+<div
+    id="app"
+    class="app"
+    style="display:none;">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div>
+
+            <div class="sidebar-logo">
+
+                <i class="fa-solid fa-wallet"></i>
+
+                <span>FinControl</span>
+
+            </div>
+
+            <nav>
+
+                <ul>
+
+                    <li class="menu-item ativo" data-tela="dashboard">
+
+                        <i class="fa-solid fa-house"></i>
+
+                        Dashboard
+
+                    </li>
+
+                    <li class="menu-item" data-tela="lancamentos">
+
+                        <i class="fa-solid fa-money-bill-wave"></i>
+
+                        Lançamentos
+
+                    </li>
+
+                    <li class="menu-item" data-tela="cartoes">
+
+                        <i class="fa-solid fa-credit-card"></i>
+
+                        Cartões
+
+                    </li>
+
+                    <li class="menu-item" data-tela="categorias">
+
+                        <i class="fa-solid fa-list"></i>
+
+                        Categorias
+
+                    </li>
+
+                    <li class="menu-item" data-tela="metas">
+
+                        <i class="fa-solid fa-bullseye"></i>
+
+                        Metas
+
+                    </li>
+
+                    <li class="menu-item" data-tela="relatorios">
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                        Relatórios
+
+                    </li>
+
+                    <li class="menu-item" data-tela="configuracoes">
+
+                        <i class="fa-solid fa-gear"></i>
+
+                        Configurações
+
+                    </li>
+
+                </ul>
+
+            </nav>
+
+        </div>
+
+        <button
+            id="btnSair"
+            class="btn-sair">
+
+            <i class="fa-solid fa-right-from-bracket"></i>
+
+            Sair
+
+        </button>
+
+    </aside>
+
+    <!-- CONTEÚDO -->
+
+    <main class="conteudo">
+
+        <!-- TOPO -->
+
+        <header class="topo">
+
+            <div>
+
+                <h2 id="nomeUsuario">
+
+                    Bem-vindo
+
+                </h2>
+
+                <span>
+
+                    Gerencie sua vida financeira em um único lugar.
+
+                </span>
+
+            </div>
+
+            <div class="perfil">
+
+                <i class="fa-solid fa-circle-user"></i>
+
+            </div>
+
+        </header>
+
+        <!-- ========================================================= -->
+        <!-- DASHBOARD -->
+        <!-- ========================================================= -->
+
+        <section
+            id="dashboard"
+            class="pagina">
+
+                        <div class="dashboard-grid">
+
+                <div class="card saldo">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+
+                            Saldo Disponível
+
+                        </span>
+
+                        <i class="fa-solid fa-wallet"></i>
+
+                    </div>
+
+                    <h2 id="saldo">
+
+                        R$ 0,00
+
+                    </h2>
+
+                </div>
+
+                <div class="card entrada">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+
+                            Salário
+
+                        </span>
+
+                        <i class="fa-solid fa-money-bill-wave"></i>
+
+                    </div>
+
+                    <h2 id="salario">
+
+                        R$ 0,00
+
+                    </h2>
+
+                </div>
+
+                <div class="card saida">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+
+                            Despesas
+
+                        </span>
+
+                        <i class="fa-solid fa-arrow-trend-down"></i>
+
+                    </div>
+
+                    <h2 id="gastos">
+
+                        R$ 0,00
+
+                    </h2>
+
+                </div>
+
+                <div class="card meta">
+
+                    <div class="card-header">
+
+                        <span class="card-title">
+
+                            Disponível no Mês
+
+                        </span>
+
+                        <i class="fa-solid fa-piggy-bank"></i>
+
+                    </div>
+
+                    <h2 id="disponivel">
+
+                        R$ 0,00
+
+                    </h2>
+
+                </div>
+
+            </div>
+
+            <div class="dashboard-content">
+
+                <div class="panel">
+
+                    <h3>
+
+                        Últimos Lançamentos
+
+                    </h3>
+
+                    <div
+                        id="listaLancamentos"
+                        class="lista-lancamentos">
+
+                        <div class="lancamento">
+
+                            <div class="lancamento-info">
+
+                                <strong>
+
+                                    Nenhum lançamento cadastrado
+
+                                </strong>
+
+                                <span>
+
+                                    Adicione seu primeiro lançamento
+
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="panel">
+
+                    <h3>
+
+                        Resumo Financeiro
+
+                    </h3>
+
+                    <div class="grafico">
+
+                        <i
+                            class="fa-solid fa-chart-column"
+                            style="font-size:60px;color:#CBD5E1;">
+
+                        </i>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- LANÇAMENTOS -->
+        <!-- ===================================================== -->
+
+        <section
+            id="lancamentos"
+            class="pagina"
+            style="display:none;">
+
+            <div class="panel">
+
+                <h2>
+
+                    Lançamentos
+
+                </h2>
+
+                <br>
+
+                <button
+                    id="btnNovoLancamento"
+                    class="btn-primary">
+
+                    <i class="fa-solid fa-plus"></i>
+
+                    Novo Lançamento
+
+                </button>
+
+                <br><br>
+
+                <div
+                    id="listaCompletaLancamentos">
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- CARTÕES -->
+        <!-- ===================================================== -->
+
+        <section
+            id="cartoes"
+            class="pagina"
+            style="display:none;">
+
+            <div class="panel">
+
+                <h2>
+
+                    Cartões de Crédito
+
+                </h2>
+
+                <br>
+
+                <p>
+
+                    Em breve você poderá cadastrar cartões,
+                    controlar limite, fatura e vencimento.
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- CATEGORIAS -->
+        <!-- ===================================================== -->
+
+        <section
+            id="categorias"
+            class="pagina"
+            style="display:none;">
+
+            <div class="panel">
+
+                <h2>
+
+                    Categorias
+
+                </h2>
+
+                <br>
+
+                <div id="listaCategorias">
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- METAS -->
+        <!-- ===================================================== -->
+
+        <section
+            id="metas"
+            class="pagina"
+            style="display:none;">
+
+            <div class="panel">
+
+                <h2>
+
+                    Metas Financeiras
+
+                </h2>
+
+                <br>
+
+                <p>
+
+                    Crie metas de economia para acompanhar sua evolução.
+
+                </p>
+
+            </div>
+
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- RELATÓRIOS -->
+        <!-- ===================================================== -->
+
+        <section
+            id="relatorios"
+            class="pagina"
+            style="display:none;">
+
+            <div class="panel">
+
+                <h2>
+
+                    Relatórios
+
+                </h2>
+
+                <br>
+
+                <div class="grafico">
+
+                    Área destinada aos gráficos financeiros.
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- ===================================================== -->
+        <!-- CONFIGURAÇÕES -->
+        <!-- ===================================================== -->
+
+        <section
+            id="configuracoes"
+            class="pagina"
+            style="display:none;">
+
+            <div class="panel">
+
+                <h2>
+
+                    Configurações
+
+                </h2>
+
+                <br>
+
+                <p>
+
+                    Personalize seu FinControl.
+
+                </p>
+
+            </div>
+
+        </section>
+
+                <!-- =============================================== -->
+        <!-- MODAL NOVO LANÇAMENTO -->
+        <!-- =============================================== -->
+
+        <div
+            id="modalLancamento"
+            class="modal"
+            style="display:none;">
+
+            <div class="modal-box">
+
+                <h2>
+
+                    Novo Lançamento
+
+                </h2>
+
+                <br>
+
+                <div class="campo">
+
+                    <label>Descrição</label>
+
+                    <input
+                        type="text"
+                        id="descricao"
+                        placeholder="Ex.: Mercado, Gasolina...">
+
+                </div>
+
+                <div class="campo">
+
+                    <label>Valor</label>
+
+                    <input
+                        type="number"
+                        id="valor"
+                        step="0.01"
+                        placeholder="0,00">
+
+                </div>
+
+                <div class="campo">
+
+                    <label>Categoria</label>
+
+                    <select id="categoria">
+
+                        <option>Alimentação</option>
+                        <option>Moradia</option>
+                        <option>Transporte</option>
+                        <option>Saúde</option>
+                        <option>Educação</option>
+                        <option>Lazer</option>
+                        <option>Compras</option>
+                        <option>Assinaturas</option>
+                        <option>Pets</option>
+                        <option>Investimentos</option>
+                        <option>Outros</option>
+
+                    </select>
+
+                </div>
+
+                <div class="campo">
+
+                    <label>Tipo</label>
+
+                    <select id="tipo">
+
+                        <option value="despesa">
+
+                            Despesa
+
+                        </option>
+
+                        <option value="receita">
+
+                            Receita
+
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div style="display:flex;gap:15px;">
+
+                    <button
+                        id="btnSalvarLancamento"
+                        class="btn-primary">
+
+                        Salvar
+
+                    </button>
+
+                    <button
+                        id="btnCancelarLancamento"
+                        class="btn-secondary">
+
+                        Cancelar
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- =============================================== -->
+        <!-- MODAL DEFINIR SALÁRIO -->
+        <!-- =============================================== -->
+
+        <div
+            id="modalSalario"
+            class="modal"
+            style="display:none;">
+
+            <div class="modal-box">
+
+                <h2>
+
+                    Definir Salário
+
+                </h2>
+
+                <br>
+
+                <div class="campo">
+
+                    <label>Salário Mensal</label>
+
+                    <input
+                        type="number"
+                        id="novoSalario"
+                        placeholder="Ex.: 4500.00">
+
+                </div>
+
+                <button
+                    id="btnSalvarSalario"
+                    class="btn-primary">
+
+                    Salvar Salário
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- =============================================== -->
+<!-- JAVASCRIPT -->
+<!-- =============================================== -->
+
+<script src="js/storage.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/lancamentos.js"></script>
+<script src="js/categorias.js"></script>
+<script src="js/cartoes.js"></script>
+<script src="js/recorrentes.js"></script>
+<script src="js/metas.js"></script>
+<script src="js/graficos.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+
+</html>
