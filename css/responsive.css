@@ -1,0 +1,22 @@
+/* Tudo o que estiver aqui dentro só vai funcionar em telas de celular (menores que 768px) */
+@media (max-width: 768px) {
+    
+    /* 1. Ajusta a caixa de login para não estourar a tela do celular */
+    .login-box {
+        width: 90% !important; 
+        max-width: 380px;      
+        padding: 20px;         
+    }
+
+    /* 2. Força os cards da dashboard (como o de Salário) a ficarem um embaixo do outro */
+    .dashboard-container, .cards-container { 
+        display: flex;
+        flex-direction: column; 
+        gap: 15px;              
+    }
+
+    /* 3. Garante que cada card ocupe a largura bonitinha da tela */
+    .card {
+        width: 100% !important;
+    }
+}
