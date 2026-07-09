@@ -1,22 +1,39 @@
-/* Tudo o que estiver aqui dentro só vai funcionar em telas de celular (menores que 768px) */
-@media (max-width: 768px) {
+/* Força as regras para qualquer tela menor que 768px (celulares) */
+@media screen and (max-width: 768px) {
     
-    /* 1. Ajusta a caixa de login para não estourar a tela do celular */
-    .login-box {
-        width: 90% !important; 
-        max-width: 380px;      
-        padding: 20px;         
-    }
-
-    /* 2. Força os cards da dashboard (como o de Salário) a ficarem um embaixo do outro */
-    .dashboard-container, .cards-container { 
-        display: flex;
-        flex-direction: column; 
-        gap: 15px;              
-    }
-
-    /* 3. Garante que cada card ocupe a largura bonitinha da tela */
-    .card {
+    /* Remove o zoom automático e força tudo a caber na tela */
+    html, body {
         width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: hidden !important; /* Mata a barra de rolagem pro lado */
+        font-size: 14px !important;    /* Ajusta o tamanho da letra base */
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    /* Ajusta a caixa de login para ocupar o tamanho certo da tela do celular */
+    .login-screen {
+        padding: 10px !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
+    .login-box {
+        width: 100% !important;
+        max-width: 340px !important; /* Tamanho perfeito para telas de celular */
+        box-sizing: border-box !important;
+        padding: 20px !important;
+        margin: 0 auto !important;
+    }
+
+    /* Força todos os inputs e botões a ficarem grandes e fáceis de tocar */
+    .login-box input, 
+    .login-box button {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+        height: 45px !important; /* Dá uma altura boa para o dedo clicar */
+        margin-bottom: 15px !important;
     }
 }
