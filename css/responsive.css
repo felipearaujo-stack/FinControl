@@ -1,99 +1,105 @@
 /* ==========================================================================
-   CONFIGURAÇÃO MOBILE - LANDING PAGE ADAPTADA PARA APP (PÓS-LOGIN)
+   CONFIGURAÇÃO MOBILE DEFINITIVA - APLICATIVO ENQUADRADO (Telas < 768px)
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. EVITA O ZOOM E O CORTE DE TELA */
+    /* 1. BLINDAGEM CONTRA ROLAGEM LATERAL (O efeito de se mexer para os lados) */
+    /* Esse bloco força absolutamente tudo no site a respeitar o limite da tela */
+    * {
+        box-sizing: border-box !important;
+        max-width: 100% !important; 
+    }
+
     html, body {
         width: 100% !important;
         max-width: 100% !important;
-        overflow-x: hidden !important; /* Mata a rolagem para os lados */
+        overflow-x: hidden !important; /* Desativa totalmente a rolagem lateral */
         margin: 0 !important;
         padding: 0 !important;
+        position: relative !important;
         background-color: #f8f9fa !important;
     }
 
-    /* 2. AJUSTE DA ESTRUTURA PRINCIPAL (Onde o menu e o conteúdo se encontram) */
-    /* Se você usa uma div pai (tipo .container, .wrapper ou .main-content) 
-       que junta o menu lateral e os cards */
+    /* 2. RESOLVENDO O SUMIÇO DOS CARDS (Reset de posicionamento) */
+    /* Removemos qualquer float, margem esquerda gigante ou posição fixa que jogue os cards para fora da tela */
     .wrapper, 
     .container, 
     .dashboard-container,
-    body > div { 
+    #dashboard, /* Caso a sua dashboard use um ID */
+    main,
+    .content,
+    .main-content {
         display: flex !important;
-        flex-direction: column !important; /* No computador é 'row' (lado a lado), no celular vira coluna (um embaixo do outro) */
+        flex-direction: column !important; /* Empilha tudo na vertical */
         width: 100% !important;
-        padding: 0 !important;
+        max-width: 100% !important;
         margin: 0 !important;
+        padding: 12px !important; /* Espaçamento interno confortável */
+        float: none !important;
+        position: relative !important;
+        left: 0 !important;
+        top: 0 !important;
     }
 
-    /* 3. TRANSFORMAÇÃO DO MENU LATERAL (Sidebar) EM MENU DE APP */
-    /* Se o seu menu se chama .sidebar, .menu, ou .aside */
+    /* 3. TRANSFORMAÇÃO DO MENU LATERAL (Para não cobrir os cards) */
     .sidebar, 
     aside, 
     .menu-lateral {
         width: 100% !important;
         max-width: 100% !important;
-        height: auto !important; /* Remove a altura de tela cheia do computador */
-        position: static !important; /* Tira ele de 'fixed' ou 'absolute' se tiver */
-        background-color: #ffffff !important;
-        border-bottom: 1px solid #eee !important;
+        height: auto !important;
+        position: relative !important; /* Tira o 'fixed' ou 'absolute' de computador */
+        margin: 0 0 15px 0 !important; /* Dá um espaço antes dos cards começarem */
         padding: 10px !important;
+        background-color: #ffffff !important;
+        border-radius: 12px !important;
         display: flex !important;
-        flex-direction: row !important; /* Coloca os botões de navegação lado a lado horizontalmente */
-        justify-content: space-around !important; /* Espalha os botões igualmente na tela do celular */
-        box-sizing: border-box !important;
+        flex-direction: row !important; /* Links ficam lado a lado no topo */
+        justify-content: space-around !important;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
     }
 
-    /* Ajuste dos links/botões dentro desse menu do celular */
-    .sidebar a, 
-    .menu-lateral a,
-    aside a {
-        padding: 6px 10px !important;
-        font-size: 12px !important;
-        display: flex !important;
-        flex-direction: column !important; /* Ícone em cima, texto embaixo */
-        align-items: center !important;
-        gap: 4px !important;
-    }
-
-    /* 4. ÁREA DOS CARDS (O bloco ao lado do menu) */
-    /* Se a área onde ficam os cards se chama .content, .main ou .dashboard */
-    .content, 
-    main, 
-    .main-content {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 15px !important;
-        box-sizing: border-box !important;
-    }
-
-    /* 5. ORGANIZAÇÃO DOS CARDS (Salário, Entradas, Saídas) */
+    /* 4. EXIBIÇÃO DOS CARDS (Enquadrados e visíveis) */
     .cards-container, 
     .grid-cards, 
     .cards-grid {
         display: flex !important;
-        flex-direction: column !important; /* No celular, os cards empilham verticalmente */
+        flex-direction: column !important; /* Garante que fiquem um embaixo do outro no celular */
         width: 100% !important;
+        max-width: 100% !important;
         gap: 12px !important;
+        margin: 0 !important;
+        padding: 0 !important;
     }
 
-    /* O card individual ocupa a tela inteira, sem esmagar */
+    /* Garante que o card de Salário e os outros fiquem visíveis e na largura certa */
     .card {
         width: 100% !important;
         max-width: 100% !important;
-        box-sizing: border-box !important;
+        display: block !important; /* Garante a exibição */
+        visibility: visible !important;
+        opacity: 1 !important;
+        background-color: #ffffff !important;
         border-radius: 12px !important;
-        padding: 15px !important;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
     }
 
-    /* 6. TABELAS DE HISTÓRICO / EXTRATO */
+    .card h2 {
+        font-size: 20px !important; /* Tamanho perfeito para não quebrar linha */
+    }
+
+    /* 5. HISTÓRICO / TABELAS DE LANÇAMENTOS */
+    /* Evita que a tabela empurre a tela para os lados */
     .table-container, 
     .historico-container,
-    table {
+    table,
+    .transactions-box {
         width: 100% !important;
-        box-sizing: border-box !important;
-        overflow-x: auto !important; /* Permite rolar a tabela de transações para o lado se não couber, sem quebrar o resto do layout */
+        max-width: 100% !important;
+        overflow-x: auto !important; /* Cria um scroll suave apenas na tabela se os dados forem muito longos */
         display: block !important;
+        margin-top: 15px !important;
     }
 }
