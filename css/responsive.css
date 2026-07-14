@@ -1,144 +1,109 @@
 /* ==========================================================================
-   CONFIGURAÇÃO MOBILE - TRANSFORMAÇÃO EM APLICATIVO (Telas menores que 768px)
+   CONFIGURAÇÃO MOBILE - SISTEMA COM PAINEL E CARDS AO LADO
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. RESET DE APP: Evita barras de rolagem laterais e fixa o fundo */
+    /* 1. RESET E PREPARAÇÃO DA TELA */
     html, body {
         width: 100% !important;
         max-width: 100% !important;
-        overflow-x: hidden !important;
-        background-color: #f8f9fa !important; /* Cor de fundo suave típica de apps */
+        overflow-x: hidden !important; /* Sem rolagem para as laterais */
         margin: 0 !important;
         padding: 0 !important;
-        font-size: 14px !important; /* Letras em tamanho ideal para celular */
-        -webkit-tap-highlight-color: transparent; /* Remove aquele brilho azul feio ao tocar na tela */
+        background-color: #f8f9fa !important;
     }
 
-    /* 2. TELA DE LOGIN ESTILO APP */
-    .login-screen {
-        min-height: 100vh !important;
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        padding: 20px !important;
-        box-sizing: border-box !important;
-    }
-
-    .login-box {
-        width: 100% !important;
-        max-width: 350px !important;
-        background: #ffffff !important;
-        border-radius: 20px !important; /* Bordas bem arredondadas de app moderno */
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05) !important; /* Sombra suave */
-        padding: 30px 20px !important;
-        box-sizing: border-box !important;
-    }
-
-    .login-box h1 {
-        font-size: 24px !important;
-        margin-bottom: 5px !important;
-    }
-
-    .login-box input, 
-    .login-box button {
-        width: 100% !important;
-        height: 48px !important; /* Altura ideal para o toque do dedo */
-        border-radius: 12px !important;
-        font-size: 16px !important; /* Evita que o iPhone dê zoom automático ao focar no input */
-        margin-bottom: 12px !important;
-        box-sizing: border-box !important;
-    }
-
-    /* 3. TELA INTERNA / DASHBOARD ESTILO APP */
-    
-    /* Container principal ajustado para celular */
-    .main-container, 
+    /* 2. ESTRUTURA DE TELA DIVIDIDA (Dashboard Principal) */
+    /* Se o seu container principal engloba o "painel lateral" e os "cards" */
     .dashboard-container, 
-    main, 
+    .main-container, 
     .wrapper {
+        display: flex !important;
+        flex-direction: column !important; /* No celular, o painel fica no topo e os cards logo abaixo */
+        width: 100% !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+        gap: 15px !important;
+    }
+
+    /* 3. O SEU PAINEL / MENU LATERAL (Sidebar) */
+    /* Ele deixa de ser aquela barra lateral gigante de computador e vira um menu horizontal compacto no topo */
+    .sidebar, 
+    .menu-lateral {
         width: 100% !important;
         max-width: 100% !important;
-        padding: 16px !important;
+        height: auto !important; /* Sem altura fixa de tela cheia */
+        background-color: #ffffff !important;
+        border-radius: 12px !important;
+        padding: 12px !important;
         box-sizing: border-box !important;
+        display: flex !important;
+        flex-direction: row !important; /* Links de navegação lado a lado horizontalmente */
+        justify-content: space-around !important; /* Espaça os links igualmente */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02) !important;
+    }
+
+    /* Ajuste dos links dentro do painel */
+    .sidebar a, 
+    .menu-lateral a {
+        padding: 8px !important;
+        font-size: 13px !important;
+        display: flex !important;
+        flex-direction: column !important; /* Ícone em cima, texto embaixo (estilo app) */
+        align-items: center !important;
+        gap: 4px !important;
+    }
+
+    /* 4. O CONTEÚDO PRINCIPAL (Onde ficam os cards ao lado do menu) */
+    .content, 
+    .main-content {
+        width: 100% !important;
+        max-width: 100% !important;
         display: flex !important;
         flex-direction: column !important;
-        gap: 20px !important;
+        gap: 15px !important;
     }
 
-    /* Navegação/Header de App */
-    header, .navbar {
-        padding: 15px 16px !important;
-        background-color: #ffffff !important;
-        border-bottom: 1px solid #eee !important;
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    /* EMPILHAMENTO DE CARDS (Salário, Entradas, Saídas) */
+    /* 5. OS CARDS (Salário, Entradas, Saídas) */
+    /* Para que os cards fiquem alinhados lado a lado no celular se a tela permitir, ou empilhados caso fique muito apertado */
     .cards-container, 
     .grid-cards, 
     .cards-grid {
-        display: flex !important;
-        flex-direction: column !important; /* Força ficar um abaixo do outro */
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important; /* Coloca os cards em 2 colunas lado a lado no celular! */
+        gap: 10px !important; /* Espaço menor entre eles para caber na tela */
         width: 100% !important;
-        gap: 12px !important;
+        box-sizing: border-box !important;
     }
 
-    /* Card Individual Estilo App */
+    /* Se você preferir que o card de Salário (por ser principal) ocupe a largura toda, e os outros menores fiquem lado a lado */
+    .card.entrada {
+        grid-column: span 2 !important; /* O card de salário ocupa as duas colunas */
+    }
+
+    /* Ajuste individual do card para caber de forma compacta */
     .card {
         width: 100% !important;
-        max-width: 100% !important;
         background: #ffffff !important;
-        border-radius: 16px !important; /* Cantos arredondados elegantes */
-        padding: 16px !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02) !important;
-        border: 1px solid #f1f3f5 !important;
+        border-radius: 12px !important;
+        padding: 12px !important;
         box-sizing: border-box !important;
-        transition: transform 0.2s ease !important;
-    }
-
-    /* Ajuste dos textos dentro do Card */
-    .card-header {
-        display: flex !important;
-        justify-content: space-between !important;
-        align-items: center !important;
-        margin-bottom: 8px !important;
-    }
-
-    .card-title {
-        font-size: 13px !important;
-        color: #868e96 !important;
-        font-weight: 500 !important;
+        border: 1px solid #f1f3f5 !important;
     }
 
     .card h2 {
-        font-size: 22px !important; /* Diminui um pouco o valor do R$ 0,00 para caber sem quebrar */
+        font-size: 18px !important; /* Tamanho de fonte menor para caber em telas estreitas */
         font-weight: 700 !important;
-        margin: 0 !important;
     }
 
-    /* 4. SEÇÃO DE TRANSAÇÕES E TABELAS */
-    /* Em telas de celular, tabelas largas costumam quebrar o app. 
-       Esse ajuste cria um scroll horizontal apenas dentro do bloco da tabela */
+    /* 6. TABELAS E SEÇÃO DE LANÇAMENTOS */
     .table-container, 
-    table, 
-    .historico-container,
-    .transactions-box {
+    .historico-container {
         width: 100% !important;
-        overflow-x: auto !important; /* Rola só a tabela para o lado, sem quebrar o resto do app */
-        display: block !important;
-        background-color: #ffffff !important;
-        border-radius: 16px !important;
+        background: #ffffff !important;
+        border-radius: 12px !important;
         padding: 12px !important;
+        overflow-x: auto !important; /* Rola só o histórico pro lado se for muito grande */
         box-sizing: border-box !important;
-    }
-
-    /* Se você tiver um menu lateral tradicional de computador, no celular ele deve sumir ou virar topo */
-    .sidebar {
-        display: none !important; /* Oculta a barra lateral que serve apenas para computadores */
     }
 }
