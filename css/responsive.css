@@ -1,109 +1,99 @@
 /* ==========================================================================
-   CONFIGURAÇÃO MOBILE - SISTEMA COM PAINEL E CARDS AO LADO
+   CONFIGURAÇÃO MOBILE - LANDING PAGE ADAPTADA PARA APP (PÓS-LOGIN)
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. RESET E PREPARAÇÃO DA TELA */
+    /* 1. EVITA O ZOOM E O CORTE DE TELA */
     html, body {
         width: 100% !important;
         max-width: 100% !important;
-        overflow-x: hidden !important; /* Sem rolagem para as laterais */
+        overflow-x: hidden !important; /* Mata a rolagem para os lados */
         margin: 0 !important;
         padding: 0 !important;
         background-color: #f8f9fa !important;
     }
 
-    /* 2. ESTRUTURA DE TELA DIVIDIDA (Dashboard Principal) */
-    /* Se o seu container principal engloba o "painel lateral" e os "cards" */
-    .dashboard-container, 
-    .main-container, 
-    .wrapper {
+    /* 2. AJUSTE DA ESTRUTURA PRINCIPAL (Onde o menu e o conteúdo se encontram) */
+    /* Se você usa uma div pai (tipo .container, .wrapper ou .main-content) 
+       que junta o menu lateral e os cards */
+    .wrapper, 
+    .container, 
+    .dashboard-container,
+    body > div { 
         display: flex !important;
-        flex-direction: column !important; /* No celular, o painel fica no topo e os cards logo abaixo */
+        flex-direction: column !important; /* No computador é 'row' (lado a lado), no celular vira coluna (um embaixo do outro) */
         width: 100% !important;
-        padding: 10px !important;
-        box-sizing: border-box !important;
-        gap: 15px !important;
+        padding: 0 !important;
+        margin: 0 !important;
     }
 
-    /* 3. O SEU PAINEL / MENU LATERAL (Sidebar) */
-    /* Ele deixa de ser aquela barra lateral gigante de computador e vira um menu horizontal compacto no topo */
+    /* 3. TRANSFORMAÇÃO DO MENU LATERAL (Sidebar) EM MENU DE APP */
+    /* Se o seu menu se chama .sidebar, .menu, ou .aside */
     .sidebar, 
+    aside, 
     .menu-lateral {
         width: 100% !important;
         max-width: 100% !important;
-        height: auto !important; /* Sem altura fixa de tela cheia */
+        height: auto !important; /* Remove a altura de tela cheia do computador */
+        position: static !important; /* Tira ele de 'fixed' ou 'absolute' se tiver */
         background-color: #ffffff !important;
-        border-radius: 12px !important;
-        padding: 12px !important;
-        box-sizing: border-box !important;
+        border-bottom: 1px solid #eee !important;
+        padding: 10px !important;
         display: flex !important;
-        flex-direction: row !important; /* Links de navegação lado a lado horizontalmente */
-        justify-content: space-around !important; /* Espaça os links igualmente */
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02) !important;
+        flex-direction: row !important; /* Coloca os botões de navegação lado a lado horizontalmente */
+        justify-content: space-around !important; /* Espalha os botões igualmente na tela do celular */
+        box-sizing: border-box !important;
     }
 
-    /* Ajuste dos links dentro do painel */
+    /* Ajuste dos links/botões dentro desse menu do celular */
     .sidebar a, 
-    .menu-lateral a {
-        padding: 8px !important;
-        font-size: 13px !important;
+    .menu-lateral a,
+    aside a {
+        padding: 6px 10px !important;
+        font-size: 12px !important;
         display: flex !important;
-        flex-direction: column !important; /* Ícone em cima, texto embaixo (estilo app) */
+        flex-direction: column !important; /* Ícone em cima, texto embaixo */
         align-items: center !important;
         gap: 4px !important;
     }
 
-    /* 4. O CONTEÚDO PRINCIPAL (Onde ficam os cards ao lado do menu) */
+    /* 4. ÁREA DOS CARDS (O bloco ao lado do menu) */
+    /* Se a área onde ficam os cards se chama .content, .main ou .dashboard */
     .content, 
+    main, 
     .main-content {
         width: 100% !important;
         max-width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 15px !important;
+        padding: 15px !important;
+        box-sizing: border-box !important;
     }
 
-    /* 5. OS CARDS (Salário, Entradas, Saídas) */
-    /* Para que os cards fiquem alinhados lado a lado no celular se a tela permitir, ou empilhados caso fique muito apertado */
+    /* 5. ORGANIZAÇÃO DOS CARDS (Salário, Entradas, Saídas) */
     .cards-container, 
     .grid-cards, 
     .cards-grid {
-        display: grid !important;
-        grid-template-columns: repeat(2, 1fr) !important; /* Coloca os cards em 2 colunas lado a lado no celular! */
-        gap: 10px !important; /* Espaço menor entre eles para caber na tela */
+        display: flex !important;
+        flex-direction: column !important; /* No celular, os cards empilham verticalmente */
         width: 100% !important;
-        box-sizing: border-box !important;
+        gap: 12px !important;
     }
 
-    /* Se você preferir que o card de Salário (por ser principal) ocupe a largura toda, e os outros menores fiquem lado a lado */
-    .card.entrada {
-        grid-column: span 2 !important; /* O card de salário ocupa as duas colunas */
-    }
-
-    /* Ajuste individual do card para caber de forma compacta */
+    /* O card individual ocupa a tela inteira, sem esmagar */
     .card {
         width: 100% !important;
-        background: #ffffff !important;
-        border-radius: 12px !important;
-        padding: 12px !important;
+        max-width: 100% !important;
         box-sizing: border-box !important;
-        border: 1px solid #f1f3f5 !important;
+        border-radius: 12px !important;
+        padding: 15px !important;
     }
 
-    .card h2 {
-        font-size: 18px !important; /* Tamanho de fonte menor para caber em telas estreitas */
-        font-weight: 700 !important;
-    }
-
-    /* 6. TABELAS E SEÇÃO DE LANÇAMENTOS */
+    /* 6. TABELAS DE HISTÓRICO / EXTRATO */
     .table-container, 
-    .historico-container {
+    .historico-container,
+    table {
         width: 100% !important;
-        background: #ffffff !important;
-        border-radius: 12px !important;
-        padding: 12px !important;
-        overflow-x: auto !important; /* Rola só o histórico pro lado se for muito grande */
         box-sizing: border-box !important;
+        overflow-x: auto !important; /* Permite rolar a tabela de transações para o lado se não couber, sem quebrar o resto do layout */
+        display: block !important;
     }
 }
