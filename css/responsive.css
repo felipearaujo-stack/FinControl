@@ -1,105 +1,108 @@
 /* ==========================================================================
-   CONFIGURAÇÃO MOBILE DEFINITIVA - APLICATIVO ENQUADRADO (Telas < 768px)
+   CONFIGURAÇÃO MOBILE DEFINITIVA - FINCONTROL (Telas < 768px)
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. BLINDAGEM CONTRA ROLAGEM LATERAL (O efeito de se mexer para os lados) */
-    /* Esse bloco força absolutamente tudo no site a respeitar o limite da tela */
+    /* 1. TRAVA A TELA NAS LATERAIS (Elimina o efeito gelatina) */
     * {
         box-sizing: border-box !important;
-        max-width: 100% !important; 
+        max-width: 100% !important;
     }
 
     html, body {
         width: 100% !important;
         max-width: 100% !important;
-        overflow-x: hidden !important; /* Desativa totalmente a rolagem lateral */
+        overflow-x: hidden !important; /* Desativa totalmente o scroll pro lado */
         margin: 0 !important;
         padding: 0 !important;
-        position: relative !important;
         background-color: #f8f9fa !important;
     }
 
-    /* 2. RESOLVENDO O SUMIÇO DOS CARDS (Reset de posicionamento) */
-    /* Removemos qualquer float, margem esquerda gigante ou posição fixa que jogue os cards para fora da tela */
-    .wrapper, 
-    .container, 
-    .dashboard-container,
-    #dashboard, /* Caso a sua dashboard use um ID */
-    main,
-    .content,
-    .main-content {
-        display: flex !important;
-        flex-direction: column !important; /* Empilha tudo na vertical */
+    /* 2. ENQUADRAMENTO DA TELA DE LOGIN E CADASTRO */
+    .login-screen, 
+    .register-screen, 
+    #loginScreen, 
+    #registerScreen {
+        min-height: 100vh !important;
         width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 12px !important; /* Espaçamento interno confortável */
-        float: none !important;
-        position: relative !important;
-        left: 0 !important;
-        top: 0 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 20px !important;
+        box-sizing: border-box !important;
     }
 
-    /* 3. TRANSFORMAÇÃO DO MENU LATERAL (Para não cobrir os cards) */
-    .sidebar, 
-    aside, 
-    .menu-lateral {
+    .login-box, 
+    .register-box {
         width: 100% !important;
-        max-width: 100% !important;
-        height: auto !important;
-        position: relative !important; /* Tira o 'fixed' ou 'absolute' de computador */
-        margin: 0 0 15px 0 !important; /* Dá um espaço antes dos cards começarem */
-        padding: 10px !important;
+        max-width: 350px !important;
+        padding: 24px !important;
+        border-radius: 20px !important;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
         background-color: #ffffff !important;
-        border-radius: 12px !important;
-        display: flex !important;
-        flex-direction: row !important; /* Links ficam lado a lado no topo */
-        justify-content: space-around !important;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.05) !important;
     }
 
-    /* 4. EXIBIÇÃO DOS CARDS (Enquadrados e visíveis) */
-    .cards-container, 
-    .grid-cards, 
-    .cards-grid {
-        display: flex !important;
-        flex-direction: column !important; /* Garante que fiquem um embaixo do outro no celular */
+    /* inputs e botões confortáveis pro dedão */
+    .login-box input, 
+    .login-box button,
+    .register-box input,
+    .register-box button {
         width: 100% !important;
-        max-width: 100% !important;
-        gap: 12px !important;
-        margin: 0 !important;
-        padding: 0 !important;
+        height: 48px !important;
+        border-radius: 12px !important;
+        font-size: 16px !important;
+        margin-bottom: 12px !important;
     }
 
-    /* Garante que o card de Salário e os outros fiquem visíveis e na largura certa */
-    .card {
+    /* 3. ENQUADRAMENTO DA DASHBOARD (PÓS-LOGIN) */
+    #dashboard, 
+    .dashboard-container, 
+    .main-container {
         width: 100% !important;
         max-width: 100% !important;
-        display: block !important; /* Garante a exibição */
-        visibility: visible !important;
-        opacity: 1 !important;
-        background-color: #ffffff !important;
-        border-radius: 12px !important;
         padding: 16px !important;
         box-sizing: border-box !important;
+    }
+
+    /* 4. OS CARDS (Saldo Disponível, Salário, Últimos Lançamentos, etc) */
+    /* No seu vídeo, eles estão horizontais e gigantes. Vamos forçar um embaixo do outro! */
+    .cards-container, 
+    .grid-cards, 
+    .cards-grid,
+    .dashboard-content {
+        display: flex !important;
+        flex-direction: column !important; /* Empilha os cards verticalmente */
+        width: 100% !important;
+        gap: 16px !important;
+        padding: 0 !important;
         margin: 0 !important;
     }
 
-    .card h2 {
-        font-size: 20px !important; /* Tamanho perfeito para não quebrar linha */
-    }
-
-    /* 5. HISTÓRICO / TABELAS DE LANÇAMENTOS */
-    /* Evita que a tabela empurre a tela para os lados */
-    .table-container, 
-    .historico-container,
-    table,
-    .transactions-box {
+    /* Garante que nenhum card individual passe do tamanho da tela */
+    .card, 
+    .card.entrada, 
+    .card-resumo, 
+    .box-lancamentos {
         width: 100% !important;
         max-width: 100% !important;
-        overflow-x: auto !important; /* Cria um scroll suave apenas na tabela se os dados forem muito longos */
+        margin: 0 !important;
+        padding: 16px !important;
+        background-color: #ffffff !important;
+        border-radius: 16px !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
+        border: 1px solid #f1f3f5 !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 5. HISTÓRICO / ÚLTIMOS LANÇAMENTOS E TABELAS */
+    .table-container, 
+    table, 
+    .historico-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        overflow-x: auto !important; /* Rola só o extrato pro lado se precisar, sem mover o app */
         display: block !important;
-        margin-top: 15px !important;
+        box-sizing: border-box !important;
     }
 }
