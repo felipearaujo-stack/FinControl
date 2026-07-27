@@ -104,16 +104,16 @@
         </div>
     </div>
 
-    <!-- MODAL DE NOVO LANÇAMENTO -->
+    <!-- MODAL 1: NOVO LANÇAMENTO (COM FORMA DE PAGAMENTO) -->
     <div id="modalNovoLancamento" class="modal" style="display: none;">
         <div class="modal-box">
             <h3 style="margin-bottom: 8px;">Novo Lançamento ➕</h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Cadastre uma nova receita ou despesa.</p>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Cadastre uma despesa ou receita.</p>
 
             <form onsubmit="event.preventDefault(); salvarNovoLancamento();">
                 <div class="campo" style="margin-bottom: 12px;">
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Descrição</label>
-                    <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Uber, Freelance" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                    <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Uber, Salário Extra" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
                 </div>
 
                 <div class="campo" style="margin-bottom: 12px;">
@@ -129,13 +129,23 @@
                     </select>
                 </div>
 
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Forma de Pagamento</label>
+                    <select id="lancFormaPagamento" required style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
+                        <option value="Pix">Pix ⚡</option>
+                        <option value="Cartão de Crédito">Cartão de Crédito 💳</option>
+                        <option value="Cartão de Débito">Cartão de Débito 💳</option>
+                        <option value="Dinheiro">Dinheiro Espécie 💵</option>
+                        <option value="Transferência/Boleto">Boleto / Transferência 📄</option>
+                    </select>
+                </div>
+
                 <div class="campo" style="margin-bottom: 16px;">
                     <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Categoria</label>
                     <select id="lancCategoria" style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
                         <option value="Alimentação">Alimentação 🍔</option>
                         <option value="Transporte">Transporte 🚗</option>
                         <option value="Moradia">Moradia 🏠</option>
-                        <option value="Cartão">Cartão de Crédito 💳</option>
                         <option value="Lazer">Lazer 🎮</option>
                         <option value="Outros">Outros 📦</option>
                     </select>
@@ -143,6 +153,76 @@
 
                 <button type="submit" class="btn-primary" style="width: 100%; height: 46px; border-radius: 12px; font-weight: 600;">Salvar Lançamento</button>
                 <button type="button" class="btn-secondary" onclick="fecharModalLancamento()" style="width: 100%; height: 44px; border-radius: 12px; margin-top: 8px;">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: NOVO CARTÃO / BANCO -->
+    <div id="modalNovoCartao" class="modal" style="display: none;">
+        <div class="modal-box">
+            <h3 style="margin-bottom: 8px;">Adicionar Cartão / Banco 💳</h3>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Cadastre os dados da sua conta e limites.</p>
+
+            <form onsubmit="event.preventDefault(); salvarNovoCartao();">
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Nome do Banco / Instituição</label>
+                    <input type="text" id="cardBanco" placeholder="Ex: Itaú, Nubank, Bradesco" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                </div>
+
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Tipo de Função</label>
+                    <select id="cardTipo" required style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
+                        <option value="Ambos">Crédito e Débito (Ambos) 🔄</option>
+                        <option value="Crédito">Apenas Crédito 💳</option>
+                        <option value="Débito">Apenas Débito (Conta) 💵</option>
+                    </select>
+                </div>
+
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Saldo em Débito / Conta (R$)</label>
+                    <input type="number" step="0.01" id="cardSaldoDebito" placeholder="0.00" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                </div>
+
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Limite de Crédito Total (R$)</label>
+                    <input type="number" step="0.01" id="cardLimiteCredito" placeholder="0.00" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                </div>
+
+                <div class="campo" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Dia do Vencimento da Fatura</label>
+                    <input type="number" min="1" max="31" id="cardVencimento" placeholder="Ex: 10" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; height: 46px; border-radius: 12px; font-weight: 600;">Salvar Cartão</button>
+                <button type="button" class="btn-secondary" onclick="fecharModalCartao()" style="width: 100%; height: 44px; border-radius: 12px; margin-top: 8px;">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 3: NOVA META -->
+    <div id="modalNovaMeta" class="modal" style="display: none;">
+        <div class="modal-box">
+            <h3 style="margin-bottom: 8px;">Criar Nova Meta 🎯</h3>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Defina seu objetivo e o prazo para alcançar.</p>
+
+            <form onsubmit="event.preventDefault(); salvarNovaMeta();">
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Qual a Meta? (Objetivo)</label>
+                    <input type="text" id="metaNome" placeholder="Ex: Viagem, Carro Novo, Reserva" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                </div>
+
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Qual o Valor Total? (R$)</label>
+                    <input type="number" step="0.01" id="metaValorTotal" placeholder="Ex: 10000.00" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                </div>
+
+                <div class="campo" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Em quantos meses quer alcançar?</label>
+                    <input type="number" min="1" id="metaMeses" placeholder="Ex: 12" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; height: 46px; border-radius: 12px; font-weight: 600;">Salvar Meta</button>
+                <button type="button" class="btn-secondary" onclick="fecharModalMeta()" style="width: 100%; height: 44px; border-radius: 12px; margin-top: 8px;">Cancelar</button>
             </form>
         </div>
     </div>
@@ -262,6 +342,7 @@
                         <thead>
                             <tr>
                                 <th>Descrição</th>
+                                <th>Forma Pagamento</th>
                                 <th>Categoria</th>
                                 <th>Tipo</th>
                                 <th>Valor</th>
@@ -269,7 +350,7 @@
                         </thead>
                         <tbody id="tabelaLancamentosCorpo">
                             <tr>
-                                <td colspan="4" style="text-align: center; color: #64748B;">Nenhum lançamento registrado.</td>
+                                <td colspan="5" style="text-align: center; color: #64748B;">Nenhum lançamento registrado.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -279,61 +360,11 @@
             <!-- TELA 3: CARTÕES DE CRÉDITO & DÉBITO -->
             <div id="viewCartoes" class="view-aba" style="display: none;">
                 <div class="panel" style="margin-bottom: 20px;">
-                    <h3>Gestão de Cartões & Bancos 💳</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Acompanhe o saldo em conta (débito), limite de crédito e vencimentos por instituição.</p>
+                    <h3>Meus Cartões & Bancos 💳</h3>
+                    <p style="color: #64748B; margin-bottom: 20px;">Gerencie limites de crédito, saldo em conta e faturas. Clique no botão <strong>+</strong> para cadastrar um novo cartão.</p>
 
-                    <div class="dashboard-grid">
-                        <!-- BANCO 1: ITAÚ / MASTERCARD -->
-                        <div class="card" style="background: linear-gradient(135deg, #1E293B, #0F172A); color: #fff;">
-                            <div class="card-header">
-                                <span class="card-title" style="color: #94A3B8; font-weight: 700;">BANCO ITAÚ</span>
-                                <i class="fab fa-cc-mastercard" style="font-size: 26px; color: #F59E0B;"></i>
-                            </div>
-                            <div style="margin: 10px 0;">
-                                <span style="font-size: 11px; color: #94A3B8; text-transform: uppercase;">Saldo em Débito (Conta)</span>
-                                <div style="font-size: 18px; font-weight: 700; color: #10B981;">R$ 3.250,00</div>
-                            </div>
-                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-size: 12px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                    <span>Fatura Crédito:</span>
-                                    <strong style="color: #EF4444;">R$ 1.450,00</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                    <span>Limite Disponível:</span>
-                                    <strong>R$ 5.000,00</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; color: #F59E0B; font-weight: 600;">
-                                    <span>Vencimento da Fatura:</span>
-                                    <span>10/08/2026</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- BANCO 2: NUBANK / VISA -->
-                        <div class="card" style="background: linear-gradient(135deg, #4C1D95, #2E1065); color: #fff;">
-                            <div class="card-header">
-                                <span class="card-title" style="color: #C4B5FD; font-weight: 700;">NUBANK</span>
-                                <i class="fab fa-cc-visa" style="font-size: 26px; color: #A78BFA;"></i>
-                            </div>
-                            <div style="margin: 10px 0;">
-                                <span style="font-size: 11px; color: #C4B5FD; text-transform: uppercase;">Saldo em Débito (Conta)</span>
-                                <div style="font-size: 18px; font-weight: 700; color: #10B981;">R$ 1.180,00</div>
-                            </div>
-                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-size: 12px;">
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                    <span>Fatura Crédito:</span>
-                                    <strong style="color: #FCA5A5;">R$ 420,00</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                    <span>Limite Disponível:</span>
-                                    <strong>R$ 3.000,00</strong>
-                                </div>
-                                <div style="display: flex; justify-content: space-between; color: #FCD34D; font-weight: 600;">
-                                    <span>Vencimento da Fatura:</span>
-                                    <span>15/08/2026</span>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="dashboard-grid" id="containerCartoes">
+                        <!-- Renderizado via JavaScript dinamicamente -->
                     </div>
                 </div>
 
@@ -347,22 +378,12 @@
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
                             <strong style="color: #1E293B; font-size: 14px;">1. Pague sempre 100% da fatura 🎯</strong>
-                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Evite o pagamento mínimo para não cair no juro rotativo, uma das taxas mais altas do mercado.</p>
+                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Evite o pagamento mínimo para não cair no juro rotativo.</p>
                         </div>
 
                         <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
                             <strong style="color: #1E293B; font-size: 14px;">2. Regra dos 30% do Limite 📊</strong>
-                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Tente comprometer no máximo 30% da sua renda mensal total com parcelas e faturas de cartão.</p>
-                        </div>
-
-                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
-                            <strong style="color: #1E293B; font-size: 14px;">3. Conheça a 'Melhor Data de Compra' 🗓️</strong>
-                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Compre logo após o fechamento da fatura para ter até 40 dias de prazo para pagar.</p>
-                        </div>
-
-                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
-                            <strong style="color: #1E293B; font-size: 14px;">4. Cartão de Crédito não é 'Renda Extra' 💡</strong>
-                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">O limite de crédito é um empréstimo temporário do banco, não dinheiro seu. Planeje compras com antecedência.</p>
+                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Comprometa no máximo 30% da sua renda mensal total com parcelas.</p>
                         </div>
                     </div>
                 </div>
@@ -411,38 +432,18 @@
             <div id="viewMetas" class="view-aba" style="display: none;">
                 <div class="panel">
                     <h3>Metas & Objetivos 🎯</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Seus planos financeiros de curto e longo prazo.</p>
+                    <p style="color: #64748B; margin-bottom: 20px;">Planeje seus objetivos. Clique no botão <strong>+</strong> para criar uma nova meta.</p>
 
-                    <div class="meta-item">
-                        <div class="meta-header">
-                            <strong>Reserva de Emergência</strong>
-                            <span>R$ 6.500 / R$ 10.000</span>
-                        </div>
-                        <div class="barra"><span style="width: 65%;"></span></div>
-                    </div>
-
-                    <div class="meta-item" style="margin-top: 25px;">
-                        <div class="meta-header">
-                            <strong>Viagem de Fim de Ano</strong>
-                            <span>R$ 2.000 / R$ 4.000</span>
-                        </div>
-                        <div class="barra"><span style="width: 50%;"></span></div>
-                    </div>
-
-                    <div class="meta-item" style="margin-top: 25px;">
-                        <div class="meta-header">
-                            <strong>Troca de Carro</strong>
-                            <span>R$ 12.000 / R$ 30.000</span>
-                        </div>
-                        <div class="barra"><span style="width: 40%;"></span></div>
+                    <div id="containerMetas">
+                        <!-- Renderizado via JavaScript dinamicamente -->
                     </div>
                 </div>
             </div>
 
         </main>
 
-        <!-- Botão Flutuante de Adicionar Lançamento -->
-        <button class="btn-add" onclick="abrirModalLancamento()">+</button>
+        <!-- BOTÃO CONTEXTUAL DE ADICIONAR (ALTERA AÇÃO CONFORME A ABA ATIVA) -->
+        <button class="btn-add" onclick="acaoBotaoAdd()">+</button>
     </div>
 
     <!-- Scripts JavaScript -->
