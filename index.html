@@ -114,7 +114,7 @@
          APLICATIVO (DASHBOARD PÓS-LOGIN)
     ========================================================== -->
     <div id="app" class="app" style="display: none;">
-        <!-- Menu Superior / Lateral -->
+        <!-- Menu Lateral / Superior Mobile -->
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <i class="fas fa-wallet"></i>
@@ -122,8 +122,11 @@
             </div>
             <nav>
                 <ul id="menuNavegacao">
-                    <li class="item-menu ativo" id="btnMenuLancamentos" onclick="mudarAba('viewLancamentos', this)">
-                        <i class="fas fa-chart-pie"></i> Lançamentos
+                    <li class="item-menu ativo" id="btnMenuDash" onclick="mudarAba('viewDash', this)">
+                        <i class="fas fa-chart-line"></i> Dashboard
+                    </li>
+                    <li class="item-menu" id="btnMenuLancamentos" onclick="mudarAba('viewLancamentos', this)">
+                        <i class="fas fa-exchange-alt"></i> Lançamentos
                     </li>
                     <li class="item-menu" id="btnMenuCategorias" onclick="mudarAba('viewCategorias', this)">
                         <i class="fas fa-tags"></i> Categorias
@@ -141,121 +144,204 @@
             <div class="topo">
                 <div>
                     <h2 id="nomeUsuario">Olá! 👋</h2>
-                    <span id="subtituloTela">Gerencie sua vida financeira</span>
+                    <span id="subtituloTela">Seu resumo financeiro</span>
                 </div>
                 <div class="perfil" onclick="sair()" title="Clique para Sair">
                     <i class="fas fa-user-circle"></i>
                 </div>
             </div>
 
-            <!-- TELA 1: LANÇAMENTOS -->
-            <div id="viewLancamentos" class="view-aba">
+            <!-- TELA 1: DASHBOARD COMPLETA -->
+            <div id="viewDash" class="view-aba">
                 <div class="dashboard-grid">
                     <div class="card saldo">
                         <div class="card-header">
                             <span class="card-title">Saldo Disponível</span>
-                            <i class="fas fa-dollar-sign"></i>
+                            <i class="fas fa-wallet"></i>
                         </div>
-                        <div class="card-value" id="valSaldo">R$ 0,00</div>
+                        <div class="card-value" id="valSaldo">R$ 5.420,00</div>
                     </div>
 
                     <div class="card entrada">
                         <div class="card-header">
-                            <span class="card-title">Salário / Entradas</span>
+                            <span class="card-title">Receitas / Salário</span>
                             <i class="fas fa-arrow-up"></i>
                         </div>
-                        <div class="card-value" id="valEntradas">R$ 0,00</div>
+                        <div class="card-value" id="valEntradas">R$ 8.000,00</div>
                     </div>
 
                     <div class="card saida">
                         <div class="card-header">
-                            <span class="card-title">Saídas</span>
+                            <span class="card-title">Despesas</span>
                             <i class="fas fa-arrow-down"></i>
                         </div>
-                        <div class="card-value" id="valSaidas">R$ 0,00</div>
+                        <div class="card-value" id="valSaidas">R$ 2.580,00</div>
                     </div>
 
                     <div class="card meta">
                         <div class="card-header">
-                            <span class="card-title">Resumo Financeiro</span>
-                            <i class="fas fa-chart-line"></i>
+                            <span class="card-title">Metas Concluídas</span>
+                            <i class="fas fa-bullseye"></i>
                         </div>
-                        <div class="card-value" id="valResumo">100%</div>
+                        <div class="card-value" id="valResumo">65%</div>
                     </div>
                 </div>
 
                 <div class="dashboard-content">
                     <div class="panel">
-                        <h3>Últimos Lançamentos</h3>
-                        <div id="listaLancamentos" class="lista-lancamentos">
-                            <p style="color: #64748B;">Nenhum lançamento registrado.</p>
+                        <h3>Gráfico de Desempenho</h3>
+                        <div class="grafico">
+                            <p><i class="fas fa-chart-bar" style="font-size: 32px; margin-bottom: 8px;"></i><br>Visão Geral de Entradas vs Saídas</p>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <h3>Histórico Recente</h3>
+                        <div class="lista-lancamentos">
+                            <div class="lancamento">
+                                <div class="lancamento-info">
+                                    <strong>Salário Mensal</strong>
+                                    <span>25/07/2026 - Depósito</span>
+                                </div>
+                                <span class="lancamento-valor valor-positivo">+ R$ 8.000,00</span>
+                            </div>
+                            <div class="lancamento">
+                                <div class="lancamento-info">
+                                    <strong>Supermercado</strong>
+                                    <span>26/07/2026 - Alimentação</span>
+                                </div>
+                                <span class="lancamento-valor valor-negativo">- R$ 1.250,00</span>
+                            </div>
+                            <div class="lancamento">
+                                <div class="lancamento-info">
+                                    <strong>Aluguel & Contas</strong>
+                                    <span>27/07/2026 - Moradia</span>
+                                </div>
+                                <span class="lancamento-valor valor-negativo">- R$ 1.330,00</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TELA 2: CATEGORIAS -->
+            <!-- TELA 2: TABELA DETALHADA DE LANÇAMENTOS -->
+            <div id="viewLancamentos" class="view-aba" style="display: none;">
+                <div class="panel">
+                    <h3>Todos os Lançamentos 📑</h3>
+                    <p style="color: #64748B; margin-bottom: 20px;">Gerencie e acompanhe o extrato de movimentações.</p>
+                    
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Descrição</th>
+                                <th>Categoria</th>
+                                <th>Data</th>
+                                <th>Valor</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Salário Mensal</td>
+                                <td><span class="badge green">Receita</span></td>
+                                <td>25/07/2026</td>
+                                <td class="valor-positivo"><strong>+ R$ 8.000,00</strong></td>
+                                <td><span class="badge green">Concluído</span></td>
+                            </tr>
+                            <tr>
+                                <td>Supermercado Central</td>
+                                <td><span class="badge red">Alimentação</span></td>
+                                <td>26/07/2026</td>
+                                <td class="valor-negativo"><strong>- R$ 1.250,00</strong></td>
+                                <td><span class="badge green">Pago</span></td>
+                            </tr>
+                            <tr>
+                                <td>Aluguel do Imóvel</td>
+                                <td><span class="badge orange">Moradia</span></td>
+                                <td>27/07/2026</td>
+                                <td class="valor-negativo"><strong>- R$ 1.330,00</strong></td>
+                                <td><span class="badge green">Pago</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- TELA 3: CATEGORIAS -->
             <div id="viewCategorias" class="view-aba" style="display: none;">
                 <div class="panel">
                     <h3>Minhas Categorias 🏷️</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Organize seus gastos por categorias personalizadas.</p>
+                    <p style="color: #64748B; margin-bottom: 20px;">Separe seus orçamentos por grupos.</p>
                     
                     <div class="lista-lancamentos">
                         <div class="lancamento">
                             <div class="lancamento-info">
                                 <strong>🍔 Alimentação</strong>
-                                <span>Mercado, Restaurantes e Delivery</span>
+                                <span>Supermercado, Restaurantes, Feira e Delivery</span>
                             </div>
+                            <span class="badge green">Orçamento: R$ 2.000</span>
                         </div>
                         <div class="lancamento">
                             <div class="lancamento-info">
                                 <strong>🚗 Transporte</strong>
-                                <span>Combustível, Uber e Manutenção</span>
+                                <span>Combustível, Manutenção, Uber e Pedágio</span>
                             </div>
+                            <span class="badge green">Orçamento: R$ 800</span>
                         </div>
                         <div class="lancamento">
                             <div class="lancamento-info">
                                 <strong>🏠 Moradia</strong>
-                                <span>Aluguel, Água e Luz</span>
+                                <span>Aluguel, Condomínio, Luz, Água e Internet</span>
                             </div>
+                            <span class="badge red">Orçamento: R$ 2.500</span>
                         </div>
                         <div class="lancamento">
                             <div class="lancamento-info">
-                                <strong>🎮 Lazer</strong>
-                                <span>Cinema, Viagens e Hobbies</span>
+                                <strong>🎮 Lazer & Viagens</strong>
+                                <span>Passeios, Cinema, Streaming e Hobbies</span>
                             </div>
+                            <span class="badge orange">Orçamento: R$ 600</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- TELA 3: METAS -->
+            <!-- TELA 4: METAS -->
             <div id="viewMetas" class="view-aba" style="display: none;">
                 <div class="panel">
-                    <h3>Metas Financeiras 🎯</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Acompanhe a evolução dos seus objetivos.</p>
+                    <h3>Metas & Objetivos 🎯</h3>
+                    <p style="color: #64748B; margin-bottom: 20px;">Seus planos financeiros de curto e longo prazo.</p>
 
                     <div class="meta-item">
                         <div class="meta-header">
                             <strong>Reserva de Emergência</strong>
-                            <span>R$ 5.000 / R$ 10.000</span>
+                            <span>R$ 6.500 / R$ 10.000</span>
+                        </div>
+                        <div class="barra"><span style="width: 65%;"></span></div>
+                    </div>
+
+                    <div class="meta-item" style="margin-top: 25px;">
+                        <div class="meta-header">
+                            <strong>Viagem de Fim de Ano</strong>
+                            <span>R$ 2.000 / R$ 4.000</span>
                         </div>
                         <div class="barra"><span style="width: 50%;"></span></div>
                     </div>
 
-                    <div class="meta-item" style="margin-top: 20px;">
+                    <div class="meta-item" style="margin-top: 25px;">
                         <div class="meta-header">
-                            <strong>Viagem de Fim de Ano</strong>
-                            <span>R$ 1.500 / R$ 3.000</span>
+                            <strong>Troca de Carro</strong>
+                            <span>R$ 12.000 / R$ 30.000</span>
                         </div>
-                        <div class="barra"><span style="width: 50%;"></span></div>
+                        <div class="barra"><span style="width: 40%;"></span></div>
                     </div>
                 </div>
             </div>
 
         </main>
 
-        <button class="btn-add">+</button>
+        <!-- Botão Flutuante de Adicionar Lançamento -->
+        <button class="btn-add" onclick="alert('Abrir formulário de novo lançamento!')">+</button>
     </div>
 
     <!-- Scripts JavaScript -->
