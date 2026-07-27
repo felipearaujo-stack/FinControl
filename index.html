@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#F5F7FB">
-    <title>FinControl - Seu Banco Financeiro Pessoal</title>
+    <meta name="theme-color" content="#000000">
+    <title>FinControl - Login</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,30 +15,26 @@
 <body>
 
     <div id="loginScreen" class="login-screen">
-        <div class="login-box">
-            <div class="logo">
-                <i class="fas fa-wallet" style="font-size: 32px; color: #2563EB;"></i>
-                <h1 style="font-size: 24px; font-weight: 700; margin-top: 8px;">FinControl</h1>
-            </div>
-            <p class="subtitulo" style="color: #64748B; margin-bottom: 20px; font-size: 14px;">Seu banco financeiro pessoal</p>
+        <div class="login-card-circle">
+            <h2 class="login-title">LOGIN</h2>
 
             <form id="formLogin" onsubmit="event.preventDefault(); entrar();">
-                <div class="campo">
-                    <label for="loginUsuario">Usuário</label>
-                    <input type="text" id="loginUsuario" placeholder="Digite seu usuário" required>
+                <div class="input-group">
+                    <input type="text" id="loginUsuario" placeholder="Username" required autocomplete="off">
+                    <i class="fas fa-user input-icon"></i>
                 </div>
 
-                <div class="campo">
-                    <label for="loginSenha">Senha</label>
-                    <input type="password" id="loginSenha" placeholder="Digite sua senha" required>
+                <div class="input-group">
+                    <input type="password" id="loginSenha" placeholder="••••••••••••" required>
+                    <i class="fas fa-lock input-icon"></i>
                 </div>
 
-                <button type="submit" class="btn-primary" id="btnEntrar">Entrar</button>
+                <button type="submit" class="btn-login-dark" id="btnEntrar">LOGIN</button>
             </form>
 
-            <div class="login-footer">
-                <a href="#" id="btnEsqueciSenha" onclick="abrirEsqueciSenha()">Esqueci minha senha</a>
-                <p>Ainda não tem conta? <a href="#" id="btnAbrirCadastro">Criar conta</a></p>
+            <div class="login-options">
+                <a href="#" id="btnAbrirCadastro" onclick="abrirCadastro()">Criar conta</a>
+                <a href="#" id="btnEsqueciSenha" onclick="abrirEsqueciSenha()">Esqueci a senha?</a>
             </div>
         </div>
     </div>
@@ -73,7 +69,7 @@
     <div id="modalEsqueciSenha" class="modal" style="display: none;">
         <div class="modal-box">
             <h3 style="margin-bottom: 8px;">Recuperar Senha via SMS 📱</h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Informe seu telefone para receber um código de validação.</p>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Informe seu telefone para receber o código.</p>
 
             <div id="passoTelefone">
                 <div class="campo">
