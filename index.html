@@ -1,845 +1,179 @@
-<div class="card entrada" onclick="abrirModalSalario()" style="cursor: pointer;">
-    <div class="card-header">
-        <span class="card-title">
-            Salário
-        </span>
-        <i class="fa-solid fa-money-bill-wave"></i>
-    </div>
-    <h2 id="salario">
-        R$ 0,00
-    </h2>
-</div>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#F5F7FB">
+    <title>FinControl - Seu Banco Financeiro Pessoal</title>
 
-    <title>FinControl</title>
-
-    <!-- CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/components.css">
-    <link rel="stylesheet" href="css/login.css">
-    <link rel="stylesheet" href="css/dashboard.css">
     <link rel="stylesheet" href="css/responsive.css">
-
-    <!-- Font Awesome -->
-
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
-    <!-- Google Fonts -->
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
-
 </head>
-
 <body>
 
-<!-- ========================================================= -->
-<!-- LOGIN -->
-<!-- ========================================================= -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-box">
+            <div class="logo">
+                <i class="fas fa-wallet" style="font-size: 32px; color: #2563EB;"></i>
+                <h1 style="font-size: 24px; font-weight: 700; margin-top: 8px;">FinControl</h1>
+            </div>
+            <p class="subtitulo" style="color: #64748B; margin-bottom: 20px; font-size: 14px;">Seu banco financeiro pessoal</p>
 
-<section id="loginScreen" class="login-screen">
+            <form id="formLogin" onsubmit="event.preventDefault(); entrar();">
+                <div class="campo">
+                    <label for="loginUsuario">Usuário</label>
+                    <input type="text" id="loginUsuario" placeholder="Digite seu usuário" required>
+                </div>
 
-    <div class="login-box">
+                <div class="campo">
+                    <label for="loginSenha">Senha</label>
+                    <input type="password" id="loginSenha" placeholder="Digite sua senha" required>
+                </div>
 
-        <div class="logo">
+                <button type="submit" class="btn-primary" id="btnEntrar">Entrar</button>
+            </form>
 
-            <i class="fa-solid fa-wallet"></i>
-
-            <h1>FinControl</h1>
-
-            <p>Seu banco financeiro pessoal.</p>
-
+            <div class="login-footer">
+                <a href="#" id="btnEsqueciSenha" onclick="abrirEsqueciSenha()">Esqueci minha senha</a>
+                <p>Ainda não tem conta? <a href="#" id="btnAbrirCadastro">Criar conta</a></p>
+            </div>
         </div>
-
-        <div class="campo">
-
-            <label>Usuário</label>
-
-            <input
-                type="text"
-                id="loginUsuario"
-                placeholder="Digite seu usuário">
-
-        </div>
-
-        <div class="campo">
-
-            <label>Senha</label>
-
-            <input
-                type="password"
-                id="loginSenha"
-                placeholder="Digite sua senha">
-
-        </div>
-
-        <button
-            id="btnEntrar"
-            class="btn-primary">
-
-            Entrar
-
-        </button>
-
-        <button
-            id="btnAbrirCadastro"
-            class="btn-secondary">
-
-            Criar Conta
-
-        </button>
-
     </div>
 
-</section>
+    <div id="cadastroScreen" class="register-screen" style="display: none;">
+        <div class="register-box">
+            <h2>Criar Conta</h2>
+            <p style="color: #64748B; margin-bottom: 15px; font-size: 14px;">Preencha os dados abaixo</p>
 
-<!-- ========================================================= -->
-<!-- CADASTRO -->
-<!-- ========================================================= -->
+            <div class="campo">
+                <label>Nome Completo</label>
+                <input type="text" id="cadNome" placeholder="Seu nome">
+            </div>
+            <div class="campo">
+                <label>Usuário</label>
+                <input type="text" id="cadUsuario" placeholder="Escolha um usuário">
+            </div>
+            <div class="campo">
+                <label>Senha</label>
+                <input type="password" id="cadSenha" placeholder="Crie uma senha">
+            </div>
+            <div class="campo">
+                <label>Confirmar Senha</label>
+                <input type="password" id="cadConfirmar" placeholder="Repita a senha">
+            </div>
 
-<section
-    id="cadastroScreen"
-    class="login-screen"
-    style="display:none;">
-
-    <div class="login-box">
-
-        <div class="logo">
-
-            <i class="fa-solid fa-user-plus"></i>
-
-            <h1>Criar Conta</h1>
-
+            <button class="btn-primary" id="btnSalvarCadastro">Criar Conta</button>
+            <button class="btn-secondary" id="btnVoltarLogin">Voltar ao Login</button>
         </div>
-
-        <div class="campo">
-
-            <label>Nome Completo</label>
-
-            <input
-                id="cadNome"
-                type="text"
-                placeholder="Seu nome">
-
-        </div>
-
-        <div class="campo">
-
-            <label>Usuário</label>
-
-            <input
-                id="cadUsuario"
-                type="text"
-                placeholder="Usuário">
-
-        </div>
-
-        <div class="campo">
-
-            <label>Senha</label>
-
-            <input
-                id="cadSenha"
-                type="password"
-                placeholder="Senha">
-
-        </div>
-
-        <div class="campo">
-
-            <label>Confirmar Senha</label>
-
-            <input
-                id="cadConfirmar"
-                type="password"
-                placeholder="Repita a senha">
-
-        </div>
-
-        <button
-            id="btnSalvarCadastro"
-            class="btn-primary">
-
-            Criar Conta
-
-        </button>
-
-        <button
-            id="btnVoltarLogin"
-            class="btn-secondary">
-
-            Voltar
-
-        </button>
-
     </div>
 
-</section>
+    <div id="modalEsqueciSenha" class="modal" style="display: none;">
+        <div class="modal-box">
+            <h3 style="margin-bottom: 8px;">Recuperar Senha via SMS 📱</h3>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Informe seu telefone para receber um código de validação.</p>
 
-<!-- ========================================================= -->
-<!-- SISTEMA -->
-<!-- ========================================================= -->
+            <div id="passoTelefone">
+                <div class="campo">
+                    <label>Telefone / Celular</label>
+                    <input type="tel" id="smsTelefone" placeholder="(11) 99999-9999">
+                </div>
+                <button class="btn-primary" onclick="enviarCodigoSMS()">Enviar Código SMS</button>
+            </div>
 
-<div
-    id="app"
-    class="app"
-    style="display:none;">
+            <div id="passoCodigo" style="display: none;">
+                <div class="campo">
+                    <label>Código recebido por SMS</label>
+                    <input type="text" id="smsCodigo" placeholder="Ex: 123456">
+                </div>
+                <div class="campo">
+                    <label>Nova Senha</label>
+                    <input type="password" id="novaSenhaSMS" placeholder="Digite a nova senha">
+                </div>
+                <button class="btn-primary" onclick="validarEResetarSenha()">Redefinir Senha</button>
+            </div>
 
-    <!-- SIDEBAR -->
+            <button class="btn-secondary" onclick="fecharEsqueciSenha()" style="margin-top: 10px;">Cancelar</button>
+        </div>
+    </div>
 
-    <aside class="sidebar">
-
-        <div>
-
+    <div id="app" class="app" style="display: none;">
+        <aside class="sidebar">
             <div class="sidebar-logo">
-
-                <i class="fa-solid fa-wallet"></i>
-
+                <i class="fas fa-wallet"></i>
                 <span>FinControl</span>
-
             </div>
-
             <nav>
-
                 <ul>
-
-                    <li class="menu-item ativo" data-tela="dashboard">
-
-                        <i class="fa-solid fa-house"></i>
-
-                        Dashboard
-
-                    </li>
-
-                    <li class="menu-item" data-tela="lancamentos">
-
-                        <i class="fa-solid fa-money-bill-wave"></i>
-
-                        Lançamentos
-
-                    </li>
-
-                    <li class="menu-item" data-tela="cartoes">
-
-                        <i class="fa-solid fa-credit-card"></i>
-
-                        Cartões
-
-                    </li>
-
-                    <li class="menu-item" data-tela="categorias">
-
-                        <i class="fa-solid fa-list"></i>
-
-                        Categorias
-
-                    </li>
-
-                    <li class="menu-item" data-tela="metas">
-
-                        <i class="fa-solid fa-bullseye"></i>
-
-                        Metas
-
-                    </li>
-
-                    <li class="menu-item" data-tela="relatorios">
-
-                        <i class="fa-solid fa-chart-line"></i>
-
-                        Relatórios
-
-                    </li>
-
-                    <li class="menu-item" data-tela="configuracoes">
-
-                        <i class="fa-solid fa-gear"></i>
-
-                        Configurações
-
-                    </li>
-
+                    <li class="ativo"><i class="fas fa-chart-pie"></i> Lançamentos</li>
+                    <li><i class="fas fa-tags"></i> Categorias</li>
+                    <li><i class="fas fa-bullseye"></i> Metas</li>
                 </ul>
-
             </nav>
+            <button class="btn-sair" id="btnSair">Sair</button>
+        </aside>
 
-        </div>
-
-        <button
-            id="btnSair"
-            class="btn-sair">
-
-            <i class="fa-solid fa-right-from-bracket"></i>
-
-            Sair
-
-        </button>
-
-    </aside>
-
-    <!-- CONTEÚDO -->
-
-    <main class="conteudo">
-
-        <!-- TOPO -->
-
-        <header class="topo">
-
-            <div>
-
-                <h2 id="nomeUsuario">
-
-                    Bem-vindo
-
-                </h2>
-
-                <span>
-
-                    Gerencie sua vida financeira em um único lugar.
-
-                </span>
-
+        <main class="conteudo">
+            <div class="topo">
+                <div>
+                    <h2 id="nomeUsuario">Olá! 👋</h2>
+                    <span>Gerencie sua vida financeira</span>
+                </div>
+                <div class="perfil">
+                    <i class="fas fa-user-circle"></i>
+                </div>
             </div>
 
-            <div class="perfil">
-
-                <i class="fa-solid fa-circle-user"></i>
-
-            </div>
-
-        </header>
-
-        <!-- ========================================================= -->
-        <!-- DASHBOARD -->
-        <!-- ========================================================= -->
-
-        <section
-            id="dashboard"
-            class="pagina">
-
-                        <div class="dashboard-grid">
-
+            <div class="dashboard-grid">
                 <div class="card saldo">
-
                     <div class="card-header">
-
-                        <span class="card-title">
-
-                            Saldo Disponível
-
-                        </span>
-
-                        <i class="fa-solid fa-wallet"></i>
-
+                        <span class="card-title">Saldo Disponível</span>
+                        <i class="fas fa-dollar-sign"></i>
                     </div>
-
-                    <h2 id="saldo">
-
-                        R$ 0,00
-
-                    </h2>
-
+                    <div class="card-value" id="valSaldo">R$ 0,00</div>
                 </div>
 
                 <div class="card entrada">
-
                     <div class="card-header">
-
-                        <span class="card-title">
-
-                            Salário
-
-                        </span>
-
-                        <i class="fa-solid fa-money-bill-wave"></i>
-
+                        <span class="card-title">Salário / Entradas</span>
+                        <i class="fas fa-arrow-up"></i>
                     </div>
-
-                    <h2 id="salario">
-
-                        R$ 0,00
-
-                    </h2>
-
+                    <div class="card-value" id="valEntradas">R$ 0,00</div>
                 </div>
 
                 <div class="card saida">
-
                     <div class="card-header">
-
-                        <span class="card-title">
-
-                            Despesas
-
-                        </span>
-
-                        <i class="fa-solid fa-arrow-trend-down"></i>
-
+                        <span class="card-title">Saídas</span>
+                        <i class="fas fa-arrow-down"></i>
                     </div>
-
-                    <h2 id="gastos">
-
-                        R$ 0,00
-
-                    </h2>
-
+                    <div class="card-value" id="valSaidas">R$ 0,00</div>
                 </div>
 
                 <div class="card meta">
-
                     <div class="card-header">
-
-                        <span class="card-title">
-
-                            Disponível no Mês
-
-                        </span>
-
-                        <i class="fa-solid fa-piggy-bank"></i>
-
+                        <span class="card-title">Resumo Financeiro</span>
+                        <i class="fas fa-chart-line"></i>
                     </div>
-
-                    <h2 id="disponivel">
-
-                        R$ 0,00
-
-                    </h2>
-
+                    <div class="card-value" id="valResumo">100%</div>
                 </div>
-
             </div>
 
             <div class="dashboard-content">
-
                 <div class="panel">
-
-                    <h3>
-
-                        Últimos Lançamentos
-
-                    </h3>
-
-                    <div
-                        id="listaLancamentos"
-                        class="lista-lancamentos">
-
-                        <div class="lancamento">
-
-                            <div class="lancamento-info">
-
-                                <strong>
-
-                                    Nenhum lançamento cadastrado
-
-                                </strong>
-
-                                <span>
-
-                                    Adicione seu primeiro lançamento
-
-                                </span>
-
-                            </div>
-
-                        </div>
-
+                    <h3>Últimos Lançamentos</h3>
+                    <div id="listaLancamentos" class="lista-lancamentos">
+                        <p style="color: #64748B;">Nenhum lançamento registrado.</p>
                     </div>
-
                 </div>
-
-                <div class="panel">
-
-                    <h3>
-
-                        Resumo Financeiro
-
-                    </h3>
-
-                    <div class="grafico">
-
-                        <i
-                            class="fa-solid fa-chart-column"
-                            style="font-size:60px;color:#CBD5E1;">
-
-                        </i>
-
-                    </div>
-
-                </div>
-
             </div>
+        </main>
 
-        </section>
+        <button class="btn-add">+</button>
+    </div>
 
-        <!-- ===================================================== -->
-        <!-- LANÇAMENTOS -->
-        <!-- ===================================================== -->
-
-        <section
-            id="lancamentos"
-            class="pagina"
-            style="display:none;">
-
-            <div class="panel">
-
-                <h2>
-
-                    Lançamentos
-
-                </h2>
-
-                <br>
-
-                <button
-                    id="btnNovoLancamento"
-                    class="btn-primary">
-
-                    <i class="fa-solid fa-plus"></i>
-
-                    Novo Lançamento
-
-                </button>
-
-                <br><br>
-
-                <div
-                    id="listaCompletaLancamentos">
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ===================================================== -->
-        <!-- CARTÕES -->
-        <!-- ===================================================== -->
-
-        <section
-            id="cartoes"
-            class="pagina"
-            style="display:none;">
-
-            <div class="panel">
-
-                <h2>
-
-                    Cartões de Crédito
-
-                </h2>
-
-                <br>
-
-                <p>
-
-                    Em breve você poderá cadastrar cartões,
-                    controlar limite, fatura e vencimento.
-
-                </p>
-
-            </div>
-
-        </section>
-
-        <!-- ===================================================== -->
-        <!-- CATEGORIAS -->
-        <!-- ===================================================== -->
-
-        <section
-            id="categorias"
-            class="pagina"
-            style="display:none;">
-
-            <div class="panel">
-
-                <h2>
-
-                    Categorias
-
-                </h2>
-
-                <br>
-
-                <div id="listaCategorias">
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ===================================================== -->
-        <!-- METAS -->
-        <!-- ===================================================== -->
-
-        <section
-            id="metas"
-            class="pagina"
-            style="display:none;">
-
-            <div class="panel">
-
-                <h2>
-
-                    Metas Financeiras
-
-                </h2>
-
-                <br>
-
-                <p>
-
-                    Crie metas de economia para acompanhar sua evolução.
-
-                </p>
-
-            </div>
-
-        </section>
-
-        <!-- ===================================================== -->
-        <!-- RELATÓRIOS -->
-        <!-- ===================================================== -->
-
-        <section
-            id="relatorios"
-            class="pagina"
-            style="display:none;">
-
-            <div class="panel">
-
-                <h2>
-
-                    Relatórios
-
-                </h2>
-
-                <br>
-
-                <div class="grafico">
-
-                    Área destinada aos gráficos financeiros.
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- ===================================================== -->
-        <!-- CONFIGURAÇÕES -->
-        <!-- ===================================================== -->
-
-        <section
-            id="configuracoes"
-            class="pagina"
-            style="display:none;">
-
-            <div class="panel">
-
-                <h2>
-
-                    Configurações
-
-                </h2>
-
-                <br>
-
-                <p>
-
-                    Personalize seu FinControl.
-
-                </p>
-
-            </div>
-
-        </section>
-
-                <!-- =============================================== -->
-        <!-- MODAL NOVO LANÇAMENTO -->
-        <!-- =============================================== -->
-
-        <div
-            id="modalLancamento"
-            class="modal"
-            style="display:none;">
-
-            <div class="modal-box">
-
-                <h2>
-
-                    Novo Lançamento
-
-                </h2>
-
-                <br>
-
-                <div class="campo">
-
-                    <label>Descrição</label>
-
-                    <input
-                        type="text"
-                        id="descricao"
-                        placeholder="Ex.: Mercado, Gasolina...">
-
-                </div>
-
-                <div class="campo">
-
-                    <label>Valor</label>
-
-                    <input
-                        type="number"
-                        id="valor"
-                        step="0.01"
-                        placeholder="0,00">
-
-                </div>
-
-                <div class="campo">
-
-                    <label>Categoria</label>
-
-                    <select id="categoria">
-
-                        <option>Alimentação</option>
-                        <option>Moradia</option>
-                        <option>Transporte</option>
-                        <option>Saúde</option>
-                        <option>Educação</option>
-                        <option>Lazer</option>
-                        <option>Compras</option>
-                        <option>Assinaturas</option>
-                        <option>Pets</option>
-                        <option>Investimentos</option>
-                        <option>Outros</option>
-
-                    </select>
-
-                </div>
-
-                <div class="campo">
-
-                    <label>Tipo</label>
-
-                    <select id="tipo">
-
-                        <option value="despesa">
-
-                            Despesa
-
-                        </option>
-
-                        <option value="receita">
-
-                            Receita
-
-                        </option>
-
-                    </select>
-
-                </div>
-
-                <div style="display:flex;gap:15px;">
-
-                    <button
-                        id="btnSalvarLancamento"
-                        class="btn-primary">
-
-                        Salvar
-
-                    </button>
-
-                    <button
-                        id="btnCancelarLancamento"
-                        class="btn-secondary">
-
-                        Cancelar
-
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- =============================================== -->
-        <!-- MODAL DEFINIR SALÁRIO -->
-        <!-- =============================================== -->
-
-        <div
-            id="modalSalario"
-            class="modal"
-            style="display:none;">
-
-            <div class="modal-box">
-
-                <h2>
-
-                    Definir Salário
-
-                </h2>
-
-                <br>
-
-                <div class="campo">
-
-                    <label>Salário Mensal</label>
-
-                    <input
-                        type="number"
-                        id="novoSalario"
-                        placeholder="Ex.: 4500.00">
-
-                </div>
-
-                <button
-                    id="btnSalvarSalario"
-                    class="btn-primary">
-
-                    Salvar Salário
-
-                </button>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</div>
-
-<!-- =============================================== -->
-<!-- JAVASCRIPT -->
-<!-- =============================================== -->
-
-<script src="js/storage.js"></script>
-<script src="js/utils.js"></script>
-<script src="js/auth.js"></script>
-<script src="js/dashboard.js"></script>
-<script src="js/lancamentos.js"></script>
-<script src="js/categorias.js"></script>
-<script src="js/cartoes.js"></script>
-<script src="js/recorrentes.js"></script>
-<script src="js/metas.js"></script>
-<script src="js/graficos.js"></script>
-<script src="js/app.js"></script>
-
+    <script src="js/storage.js"></script>
+    <script src="js/auth.js"></script>
 </body>
-
 </html>
