@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000">
-    <title>FinControl - Login</title>
+    <title>FinControl - App</title>
 
     <!-- Fontes e Ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -45,7 +45,7 @@
     </div>
 
     <!-- ==========================================================
-         TELA DE CADASTRO (PADRÃO DARK GLASSMORPHISM)
+         TELA DE CADASTRO
     ========================================================== -->
     <div id="cadastroScreen" class="login-screen" style="display: none;">
         <div class="login-card-circle">
@@ -114,74 +114,145 @@
          APLICATIVO (DASHBOARD PÓS-LOGIN)
     ========================================================== -->
     <div id="app" class="app" style="display: none;">
+        <!-- Menu Superior / Lateral com Seleção de Tela -->
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <i class="fas fa-wallet"></i>
                 <span>FinControl</span>
             </div>
             <nav>
-                <ul>
-                    <li class="ativo"><i class="fas fa-chart-pie"></i> Lançamentos</li>
-                    <li><i class="fas fa-tags"></i> Categorias</li>
-                    <li><i class="fas fa-bullseye"></i> Metas</li>
+                <ul id="menuNavegacao">
+                    <li class="item-menu ativo" data-tela="viewLancamentos">
+                        <i class="fas fa-chart-pie"></i> Lançamentos
+                    </li>
+                    <li class="item-menu" data-tela="viewCategorias">
+                        <i class="fas fa-tags"></i> Categorias
+                    </li>
+                    <li class="item-menu" data-tela="viewMetas">
+                        <i class="fas fa-bullseye"></i> Metas
+                    </li>
                 </ul>
             </nav>
-            <button class="btn-sair" id="btnSair">Sair</button>
+            <button class="btn-sair" id="btnSair" onclick="sair()">Sair</button>
         </aside>
 
+        <!-- Área Principal de Conteúdo -->
         <main class="conteudo">
             <div class="topo">
                 <div>
                     <h2 id="nomeUsuario">Olá! 👋</h2>
-                    <span>Gerencie sua vida financeira</span>
+                    <span id="subtituloTela">Gerencie sua vida financeira</span>
                 </div>
-                <div class="perfil">
+                <div class="perfil" onclick="sair()" title="Clique para Sair">
                     <i class="fas fa-user-circle"></i>
                 </div>
             </div>
 
-            <div class="dashboard-grid">
-                <div class="card saldo">
-                    <div class="card-header">
-                        <span class="card-title">Saldo Disponível</span>
-                        <i class="fas fa-dollar-sign"></i>
+            <!-- TELA 1: LANÇAMENTOS E DASHBOARD -->
+            <div id="viewLancamentos" class="view-aba">
+                <div class="dashboard-grid">
+                    <div class="card saldo">
+                        <div class="card-header">
+                            <span class="card-title">Saldo Disponível</span>
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                        <div class="card-value" id="valSaldo">R$ 0,00</div>
                     </div>
-                    <div class="card-value" id="valSaldo">R$ 0,00</div>
+
+                    <div class="card entrada">
+                        <div class="card-header">
+                            <span class="card-title">Salário / Entradas</span>
+                            <i class="fas fa-arrow-up"></i>
+                        </div>
+                        <div class="card-value" id="valEntradas">R$ 0,00</div>
+                    </div>
+
+                    <div class="card saida">
+                        <div class="card-header">
+                            <span class="card-title">Saídas</span>
+                            <i class="fas fa-arrow-down"></i>
+                        </div>
+                        <div class="card-value" id="valSaidas">R$ 0,00</div>
+                    </div>
+
+                    <div class="card meta">
+                        <div class="card-header">
+                            <span class="card-title">Resumo Financeiro</span>
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="card-value" id="valResumo">100%</div>
+                    </div>
                 </div>
 
-                <div class="card entrada">
-                    <div class="card-header">
-                        <span class="card-title">Salário / Entradas</span>
-                        <i class="fas fa-arrow-up"></i>
+                <div class="dashboard-content">
+                    <div class="panel">
+                        <h3>Últimos Lançamentos</h3>
+                        <div id="listaLancamentos" class="lista-lancamentos">
+                            <p style="color: #64748B;">Nenhum lançamento registrado.</p>
+                        </div>
                     </div>
-                    <div class="card-value" id="valEntradas">R$ 0,00</div>
-                </div>
-
-                <div class="card saida">
-                    <div class="card-header">
-                        <span class="card-title">Saídas</span>
-                        <i class="fas fa-arrow-down"></i>
-                    </div>
-                    <div class="card-value" id="valSaidas">R$ 0,00</div>
-                </div>
-
-                <div class="card meta">
-                    <div class="card-header">
-                        <span class="card-title">Resumo Financeiro</span>
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="card-value" id="valResumo">100%</div>
                 </div>
             </div>
 
-            <div class="dashboard-content">
+            <!-- TELA 2: CATEGORIAS -->
+            <div id="viewCategorias" class="view-aba" style="display: none;">
                 <div class="panel">
-                    <h3>Últimos Lançamentos</h3>
-                    <div id="listaLancamentos" class="lista-lancamentos">
-                        <p style="color: #64748B;">Nenhum lançamento registrado.</p>
+                    <h3>Minhas Categorias 🏷️</h3>
+                    <p style="color: #64748B; margin-bottom: 20px;">Organize seus gastos por categorias personalizadas.</p>
+                    
+                    <div class="lista-lancamentos">
+                        <div class="lancamento">
+                            <div class="lancamento-info">
+                                <strong>🍔 Alimentação</strong>
+                                <span>Mercado, Restaurantes e Delivery</span>
+                            </div>
+                        </div>
+                        <div class="lancamento">
+                            <div class="lancamento-info">
+                                <strong>🚗 Transporte</strong>
+                                <span>Combustível, Uber e Manutenção</span>
+                            </div>
+                        </div>
+                        <div class="lancamento">
+                            <div class="lancamento-info">
+                                <strong>🏠 Moradia</strong>
+                                <span>Aluguel, Água e Luz</span>
+                            </div>
+                        </div>
+                        <div class="lancamento">
+                            <div class="lancamento-info">
+                                <strong>🎮 Lazer</strong>
+                                <span>Cinema, Viagens e Hobbies</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <!-- TELA 3: METAS -->
+            <div id="viewMetas" class="view-aba" style="display: none;">
+                <div class="panel">
+                    <h3>Metas Financeiras 🎯</h3>
+                    <p style="color: #64748B; margin-bottom: 20px;">Acompanhe a evolução dos seus objetivos.</p>
+
+                    <div class="meta-item">
+                        <div class="meta-header">
+                            <strong>Reserva de Emergência</strong>
+                            <span>R$ 5.000 / R$ 10.000</span>
+                        </div>
+                        <div class="barra"><span style="width: 50%;"></span></div>
+                    </div>
+
+                    <div class="meta-item" style="margin-top: 20px;">
+                        <div class="meta-header">
+                            <strong>Viagem de Fim de Ano</strong>
+                            <span>R$ 1.500 / R$ 3.000</span>
+                        </div>
+                        <div class="barra"><span style="width: 50%;"></span></div>
+                    </div>
+                </div>
+            </div>
+
         </main>
 
         <button class="btn-add">+</button>
