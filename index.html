@@ -6,14 +6,19 @@
     <meta name="theme-color" content="#000000">
     <title>FinControl - Login</title>
 
+    <!-- Fontes e Ícones -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- CSS do Projeto -->
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
 
+    <!-- ==========================================================
+         TELA DE LOGIN (DARK GLASSMORPHISM)
+    ========================================================== -->
     <div id="loginScreen" class="login-screen">
         <div class="login-card-circle">
             <h2 class="login-title">LOGIN</h2>
@@ -39,33 +44,43 @@
         </div>
     </div>
 
-    <div id="cadastroScreen" class="register-screen" style="display: none;">
-        <div class="register-box">
-            <h2>Criar Conta</h2>
-            <p style="color: #64748B; margin-bottom: 15px; font-size: 14px;">Preencha os dados abaixo</p>
+    <!-- ==========================================================
+         TELA DE CADASTRO (PADRÃO DARK GLASSMORPHISM)
+    ========================================================== -->
+    <div id="cadastroScreen" class="login-screen" style="display: none;">
+        <div class="login-card-circle">
+            <h2 class="login-title" style="font-size: 20px !important;">CRIAR CONTA</h2>
 
-            <div class="campo">
-                <label>Nome Completo</label>
-                <input type="text" id="cadNome" placeholder="Seu nome">
-            </div>
-            <div class="campo">
-                <label>Usuário</label>
-                <input type="text" id="cadUsuario" placeholder="Escolha um usuário">
-            </div>
-            <div class="campo">
-                <label>Senha</label>
-                <input type="password" id="cadSenha" placeholder="Crie uma senha">
-            </div>
-            <div class="campo">
-                <label>Confirmar Senha</label>
-                <input type="password" id="cadConfirmar" placeholder="Repita a senha">
-            </div>
+            <form id="formCadastro" onsubmit="event.preventDefault(); cadastrar();" style="width: 100%;">
+                <div class="input-group">
+                    <input type="text" id="cadNome" placeholder="Nome Completo" required autocomplete="off">
+                    <i class="fas fa-id-card input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="cadUsuario" placeholder="Usuário" required autocomplete="off">
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="cadSenha" placeholder="Senha" required>
+                    <i class="fas fa-lock input-icon"></i>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="cadConfirmar" placeholder="Confirmar Senha" required>
+                    <i class="fas fa-check-circle input-icon"></i>
+                </div>
 
-            <button class="btn-primary" id="btnSalvarCadastro">Criar Conta</button>
-            <button class="btn-secondary" id="btnVoltarLogin">Voltar ao Login</button>
+                <button type="submit" class="btn-login-dark" id="btnSalvarCadastro" style="width: 100% !important; border-radius: 12px !important;">CADASTRAR</button>
+            </form>
+
+            <div class="login-options" style="justify-content: center !important; margin-top: 15px;">
+                <a href="#" id="btnVoltarLogin" onclick="voltarLogin()">← Voltar ao Login</a>
+            </div>
         </div>
     </div>
 
+    <!-- ==========================================================
+         MODAL ESQUECI A SENHA (SMS)
+    ========================================================== -->
     <div id="modalEsqueciSenha" class="modal" style="display: none;">
         <div class="modal-box">
             <h3 style="margin-bottom: 8px;">Recuperar Senha via SMS 📱</h3>
@@ -95,6 +110,9 @@
         </div>
     </div>
 
+    <!-- ==========================================================
+         APLICATIVO (DASHBOARD PÓS-LOGIN)
+    ========================================================== -->
     <div id="app" class="app" style="display: none;">
         <aside class="sidebar">
             <div class="sidebar-logo">
@@ -169,6 +187,7 @@
         <button class="btn-add">+</button>
     </div>
 
+    <!-- Scripts JavaScript -->
     <script src="js/storage.js"></script>
     <script src="js/auth.js"></script>
 </body>
