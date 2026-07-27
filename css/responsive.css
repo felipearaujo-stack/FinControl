@@ -3,106 +3,158 @@
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. TRAVA A TELA NAS LATERAIS (Elimina o efeito gelatina) */
+    /* 1. LIBERA A ROLAGEM VERTICAL E TRAVA A LATERAL */
     * {
         box-sizing: border-box !important;
         max-width: 100% !important;
     }
 
-    html, body {
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow-x: hidden !important; /* Desativa totalmente o scroll pro lado */
-        margin: 0 !important;
-        padding: 0 !important;
-        background-color: #f8f9fa !important;
+    html {
+        scroll-behavior: smooth;
+        overflow-x: hidden !important;
     }
 
-    /* 2. ENQUADRAMENTO DA TELA DE LOGIN E CADASTRO */
-    .login-screen, 
-    .register-screen, 
-    #loginScreen, 
-    #registerScreen {
-        min-height: 100vh !important;
+    body {
+        overflow-y: auto !important; /* Corrige o overflow: hidden do seu style.css */
+        overflow-x: hidden !important;
         width: 100% !important;
+        background: #F5F7FB !important;
+    }
+
+    /* 2. ESTRUTURA DO APLICATIVO (.app) */
+    .app {
+        display: flex !important;
+        flex-direction: column !important; /* Empilha o menu e o conteúdo */
+        width: 100% !important;
+        height: auto !important;
+        min-height: 100vh !important;
+    }
+
+    /* 3. MENU LATERAL (.sidebar) -> Vira barra superior no celular */
+    .sidebar {
+        width: 100% !important;
+        border-right: none !important;
+        border-bottom: 1px solid var(--border) !important;
+        padding: 15px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,.05) !important;
+    }
+
+    .sidebar-logo {
+        margin-bottom: 15px !important;
+        justify-content: center !important;
+        font-size: 20px !important;
+    }
+
+    .sidebar nav ul {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-around !important;
+        gap: 5px !important;
+    }
+
+    .sidebar li {
+        padding: 8px !important;
+        margin-bottom: 0 !important;
+        font-size: 12px !important;
+        flex-direction: column !important;
+        gap: 4px !important;
+        text-align: center !important;
+    }
+
+    .sidebar li i {
+        font-size: 18px !important;
+    }
+
+    .btn-sair {
+        margin-top: 10px !important;
+        padding: 10px !important;
+    }
+
+    /* 4. CONTEÚDO PRINCIPAL (.conteudo) */
+    .conteudo {
+        padding: 16px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .topo {
+        flex-direction: row !important;
+        margin-bottom: 20px !important;
+    }
+
+    .topo h2 {
+        font-size: 22px !important;
+    }
+
+    .perfil {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 22px !important;
+    }
+
+    /* 5. OS CARDS DA DASHBOARD (.dashboard-grid) */
+    /* Muda de 4 colunas para 1 coluna vertical no celular */
+    .dashboard-grid {
         display: flex !important;
         flex-direction: column !important;
-        justify-content: center !important;
-        align-items: center !important;
-        padding: 20px !important;
-        box-sizing: border-box !important;
+        gap: 15px !important;
+        margin-bottom: 20px !important;
     }
 
-    .login-box, 
-    .register-box {
+    .card {
         width: 100% !important;
-        max-width: 350px !important;
-        padding: 24px !important;
-        border-radius: 20px !important;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05) !important;
-        background-color: #ffffff !important;
+        padding: 18px !important;
+        margin: 0 !important;
     }
 
-    /* inputs e botões confortáveis pro dedão */
-    .login-box input, 
-    .login-box button,
-    .register-box input,
-    .register-box button {
-        width: 100% !important;
-        height: 48px !important;
-        border-radius: 12px !important;
-        font-size: 16px !important;
-        margin-bottom: 12px !important;
+    .card-value {
+        font-size: 24px !important; /* Evita que o valor R$ vaze a tela */
     }
 
-    /* 3. ENQUADRAMENTO DA DASHBOARD (PÓS-LOGIN) */
-    #dashboard, 
-    .dashboard-container, 
-    .main-container {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 16px !important;
-        box-sizing: border-box !important;
-    }
-
-    /* 4. OS CARDS (Saldo Disponível, Salário, Últimos Lançamentos, etc) */
-    /* No seu vídeo, eles estão horizontais e gigantes. Vamos forçar um embaixo do outro! */
-    .cards-container, 
-    .grid-cards, 
-    .cards-grid,
+    /* 6. CONTEÚDO E HISTÓRICO (.dashboard-content) */
+    /* Muda de 2 colunas para 1 coluna vertical */
     .dashboard-content {
         display: flex !important;
-        flex-direction: column !important; /* Empilha os cards verticalmente */
-        width: 100% !important;
-        gap: 16px !important;
-        padding: 0 !important;
-        margin: 0 !important;
+        flex-direction: column !important;
+        gap: 20px !important;
     }
 
-    /* Garante que nenhum card individual passe do tamanho da tela */
-    .card, 
-    .card.entrada, 
-    .card-resumo, 
-    .box-lancamentos {
+    .panel {
+        padding: 18px !important;
         width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        padding: 16px !important;
-        background-color: #ffffff !important;
-        border-radius: 16px !important;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03) !important;
-        border: 1px solid #f1f3f5 !important;
-        box-sizing: border-box !important;
     }
 
-    /* 5. HISTÓRICO / ÚLTIMOS LANÇAMENTOS E TABELAS */
-    .table-container, 
-    table, 
-    .historico-container {
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow-x: auto !important; /* Rola só o extrato pro lado se precisar, sem mover o app */
+    /* 7. TABELAS DE LANÇAMENTOS E HISTÓRICO */
+    table {
         display: block !important;
-        box-sizing: border-box !important;
+        overflow-x: auto !important;
+        white-space: nowrap !important;
+    }
+
+    /* 8. BOTÃO ADICIONAR FLUTUANTE (.btn-add) */
+    .btn-add {
+        right: 20px !important;
+        bottom: 20px !important;
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 24px !important;
+        z-index: 999 !important;
+    }
+
+    /* 9. MODAIS DE PREENCHIMENTO E FORMULÁRIOS */
+    .modal {
+        padding: 16px !important;
+    }
+
+    .modal-box {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 20px !important;
+        border-radius: 18px !important;
+    }
+
+    /* Garante fonte 16px para evitar zoom automático nos campos no celular */
+    input, select {
+        font-size: 16px !important;
     }
 }
