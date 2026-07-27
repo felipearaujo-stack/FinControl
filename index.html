@@ -16,9 +16,7 @@
 </head>
 <body>
 
-    <!-- ==========================================================
-         TELA DE LOGIN (DARK GLASSMORPHISM)
-    ========================================================== -->
+    <!-- TELA DE LOGIN (DARK GLASSMORPHISM) -->
     <div id="loginScreen" class="login-screen">
         <div class="login-card-circle">
             <h2 class="login-title">LOGIN</h2>
@@ -44,9 +42,7 @@
         </div>
     </div>
 
-    <!-- ==========================================================
-         TELA DE CADASTRO
-    ========================================================== -->
+    <!-- TELA DE CADASTRO -->
     <div id="cadastroScreen" class="login-screen" style="display: none;">
         <div class="login-card-circle">
             <h2 class="login-title" style="font-size: 20px !important;">CRIAR CONTA</h2>
@@ -78,9 +74,7 @@
         </div>
     </div>
 
-    <!-- ==========================================================
-         MODAL ESQUECI A SENHA (SMS)
-    ========================================================== -->
+    <!-- MODAL ESQUECI A SENHA (SMS) -->
     <div id="modalEsqueciSenha" class="modal" style="display: none;">
         <div class="modal-box">
             <h3 style="margin-bottom: 8px;">Recuperar Senha via SMS 📱</h3>
@@ -110,9 +104,7 @@
         </div>
     </div>
 
-    <!-- ==========================================================
-         MODAL DE NOVO LANÇAMENTO
-    ========================================================== -->
+    <!-- MODAL DE NOVO LANÇAMENTO -->
     <div id="modalNovoLancamento" class="modal" style="display: none;">
         <div class="modal-box">
             <h3 style="margin-bottom: 8px;">Novo Lançamento ➕</h3>
@@ -155,11 +147,8 @@
         </div>
     </div>
 
-    <!-- ==========================================================
-         APLICATIVO (DASHBOARD PÓS-LOGIN)
-    ========================================================== -->
+    <!-- APLICATIVO (DASHBOARD PÓS-LOGIN) -->
     <div id="app" class="app" style="display: none;">
-        <!-- Menu Lateral / Superior Mobile -->
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <i class="fas fa-wallet"></i>
@@ -287,55 +276,93 @@
                 </div>
             </div>
 
-            <!-- TELA 3: CARTÕES DE CRÉDITO -->
+            <!-- TELA 3: CARTÕES DE CRÉDITO & DÉBITO -->
             <div id="viewCartoes" class="view-aba" style="display: none;">
-                <div class="panel">
-                    <h3>Meus Cartões de Crédito 💳</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Acompanhe limites, faturas e vencimentos.</p>
+                <div class="panel" style="margin-bottom: 20px;">
+                    <h3>Gestão de Cartões & Bancos 💳</h3>
+                    <p style="color: #64748B; margin-bottom: 20px;">Acompanhe o saldo em conta (débito), limite de crédito e vencimentos por instituição.</p>
 
                     <div class="dashboard-grid">
+                        <!-- BANCO 1: ITAÚ / MASTERCARD -->
                         <div class="card" style="background: linear-gradient(135deg, #1E293B, #0F172A); color: #fff;">
                             <div class="card-header">
-                                <span class="card-title" style="color: #94A3B8;">Cartão Principal</span>
-                                <i class="fab fa-cc-mastercard" style="font-size: 24px;"></i>
+                                <span class="card-title" style="color: #94A3B8; font-weight: 700;">BANCO ITAÚ</span>
+                                <i class="fab fa-cc-mastercard" style="font-size: 26px; color: #F59E0B;"></i>
                             </div>
-                            <div class="card-value" style="color: #fff; font-size: 20px; margin: 10px 0;">•••• •••• •••• 4829</div>
-                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94A3B8;">
-                                <span>Fatura Atual: <strong style="color: #EF4444;">R$ 1.450,00</strong></span>
-                                <span>Limite: <strong>R$ 5.000,00</strong></span>
+                            <div style="margin: 10px 0;">
+                                <span style="font-size: 11px; color: #94A3B8; text-transform: uppercase;">Saldo em Débito (Conta)</span>
+                                <div style="font-size: 18px; font-weight: 700; color: #10B981;">R$ 3.250,00</div>
+                            </div>
+                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-size: 12px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>Fatura Crédito:</span>
+                                    <strong style="color: #EF4444;">R$ 1.450,00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>Limite Disponível:</span>
+                                    <strong>R$ 5.000,00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; color: #F59E0B; font-weight: 600;">
+                                    <span>Vencimento da Fatura:</span>
+                                    <span>10/08/2026</span>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="card" style="background: linear-gradient(135deg, #2563EB, #1D4ED8); color: #fff;">
+                        <!-- BANCO 2: NUBANK / VISA -->
+                        <div class="card" style="background: linear-gradient(135deg, #4C1D95, #2E1065); color: #fff;">
                             <div class="card-header">
-                                <span class="card-title" style="color: #93C5FD;">Cartão Digital / Nubank</span>
-                                <i class="fab fa-cc-visa" style="font-size: 24px;"></i>
+                                <span class="card-title" style="color: #C4B5FD; font-weight: 700;">NUBANK</span>
+                                <i class="fab fa-cc-visa" style="font-size: 26px; color: #A78BFA;"></i>
                             </div>
-                            <div class="card-value" style="color: #fff; font-size: 20px; margin: 10px 0;">•••• •••• •••• 9102</div>
-                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #93C5FD;">
-                                <span>Fatura Atual: <strong style="color: #FCA5A5;">R$ 380,00</strong></span>
-                                <span>Limite: <strong>R$ 2.500,00</strong></span>
+                            <div style="margin: 10px 0;">
+                                <span style="font-size: 11px; color: #C4B5FD; text-transform: uppercase;">Saldo em Débito (Conta)</span>
+                                <div style="font-size: 18px; font-weight: 700; color: #10B981;">R$ 1.180,00</div>
+                            </div>
+                            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-size: 12px;">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>Fatura Crédito:</span>
+                                    <strong style="color: #FCA5A5;">R$ 420,00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                                    <span>Limite Disponível:</span>
+                                    <strong>R$ 3.000,00</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; color: #FCD34D; font-weight: 600;">
+                                    <span>Vencimento da Fatura:</span>
+                                    <span>15/08/2026</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div style="margin-top: 20px;">
-                        <h4 style="margin-bottom: 12px; font-size: 16px;">Faturas e Vencimentos</h4>
-                        <div class="lista-lancamentos">
-                            <div class="lancamento">
-                                <div class="lancamento-info">
-                                    <strong>Fatura Mastercard Black</strong>
-                                    <span>Vence em: 10/08/2026</span>
-                                </div>
-                                <span class="lancamento-valor valor-negativo">R$ 1.450,00</span>
-                            </div>
-                            <div class="lancamento">
-                                <div class="lancamento-info">
-                                    <strong>Fatura Visa Platinum</strong>
-                                    <span>Vence em: 15/08/2026</span>
-                                </div>
-                                <span class="lancamento-valor valor-negativo">R$ 380,00</span>
-                            </div>
+                <!-- PAINEL DE DICAS DE EDUCAÇÃO FINANCEIRA -->
+                <div class="panel" style="border-left: 6px solid #2563EB;">
+                    <h3 style="display: flex; align-items: center; gap: 8px;">
+                        <i class="fas fa-lightbulb" style="color: #EAB308;"></i> Dicas de Uso Consciente do Cartão
+                    </h3>
+                    <p style="color: #64748B; font-size: 13px; margin-bottom: 16px;">Mantenha sua saúde financeira no verde com estas boas práticas:</p>
+
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
+                            <strong style="color: #1E293B; font-size: 14px;">1. Pague sempre 100% da fatura 🎯</strong>
+                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Evite o pagamento mínimo para não cair no juro rotativo, uma das taxas mais altas do mercado.</p>
+                        </div>
+
+                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
+                            <strong style="color: #1E293B; font-size: 14px;">2. Regra dos 30% do Limite 📊</strong>
+                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Tente comprometer no máximo 30% da sua renda mensal total com parcelas e faturas de cartão.</p>
+                        </div>
+
+                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
+                            <strong style="color: #1E293B; font-size: 14px;">3. Conheça a 'Melhor Data de Compra' 🗓️</strong>
+                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Compre logo após o fechamento da fatura para ter até 40 dias de prazo para pagar.</p>
+                        </div>
+
+                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
+                            <strong style="color: #1E293B; font-size: 14px;">4. Cartão de Crédito não é 'Renda Extra' 💡</strong>
+                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">O limite de crédito é um empréstimo temporário do banco, não dinheiro seu. Planeje compras com antecedência.</p>
                         </div>
                     </div>
                 </div>
