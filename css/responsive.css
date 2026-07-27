@@ -1,29 +1,145 @@
 /* ==========================================================================
-   FINCONTROL - LAYOUT RESPONSIVO PARA APLICAÇÕES MÓVEIS (< 768px)
+   FINCONTROL - LOGIN GLASSMORPHISM + RESPONSIVO MOBILE
    ========================================================================== */
 
-/* Estilos de Rodapé do Login */
-.login-footer {
-    margin-top: 18px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* 1. ESTILO DA TELA DE LOGIN DARK / CIRCULAR */
+.login-screen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: #000000 !important;
+    background-image: radial-gradient(circle at 10% 20%, rgba(120, 50, 180, 0.25), transparent 40%),
+                      radial-gradient(circle at 90% 80%, rgba(37, 99, 235, 0.25), transparent 40%) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 99999 !important;
+    padding: 20px !important;
 }
 
-.login-footer a {
-    color: #2563EB;
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 600;
+/* Card Circular Glassmorphism */
+.login-card-circle {
+    width: 100% !important;
+    max-width: 380px !important;
+    min-height: 380px !important;
+    background: rgba(30, 32, 38, 0.75) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-radius: 50% / 40% !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6) !important;
+    padding: 45px 35px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
 }
 
-.login-footer p {
-    font-size: 14px;
-    color: #64748B;
-    margin: 0;
+@media (max-width: 480px) {
+    .login-card-circle {
+        border-radius: 35px !important;
+        padding: 35px 25px !important;
+    }
 }
 
+.login-title {
+    color: #FFFFFF !important;
+    font-size: 24px !important;
+    font-weight: 600 !important;
+    letter-spacing: 2px !important;
+    margin-bottom: 25px !important;
+    text-transform: uppercase !important;
+}
+
+#formLogin {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+.input-group {
+    position: relative !important;
+    width: 100% !important;
+    margin-bottom: 18px !important;
+}
+
+.input-group input {
+    width: 100% !important;
+    height: 48px !important;
+    background: rgba(255, 255, 255, 0.07) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px !important;
+    padding: 0 45px 0 16px !important;
+    color: #FFFFFF !important;
+    font-size: 15px !important;
+    outline: none !important;
+    transition: all 0.3s ease !important;
+}
+
+.input-group input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.input-group input:focus {
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.input-icon {
+    position: absolute !important;
+    right: 16px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 18px !important;
+    pointer-events: none !important;
+}
+
+.btn-login-dark {
+    width: 60% !important;
+    height: 44px !important;
+    background: linear-gradient(180deg, #2D3238 0%, #15181C 100%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 22px !important;
+    color: #FFFFFF !important;
+    font-weight: 600 !important;
+    font-size: 15px !important;
+    letter-spacing: 1.5px !important;
+    cursor: pointer !important;
+    margin-top: 10px !important;
+    margin-bottom: 20px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
+    transition: transform 0.2s ease !important;
+}
+
+.btn-login-dark:active {
+    transform: scale(0.97) !important;
+}
+
+.login-options {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    font-size: 13px !important;
+    padding: 0 5px !important;
+}
+
+.login-options a {
+    color: rgba(255, 255, 255, 0.7) !important;
+    text-decoration: none !important;
+    transition: color 0.2s !important;
+}
+
+.login-options a:hover {
+    color: #FFFFFF !important;
+    text-decoration: underline !important;
+}
+
+/* 2. REGRAS PARA O APP NO CELULAR (< 768px) */
 @media screen and (max-width: 768px) {
 
     * {
@@ -40,47 +156,6 @@
         background: #F5F7FB !important;
     }
 
-    /* 1. TELA DE LOGIN & CADASTRO CENTRALIZADA */
-    .login-screen, 
-    #loginScreen,
-    .register-screen,
-    #cadastroScreen {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        z-index: 9999 !important;
-        background: #F5F7FB !important;
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        padding: 20px !important;
-    }
-
-    .login-box, 
-    .register-box {
-        width: 100% !important;
-        max-width: 350px !important;
-        background: #FFFFFF !important;
-        padding: 28px 20px !important;
-        border-radius: 20px !important;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
-        text-align: center;
-    }
-
-    .login-box input, 
-    .login-box button,
-    .register-box input,
-    .register-box button {
-        width: 100% !important;
-        height: 48px !important;
-        font-size: 16px !important; /* Previne zoom no iPhone/Android */
-        border-radius: 12px !important;
-        margin-bottom: 12px !important;
-    }
-
-    /* 2. DASHBOARD PÓS-LOGIN */
     .app {
         display: flex !important;
         flex-direction: column !important;
@@ -89,7 +164,6 @@
         overflow: hidden !important;
     }
 
-    /* Menu Superior Fixo no Celular */
     .sidebar {
         width: 100% !important;
         flex-shrink: 0 !important;
@@ -131,7 +205,6 @@
         display: none !important;
     }
 
-    /* 3. SCROLL ISOLADO NA ÁREA DE CONTEÚDO */
     .conteudo {
         flex: 1 !important;
         overflow-y: auto !important;
@@ -156,7 +229,6 @@
         font-size: 20px !important;
     }
 
-    /* Organização dos Cards em Lista Vertical */
     .dashboard-grid,
     .dashboard-content {
         display: flex !important;
@@ -186,13 +258,5 @@
         width: 55px !important;
         height: 55px !important;
         font-size: 22px !important;
-    }
-
-    /* Modais */
-    .modal-box {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 20px !important;
-        border-radius: 18px !important;
     }
 }
