@@ -1,48 +1,36 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (SESSÃO + TROCA DE TELAS SPA)
+   FINCONTROL - AUTH.JS
 ========================================================== */
 
 const loginScreen = document.getElementById("loginScreen");
 const cadastroScreen = document.getElementById("cadastroScreen");
 const app = document.getElementById("app");
 
-const btnEntrar = document.getElementById("btnEntrar");
-const btnAbrirCadastro = document.getElementById("btnAbrirCadastro");
-const btnSalvarCadastro = document.getElementById("btnSalvarCadastro");
-const btnVoltarLogin = document.getElementById("btnVoltarLogin");
-
 let codigoEnviadoSMS = null;
 
-// Configurar navegação dos menus
-document.addEventListener("DOMContentLoaded", () => {
-    const itensMenu = document.querySelectorAll(".item-menu");
-    itensMenu.forEach(item => {
-        item.addEventListener("click", () => {
-            const idTelaDestino = item.getAttribute("data-tela");
-            navegarPara(idTelaDestino, item);
-        });
+// FUNÇÃO INFALÍVEL DE TROCA DE TELAS / ABAS NO APP
+function mudarAba(nomeAba, elemento) {
+    // 1. Esconde todas as abas da dashboard
+    const abas = document.querySelectorAll('.view-aba');
+    abas.forEach(aba => {
+        aba.style.display = 'none';
     });
-});
 
-// Função que realiza a troca fluida de telas no app
-function navegarPara(idTela, elementoClicado) {
-    // Esconde todas as abas
-    const abas = document.querySelectorAll(".view-aba");
-    abas.forEach(aba => aba.style.display = "none");
+    // 2. Remove o destaque visual de todos os botões do menu
+    const botoesMenu = document.querySelectorAll('.item-menu');
+    botoesMenu.forEach(btn => {
+        btn.classList.remove('ativo');
+    });
 
-    // Remove a classe ativo de todos os botões do menu
-    const itensMenu = document.querySelectorAll(".item-menu");
-    itensMenu.forEach(item => item.classList.remove("ativo"));
-
-    // Mostra a tela desejada
-    const telaDestino = document.getElementById(idTela);
-    if (telaDestino) {
-        telaDestino.style.display = "block";
+    // 3. Exibe a aba clicada
+    const abaAlvo = document.getElementById(nomeAba);
+    if (abaAlvo) {
+        abaAlvo.style.display = 'block';
     }
 
-    // Adiciona o destaque no ícone do menu
-    if (elementoClicado) {
-        elementoClicado.classList.add("ativo");
+    // 4. Marca o botão atual como ativo
+    if (elemento) {
+        elemento.classList.add('ativo');
     }
 }
 
@@ -100,10 +88,13 @@ function entrar() {
     let dados = null;
     if (typeof Storage !== "undefined" && Storage.carregarUsuario) {
         dados = Storage.carregarUsuario(usuario);
+    } else {
+        // Fallback direto de segurança caso o Storage do navegador não tenha carregado a classe
+        dados = JSON.parse(localStorage.getItem(`user_${usuario}`));
     }
 
     if (!dados) {
-        alert("Usuário não encontrado.");
+        alert("Usuário não encontrado. Crie uma conta no link 'Criar conta'.");
         return;
     }
 
@@ -112,24 +103,18 @@ function entrar() {
         return;
     }
 
-    if (typeof Storage !== "undefined" && Storage.salvarUsuarioAtual) {
-        Storage.salvarUsuarioAtual(usuario);
-    }
+    localStorage.setItem("usuarioAtual", usuario);
 
-    // Esconde o login e abre o app
     if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
     if (app) app.style.setProperty("display", "flex", "important");
 
     const nome = document.getElementById("nomeUsuario");
-    if (nome) nome.innerHTML = `Olá, ${dados.nome} 👋`;
-
-    if (typeof carregarDashboard === "function") carregarDashboard();
-    if (typeof carregarLancamentos === "function") carregarLancamentos();
+    if (nome) nome.innerHTML = `Olá, ${dados.nome || usuario} 👋`;
 }
 
 function sair() {
-    if (typeof Storage !== "undefined" && Storage.sair) Storage.sair();
+    localStorage.removeItem("usuarioAtual");
     if (app) app.style.setProperty("display", "none", "important");
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
     if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
@@ -179,24 +164,21 @@ function validarEResetarSenha() {
         return;
     }
 
-    if (typeof Storage !== "undefined" && Storage.carregarUsuario) {
-        const dados = Storage.carregarUsuario(usuario);
-        if (dados) {
-            dados.senha = novaSenha;
-            Storage.salvarUsuario(usuario, dados);
-            alert("Senha alterada com sucesso! Faça login com a nova senha.");
-            fecharEsqueciSenha();
-        } else {
-            alert("Preencha o campo Username na tela de login com seu usuário antes de redefinir.");
-        }
+    let dados = JSON.parse(localStorage.getItem(`user_${usuario}`));
+
+    if (dados) {
+        dados.senha = novaSenha;
+        localStorage.setItem(`user_${usuario}`, JSON.stringify(dados));
+        alert("Senha alterada com sucesso! Faça login com a nova senha.");
+        fecharEsqueciSenha();
+    } else {
+        alert("Preencha o campo Username com seu usuário antes de redefinir.");
     }
 }
 
+// INICIALIZAÇÃO
 window.addEventListener("load", () => {
-    let usuarioSalvo = null;
-    if (typeof Storage !== "undefined" && Storage.obterUsuarioAtual) {
-        usuarioSalvo = Storage.obterUsuarioAtual();
-    }
+    const usuarioSalvo = localStorage.getItem("usuarioAtual");
 
     if (!usuarioSalvo) {
         if (app) app.style.setProperty("display", "none", "important");
@@ -205,10 +187,7 @@ window.addEventListener("load", () => {
         return;
     }
 
-    let dados = null;
-    if (typeof Storage !== "undefined" && Storage.carregarUsuario) {
-        dados = Storage.carregarUsuario(usuarioSalvo);
-    }
+    const dados = JSON.parse(localStorage.getItem(`user_${usuarioSalvo}`));
 
     if (!dados) {
         if (app) app.style.setProperty("display", "none", "important");
@@ -222,8 +201,5 @@ window.addEventListener("load", () => {
     if (app) app.style.setProperty("display", "flex", "important");
 
     const nome = document.getElementById("nomeUsuario");
-    if (nome) nome.innerHTML = `Olá, ${dados.nome} 👋`;
-
-    if (typeof carregarDashboard === "function") carregarDashboard();
-    if (typeof carregarLancamentos === "function") carregarLancamentos();
+    if (nome) nome.innerHTML = `Olá, ${dados.nome || usuarioSalvo} 👋`;
 });
