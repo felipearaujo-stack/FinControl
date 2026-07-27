@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS
+   FINCONTROL - AUTH.JS (SESSÃO + TROCA DE TELAS SPA)
 ========================================================== */
 
 const loginScreen = document.getElementById("loginScreen");
@@ -10,14 +10,41 @@ const btnEntrar = document.getElementById("btnEntrar");
 const btnAbrirCadastro = document.getElementById("btnAbrirCadastro");
 const btnSalvarCadastro = document.getElementById("btnSalvarCadastro");
 const btnVoltarLogin = document.getElementById("btnVoltarLogin");
-const btnSair = document.getElementById("btnSair");
 
 let codigoEnviadoSMS = null;
 
-btnAbrirCadastro?.addEventListener("click", abrirCadastro);
-btnVoltarLogin?.addEventListener("click", voltarLogin);
-btnSalvarCadastro?.addEventListener("click", cadastrar);
-btnSair?.addEventListener("click", sair);
+// Configurar navegação dos menus
+document.addEventListener("DOMContentLoaded", () => {
+    const itensMenu = document.querySelectorAll(".item-menu");
+    itensMenu.forEach(item => {
+        item.addEventListener("click", () => {
+            const idTelaDestino = item.getAttribute("data-tela");
+            navegarPara(idTelaDestino, item);
+        });
+    });
+});
+
+// Função que realiza a troca fluida de telas no app
+function navegarPara(idTela, elementoClicado) {
+    // Esconde todas as abas
+    const abas = document.querySelectorAll(".view-aba");
+    abas.forEach(aba => aba.style.display = "none");
+
+    // Remove a classe ativo de todos os botões do menu
+    const itensMenu = document.querySelectorAll(".item-menu");
+    itensMenu.forEach(item => item.classList.remove("ativo"));
+
+    // Mostra a tela desejada
+    const telaDestino = document.getElementById(idTela);
+    if (telaDestino) {
+        telaDestino.style.display = "block";
+    }
+
+    // Adiciona o destaque no ícone do menu
+    if (elementoClicado) {
+        elementoClicado.classList.add("ativo");
+    }
+}
 
 function abrirCadastro() {
     if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
@@ -89,7 +116,7 @@ function entrar() {
         Storage.salvarUsuarioAtual(usuario);
     }
 
-    // Oculta telas de login/cadastro e abre a Dashboard
+    // Esconde o login e abre o app
     if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
     if (app) app.style.setProperty("display", "flex", "important");
@@ -165,7 +192,6 @@ function validarEResetarSenha() {
     }
 }
 
-// INICIALIZAÇÃO FIXA NA TELA DE LOGIN (Salva sessão apenas se existente)
 window.addEventListener("load", () => {
     let usuarioSalvo = null;
     if (typeof Storage !== "undefined" && Storage.obterUsuarioAtual) {
@@ -191,7 +217,6 @@ window.addEventListener("load", () => {
         return;
     }
 
-    // Se já estiver logado, exibe direto a Dashboard
     if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
     if (app) app.style.setProperty("display", "flex", "important");
