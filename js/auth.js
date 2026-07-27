@@ -8,27 +8,27 @@ const app = document.getElementById("app");
 
 let codigoEnviadoSMS = null;
 
-// FUNÇÃO INFALÍVEL DE TROCA DE TELAS / ABAS NO APP
+// FUNÇÃO DIRETA DE ALTERNÂNCIA DE ABAS
 function mudarAba(nomeAba, elemento) {
-    // 1. Esconde todas as abas da dashboard
+    // 1. Esconde todas as telas
     const abas = document.querySelectorAll('.view-aba');
     abas.forEach(aba => {
         aba.style.display = 'none';
     });
 
-    // 2. Remove o destaque visual de todos os botões do menu
+    // 2. Remove o destaque ativo do menu
     const botoesMenu = document.querySelectorAll('.item-menu');
     botoesMenu.forEach(btn => {
         btn.classList.remove('ativo');
     });
 
-    // 3. Exibe a aba clicada
+    // 3. Exibe a tela desejada
     const abaAlvo = document.getElementById(nomeAba);
     if (abaAlvo) {
         abaAlvo.style.display = 'block';
     }
 
-    // 4. Marca o botão atual como ativo
+    // 4. Ativa a marcação no menu
     if (elemento) {
         elemento.classList.add('ativo');
     }
@@ -62,20 +62,11 @@ function cadastrar() {
         return;
     }
 
-    if (typeof Storage !== "undefined" && Storage.usuarioExiste && Storage.usuarioExiste(usuario)) {
-        alert("Usuário já cadastrado.");
-        return;
-    }
-
-    if (typeof Storage !== "undefined" && Storage.salvarUsuario) {
-        Storage.salvarUsuario(usuario, {
-            nome,
-            usuario,
-            senha,
-            salario: 0,
-            lancamentos: []
-        });
-    }
+    localStorage.setItem(`user_${usuario}`, JSON.stringify({
+        nome,
+        usuario,
+        senha
+    }));
 
     alert("Conta criada com sucesso!");
     voltarLogin();
@@ -85,17 +76,12 @@ function entrar() {
     const usuario = document.getElementById("loginUsuario")?.value.trim();
     const senha = document.getElementById("loginSenha")?.value;
 
-    let dados = null;
-    if (typeof Storage !== "undefined" && Storage.carregarUsuario) {
-        dados = Storage.carregarUsuario(usuario);
-    } else {
-        // Fallback direto de segurança caso o Storage do navegador não tenha carregado a classe
-        dados = JSON.parse(localStorage.getItem(`user_${usuario}`));
-    }
+    let dados = JSON.parse(localStorage.getItem(`user_${usuario}`));
 
+    // Se for o primeiro acesso sem cadastro, permite entrar criando usuário temporário
     if (!dados) {
-        alert("Usuário não encontrado. Crie uma conta no link 'Criar conta'.");
-        return;
+        dados = { nome: usuario, usuario: usuario, senha: senha };
+        localStorage.setItem(`user_${usuario}`, JSON.stringify(dados));
     }
 
     if (dados.senha !== senha) {
