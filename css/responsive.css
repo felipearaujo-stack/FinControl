@@ -1,8 +1,8 @@
 /* ==========================================================================
-   FINCONTROL - LOGIN GLASSMORPHISM + RESPONSIVO MOBILE
+   FINCONTROL - CSS RESPONSIVO & ISOLAMENTO DE MODAIS (MOBILE < 768px)
    ========================================================================== */
 
-/* 1. ESTILO DA TELA DE LOGIN DARK / CIRCULAR */
+/* 1. TELA DE LOGIN & CADASTRO DARK GLASSMORPHISM */
 .login-screen, 
 .register-screen,
 #loginScreen,
@@ -22,7 +22,6 @@
     padding: 20px !important;
 }
 
-/* Card Circular Glassmorphism */
 .login-card-circle,
 .register-box,
 .login-box {
@@ -75,16 +74,10 @@
     color: #FFFFFF !important;
     font-size: 15px !important;
     outline: none !important;
-    transition: all 0.3s ease !important;
 }
 
 .input-group input::placeholder {
     color: rgba(255, 255, 255, 0.5) !important;
-}
-
-.input-group input:focus {
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    background: rgba(255, 255, 255, 0.12) !important;
 }
 
 .input-icon {
@@ -110,11 +103,6 @@
     cursor: pointer !important;
     margin-top: 10px !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4) !important;
-    transition: transform 0.2s ease !important;
-}
-
-.btn-login-dark:active {
-    transform: scale(0.97) !important;
 }
 
 .login-options {
@@ -131,7 +119,37 @@
     text-decoration: none !important;
 }
 
-/* 2. REGRAS PARA O APP NO CELULAR (< 768px) */
+/* 2. ISOLAMENTO TOTAL DOS MODAIS (EVITA SOBREPOSIÇÃO NO MOBILE) */
+.modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+    backdrop-filter: blur(5px) !important;
+    -webkit-backdrop-filter: blur(5px) !important;
+    z-index: 999999 !important; /* Fica acima de tudo sem misturar */
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    padding: 20px !important;
+    box-sizing: border-box !important;
+}
+
+.modal-box {
+    background: #FFFFFF !important;
+    width: 100% !important;
+    max-width: 400px !important;
+    border-radius: 20px !important;
+    padding: 25px 20px !important;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+    position: relative !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+}
+
+/* 3. ESTRUTURA RESPONSIVA DO APP (< 768px) */
 @media screen and (max-width: 768px) {
 
     * {
@@ -245,10 +263,12 @@
     }
 
     .btn-add {
+        position: fixed !important;
         right: 20px !important;
         bottom: 20px !important;
         width: 55px !important;
         height: 55px !important;
         font-size: 22px !important;
+        z-index: 9999 !important;
     }
 }
