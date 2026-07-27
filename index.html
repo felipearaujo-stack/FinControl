@@ -114,7 +114,7 @@
          APLICATIVO (DASHBOARD PÓS-LOGIN)
     ========================================================== -->
     <div id="app" class="app" style="display: none;">
-        <!-- Menu Superior / Lateral com Seleção de Tela -->
+        <!-- Menu Superior / Lateral -->
         <aside class="sidebar">
             <div class="sidebar-logo">
                 <i class="fas fa-wallet"></i>
@@ -122,13 +122,13 @@
             </div>
             <nav>
                 <ul id="menuNavegacao">
-                    <li class="item-menu ativo" data-tela="viewLancamentos">
+                    <li class="item-menu ativo" id="btnMenuLancamentos" onclick="mudarAba('viewLancamentos', this)">
                         <i class="fas fa-chart-pie"></i> Lançamentos
                     </li>
-                    <li class="item-menu" data-tela="viewCategorias">
+                    <li class="item-menu" id="btnMenuCategorias" onclick="mudarAba('viewCategorias', this)">
                         <i class="fas fa-tags"></i> Categorias
                     </li>
-                    <li class="item-menu" data-tela="viewMetas">
+                    <li class="item-menu" id="btnMenuMetas" onclick="mudarAba('viewMetas', this)">
                         <i class="fas fa-bullseye"></i> Metas
                     </li>
                 </ul>
@@ -148,7 +148,7 @@
                 </div>
             </div>
 
-            <!-- TELA 1: LANÇAMENTOS E DASHBOARD -->
+            <!-- TELA 1: LANÇAMENTOS -->
             <div id="viewLancamentos" class="view-aba">
                 <div class="dashboard-grid">
                     <div class="card saldo">
