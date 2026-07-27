@@ -1,48 +1,48 @@
 /* ==========================================================================
-   CONFIGURAÇÃO MOBILE DEFINITIVA - FINCONTROL (Telas < 768px)
+   FINCONTROL - MOBILE COM SCROLL EXCLUSIVO NA DASHBOARD (< 768px)
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. LIBERA A ROLAGEM VERTICAL E TRAVA A LATERAL */
+    /* 1. TRAVA A TELA PRINCIPAL (Para não rolar a página toda) */
     * {
         box-sizing: border-box !important;
         max-width: 100% !important;
     }
 
-    html {
-        scroll-behavior: smooth;
-        overflow-x: hidden !important;
-    }
-
-    body {
-        overflow-y: auto !important; /* Corrige o overflow: hidden do seu style.css */
-        overflow-x: hidden !important;
+    html, body {
         width: 100% !important;
+        height: 100% !important;
+        overflow: hidden !important; /* Trava o scroll do navegador/página principal */
+        margin: 0 !important;
+        padding: 0 !important;
         background: #F5F7FB !important;
     }
 
-    /* 2. ESTRUTURA DO APLICATIVO (.app) */
+    /* 2. ESTRUTURA DO APP (Ocupa exatamente 100% da altura da tela) */
     .app {
         display: flex !important;
-        flex-direction: column !important; /* Empilha o menu e o conteúdo */
-        width: 100% !important;
-        height: auto !important;
-        min-height: 100vh !important;
+        flex-direction: column !important;
+        width: 100vw !important;
+        height: 100vh !important; /* Ocupa exatamente a altura do celular */
+        overflow: hidden !important;
     }
 
-    /* 3. MENU LATERAL (.sidebar) -> Vira barra superior no celular */
+    /* 3. MENU / SIDEBAR FIXO NO TOPO */
     .sidebar {
         width: 100% !important;
+        flex-shrink: 0 !important; /* Impede a sidebar de encolher ao rolar */
         border-right: none !important;
         border-bottom: 1px solid var(--border) !important;
-        padding: 15px !important;
+        padding: 10px 15px !important;
         box-shadow: 0 4px 12px rgba(0,0,0,.05) !important;
+        background: #FFFFFF !important;
+        z-index: 10 !important;
     }
 
     .sidebar-logo {
-        margin-bottom: 15px !important;
+        margin-bottom: 8px !important;
         justify-content: center !important;
-        font-size: 20px !important;
+        font-size: 18px !important;
     }
 
     .sidebar nav ul {
@@ -50,110 +50,99 @@
         flex-direction: row !important;
         justify-content: space-around !important;
         gap: 5px !important;
+        overflow-x: auto !important; /* Permite rolar os ícones do menu pro lado se necessário */
     }
 
     .sidebar li {
-        padding: 8px !important;
+        padding: 6px 8px !important;
         margin-bottom: 0 !important;
-        font-size: 12px !important;
+        font-size: 11px !important;
         flex-direction: column !important;
-        gap: 4px !important;
+        gap: 2px !important;
         text-align: center !important;
+        white-space: nowrap !important;
     }
 
     .sidebar li i {
-        font-size: 18px !important;
+        font-size: 16px !important;
     }
 
     .btn-sair {
-        margin-top: 10px !important;
-        padding: 10px !important;
+        display: none !important; /* Oculta o botão sair grande para economizar espaço no topo */
     }
 
-    /* 4. CONTEÚDO PRINCIPAL (.conteudo) */
+    /* 4. ÁREA DE CONTEÚDO (AQUI OCORRE O SCROLL ISOLADO!) */
     .conteudo {
+        flex: 1 !important; /* Pega todo o espaço restante abaixo do menu */
+        overflow-y: auto !important; /* LIBERA O SCROLL APENAS AQUI! */
+        overflow-x: hidden !important;
         padding: 16px !important;
         width: 100% !important;
         box-sizing: border-box !important;
+        -webkit-overflow-scrolling: touch; /* Scroll suave e natural no iPhone/Android */
     }
 
     .topo {
         flex-direction: row !important;
-        margin-bottom: 20px !important;
+        margin-bottom: 15px !important;
     }
 
     .topo h2 {
-        font-size: 22px !important;
+        font-size: 20px !important;
     }
 
     .perfil {
-        width: 45px !important;
-        height: 45px !important;
-        font-size: 22px !important;
+        width: 40px !important;
+        height: 40px !important;
+        font-size: 20px !important;
     }
 
-    /* 5. OS CARDS DA DASHBOARD (.dashboard-grid) */
-    /* Muda de 4 colunas para 1 coluna vertical no celular */
+    /* 5. CARDS E CONTEÚDO DA DASHBOARD */
     .dashboard-grid {
         display: flex !important;
         flex-direction: column !important;
-        gap: 15px !important;
+        gap: 12px !important;
         margin-bottom: 20px !important;
     }
 
     .card {
         width: 100% !important;
-        padding: 18px !important;
+        padding: 16px !important;
         margin: 0 !important;
     }
 
     .card-value {
-        font-size: 24px !important; /* Evita que o valor R$ vaze a tela */
+        font-size: 22px !important;
     }
 
-    /* 6. CONTEÚDO E HISTÓRICO (.dashboard-content) */
-    /* Muda de 2 colunas para 1 coluna vertical */
     .dashboard-content {
         display: flex !important;
         flex-direction: column !important;
-        gap: 20px !important;
+        gap: 16px !important;
     }
 
     .panel {
-        padding: 18px !important;
+        padding: 16px !important;
         width: 100% !important;
     }
 
-    /* 7. TABELAS DE LANÇAMENTOS E HISTÓRICO */
+    /* 6. TABELAS E BOTÃO FLUTUANTE */
     table {
         display: block !important;
         overflow-x: auto !important;
         white-space: nowrap !important;
     }
 
-    /* 8. BOTÃO ADICIONAR FLUTUANTE (.btn-add) */
     .btn-add {
         right: 20px !important;
         bottom: 20px !important;
-        width: 60px !important;
-        height: 60px !important;
-        font-size: 24px !important;
-        z-index: 999 !important;
+        width: 55px !important;
+        height: 55px !important;
+        font-size: 22px !important;
+        z-index: 99 !important;
     }
 
-    /* 9. MODAIS DE PREENCHIMENTO E FORMULÁRIOS */
-    .modal {
-        padding: 16px !important;
-    }
-
-    .modal-box {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 20px !important;
-        border-radius: 18px !important;
-    }
-
-    /* Garante fonte 16px para evitar zoom automático nos campos no celular */
+    /* 7. FORMULÁRIOS E MODAIS */
     input, select {
         font-size: 16px !important;
     }
