@@ -1,9 +1,9 @@
 /* ==========================================================================
-   FINCONTROL - MOBILE COM SCROLL EXCLUSIVO NA DASHBOARD (< 768px)
+   FINCONTROL - TELA DE LOGIN CENTRALIZADA + APP SCROLLABLE (< 768px)
    ========================================================================== */
 @media screen and (max-width: 768px) {
 
-    /* 1. TRAVA A TELA PRINCIPAL (Para não rolar a página toda) */
+    /* Trava a página global */
     * {
         box-sizing: border-box !important;
         max-width: 100% !important;
@@ -12,29 +12,67 @@
     html, body {
         width: 100% !important;
         height: 100% !important;
-        overflow: hidden !important; /* Trava o scroll do navegador/página principal */
+        overflow: hidden !important;
         margin: 0 !important;
         padding: 0 !important;
         background: #F5F7FB !important;
     }
 
-    /* 2. ESTRUTURA DO APP (Ocupa exatamente 100% da altura da tela) */
+    /* 1. TELA DE LOGIN (Isolada e Centralizada no Meio da Tela) */
+    .login-screen, 
+    #loginScreen,
+    .register-screen,
+    #cadastroScreen {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        z-index: 9999 !important; /* Fica acima de tudo */
+        background: #F5F7FB !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        padding: 20px !important;
+    }
+
+    .login-box, 
+    .register-box {
+        width: 100% !important;
+        max-width: 350px !important;
+        background: #FFFFFF !important;
+        padding: 28px 20px !important;
+        border-radius: 20px !important;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08) !important;
+    }
+
+    .login-box input, 
+    .login-box button,
+    .register-box input,
+    .register-box button {
+        width: 100% !important;
+        height: 48px !important;
+        font-size: 16px !important; /* Impede zoom no celular */
+        border-radius: 12px !important;
+        margin-bottom: 12px !important;
+    }
+
+    /* 2. ESTRUTURA DO APP PÓS-LOGIN */
     .app {
         display: flex !important;
         flex-direction: column !important;
         width: 100vw !important;
-        height: 100vh !important; /* Ocupa exatamente a altura do celular */
+        height: 100vh !important;
         overflow: hidden !important;
     }
 
-    /* 3. MENU / SIDEBAR FIXO NO TOPO */
+    /* Topo fixo */
     .sidebar {
         width: 100% !important;
-        flex-shrink: 0 !important; /* Impede a sidebar de encolher ao rolar */
+        flex-shrink: 0 !important;
         border-right: none !important;
         border-bottom: 1px solid var(--border) !important;
         padding: 10px 15px !important;
-        box-shadow: 0 4px 12px rgba(0,0,0,.05) !important;
         background: #FFFFFF !important;
         z-index: 10 !important;
     }
@@ -50,12 +88,11 @@
         flex-direction: row !important;
         justify-content: space-around !important;
         gap: 5px !important;
-        overflow-x: auto !important; /* Permite rolar os ícones do menu pro lado se necessário */
+        overflow-x: auto !important;
     }
 
     .sidebar li {
         padding: 6px 8px !important;
-        margin-bottom: 0 !important;
         font-size: 11px !important;
         flex-direction: column !important;
         gap: 2px !important;
@@ -68,18 +105,17 @@
     }
 
     .btn-sair {
-        display: none !important; /* Oculta o botão sair grande para economizar espaço no topo */
+        display: none !important;
     }
 
-    /* 4. ÁREA DE CONTEÚDO (AQUI OCORRE O SCROLL ISOLADO!) */
+    /* 3. SCROLL EXCLUSIVO DA DASHBOARD */
     .conteudo {
-        flex: 1 !important; /* Pega todo o espaço restante abaixo do menu */
-        overflow-y: auto !important; /* LIBERA O SCROLL APENAS AQUI! */
+        flex: 1 !important;
+        overflow-y: auto !important; /* Rola só o conteúdo interno */
         overflow-x: hidden !important;
         padding: 16px !important;
         width: 100% !important;
-        box-sizing: border-box !important;
-        -webkit-overflow-scrolling: touch; /* Scroll suave e natural no iPhone/Android */
+        -webkit-overflow-scrolling: touch;
     }
 
     .topo {
@@ -97,15 +133,14 @@
         font-size: 20px !important;
     }
 
-    /* 5. CARDS E CONTEÚDO DA DASHBOARD */
-    .dashboard-grid {
+    .dashboard-grid,
+    .dashboard-content {
         display: flex !important;
         flex-direction: column !important;
-        gap: 12px !important;
-        margin-bottom: 20px !important;
+        gap: 15px !important;
     }
 
-    .card {
+    .card, .panel {
         width: 100% !important;
         padding: 16px !important;
         margin: 0 !important;
@@ -115,18 +150,6 @@
         font-size: 22px !important;
     }
 
-    .dashboard-content {
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 16px !important;
-    }
-
-    .panel {
-        padding: 16px !important;
-        width: 100% !important;
-    }
-
-    /* 6. TABELAS E BOTÃO FLUTUANTE */
     table {
         display: block !important;
         overflow-x: auto !important;
@@ -139,11 +162,5 @@
         width: 55px !important;
         height: 55px !important;
         font-size: 22px !important;
-        z-index: 99 !important;
-    }
-
-    /* 7. FORMULÁRIOS E MODAIS */
-    input, select {
-        font-size: 16px !important;
     }
 }
