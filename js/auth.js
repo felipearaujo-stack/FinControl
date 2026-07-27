@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (SESSÃO E MODAIS BLINDADOS)
+   FINCONTROL - AUTH.JS
 ========================================================== */
 
 const loginScreen = document.getElementById("loginScreen");
@@ -8,7 +8,6 @@ const app = document.getElementById("app");
 
 let codigoEnviadoSMS = null;
 
-// CONTROLE DO MODAL DE NOVO LANÇAMENTO
 function abrirModalLancamento() {
     const modal = document.getElementById("modalNovoLancamento");
     if (modal) modal.style.setProperty("display", "flex", "important");
@@ -19,7 +18,6 @@ function fecharModalLancamento() {
     if (modal) modal.style.setProperty("display", "none", "important");
 }
 
-// SALVAR NOVO LANÇAMENTO
 function salvarNovoLancamento() {
     const desc = document.getElementById("lancDescricao")?.value.trim();
     const valor = parseFloat(document.getElementById("lancValor")?.value);
@@ -56,7 +54,6 @@ function salvarNovoLancamento() {
     alert("Lançamento adicionado com sucesso!");
 }
 
-// SALVAR SALÁRIO
 function salvarSalario() {
     const valorInput = parseFloat(document.getElementById("inputSalario")?.value);
 
@@ -76,7 +73,6 @@ function salvarSalario() {
     alert(`Salário de R$ ${valorInput.toLocaleString('pt-BR', {minimumFractionDigits: 2})} salvo!`);
 }
 
-// ATUALIZA VALORES E TABELAS
 function atualizarTudo(dados) {
     const salario = dados.salario || 0;
     const lista = dados.lancamentos || [];
@@ -101,7 +97,6 @@ function atualizarTudo(dados) {
     if (elSaidas) elSaidas.innerHTML = `R$ ${totalSaidas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
     if (elInputSalario && salario > 0) elInputSalario.value = salario;
 
-    // Renderiza Histórico da Dashboard
     const containerHist = document.getElementById("containerHistorico");
     if (containerHist) {
         if (lista.length === 0 && salario === 0) {
@@ -134,7 +129,6 @@ function atualizarTudo(dados) {
         }
     }
 
-    // Renderiza Tabela da Aba Lançamentos
     const corpoTabela = document.getElementById("tabelaLancamentosCorpo");
     if (corpoTabela) {
         if (lista.length === 0 && salario === 0) {
@@ -167,7 +161,6 @@ function atualizarTudo(dados) {
     }
 }
 
-// ALTERNAR ABAS
 function mudarAba(nomeAba, elemento) {
     const abas = document.querySelectorAll('.view-aba');
     abas.forEach(aba => aba.style.display = 'none');
@@ -312,7 +305,6 @@ function validarEResetarSenha() {
     }
 }
 
-// INICIALIZAÇÃO
 window.addEventListener("load", () => {
     const usuarioSalvo = localStorage.getItem("usuarioAtual");
 
