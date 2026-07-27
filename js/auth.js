@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS
+   FINCONTROL - AUTH.JS (SESSÃO E MODAIS BLINDADOS)
 ========================================================== */
 
 const loginScreen = document.getElementById("loginScreen");
@@ -19,7 +19,7 @@ function fecharModalLancamento() {
     if (modal) modal.style.setProperty("display", "none", "important");
 }
 
-// SALVAR UM NOVO LANÇAMENTO
+// SALVAR NOVO LANÇAMENTO
 function salvarNovoLancamento() {
     const desc = document.getElementById("lancDescricao")?.value.trim();
     const valor = parseFloat(document.getElementById("lancValor")?.value);
@@ -37,7 +37,6 @@ function salvarNovoLancamento() {
     let dados = JSON.parse(localStorage.getItem(`user_${usuarioAtual}`)) || {};
     if (!dados.lancamentos) dados.lancamentos = [];
 
-    // Adiciona o novo item
     const novoItem = {
         descricao: desc,
         valor: valor,
@@ -49,12 +48,10 @@ function salvarNovoLancamento() {
     dados.lancamentos.unshift(novoItem);
     localStorage.setItem(`user_${usuarioAtual}`, JSON.stringify(dados));
 
-    // Limpa campos e fecha o modal
     document.getElementById("lancDescricao").value = "";
     document.getElementById("lancValor").value = "";
     fecharModalLancamento();
 
-    // Recarrega valores e listas
     atualizarTudo(dados);
     alert("Lançamento adicionado com sucesso!");
 }
@@ -79,7 +76,7 @@ function salvarSalario() {
     alert(`Salário de R$ ${valorInput.toLocaleString('pt-BR', {minimumFractionDigits: 2})} salvo!`);
 }
 
-// RECALCULA SALDOS E RECARREGA LISTAS
+// ATUALIZA VALORES E TABELAS
 function atualizarTudo(dados) {
     const salario = dados.salario || 0;
     const lista = dados.lancamentos || [];
@@ -94,7 +91,6 @@ function atualizarTudo(dados) {
 
     const saldoDisponivel = totalEntradas - totalSaidas;
 
-    // Atualiza Cards
     const elSaldo = document.getElementById("valSaldo");
     const elEntradas = document.getElementById("valEntradas");
     const elSaidas = document.getElementById("valSaidas");
@@ -105,7 +101,7 @@ function atualizarTudo(dados) {
     if (elSaidas) elSaidas.innerHTML = `R$ ${totalSaidas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
     if (elInputSalario && salario > 0) elInputSalario.value = salario;
 
-    // Renderiza o Histórico da Dashboard
+    // Renderiza Histórico da Dashboard
     const containerHist = document.getElementById("containerHistorico");
     if (containerHist) {
         if (lista.length === 0 && salario === 0) {
@@ -138,7 +134,7 @@ function atualizarTudo(dados) {
         }
     }
 
-    // Renderiza a Tabela da Aba Lançamentos
+    // Renderiza Tabela da Aba Lançamentos
     const corpoTabela = document.getElementById("tabelaLancamentosCorpo");
     if (corpoTabela) {
         if (lista.length === 0 && salario === 0) {
@@ -171,7 +167,7 @@ function atualizarTudo(dados) {
     }
 }
 
-// MUDAR ABAS DO MENU
+// ALTERNAR ABAS
 function mudarAba(nomeAba, elemento) {
     const abas = document.querySelectorAll('.view-aba');
     abas.forEach(aba => aba.style.display = 'none');
