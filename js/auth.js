@@ -1,6 +1,6 @@
 /* ==========================================================
    FINCONTROL - AUTH.JS
-   Autenticação, Recuperação via SMS e Sessão de Usuário
+   Autenticação e Navegação de Telas
 ========================================================== */
 
 const loginScreen = document.getElementById("loginScreen");
@@ -13,10 +13,8 @@ const btnSalvarCadastro = document.getElementById("btnSalvarCadastro");
 const btnVoltarLogin = document.getElementById("btnVoltarLogin");
 const btnSair = document.getElementById("btnSair");
 
-// Variáveis para controle da recuperação por SMS
 let codigoEnviadoSMS = null;
 
-// Eventos de Navegação das Telas
 btnAbrirCadastro?.addEventListener("click", abrirCadastro);
 btnVoltarLogin?.addEventListener("click", voltarLogin);
 btnSalvarCadastro?.addEventListener("click", cadastrar);
@@ -34,9 +32,6 @@ function voltarLogin() {
     if (loginScreen) loginScreen.style.display = "flex";
 }
 
-// ----------------------------------------------------------
-// Funções de Login e Cadastro
-// ----------------------------------------------------------
 function cadastrar() {
     const nome = document.getElementById("cadNome")?.value.trim();
     const usuario = document.getElementById("cadUsuario")?.value.trim();
@@ -86,10 +81,9 @@ function entrar() {
         return;
     }
 
-    // Grava a sessão logada no LocalStorage
     Storage.salvarUsuarioAtual(usuario);
 
-    // Alterna visualização das telas
+    // ESCONDE O LOGIN E MOSTRA O APP (MUDANÇA DE TELA)
     if (loginScreen) loginScreen.style.display = "none";
     if (cadastroScreen) cadastroScreen.style.display = "none";
     if (app) app.style.display = "flex";
@@ -102,15 +96,12 @@ function entrar() {
 }
 
 function sair() {
-    Storage.sair(); // Remove sessão salva
+    Storage.sair();
     if (app) app.style.display = "none";
     if (cadastroScreen) cadastroScreen.style.display = "none";
     if (loginScreen) loginScreen.style.display = "flex";
 }
 
-// ----------------------------------------------------------
-// Recuperação de Senha por SMS
-// ----------------------------------------------------------
 function abrirEsqueciSenha() {
     const modal = document.getElementById("modalEsqueciSenha");
     if (modal) {
@@ -133,10 +124,8 @@ function enviarCodigoSMS() {
         return;
     }
 
-    // Gera um código de 6 dígitos aleatórios
     codigoEnviadoSMS = Math.floor(100000 + Math.random() * 900000).toString();
 
-    // Simulação do SMS
     alert(`[SMS FINCONTROL] Código enviado para ${telefone}: ${codigoEnviadoSMS}`);
 
     document.getElementById("passoTelefone").style.display = "none";
@@ -165,13 +154,10 @@ function validarEResetarSenha() {
         alert("Senha alterada com sucesso! Faça login com a nova senha.");
         fecharEsqueciSenha();
     } else {
-        alert("Digite o nome de usuário no campo de login antes de redefinir.");
+        alert("Preencha o campo Username na tela de login com seu usuário antes de redefinir.");
     }
 }
 
-// ----------------------------------------------------------
-// Login Automático ao Abrir o Link
-// ----------------------------------------------------------
 window.addEventListener("load", () => {
     const usuarioSalvo = Storage.obterUsuarioAtual();
 
@@ -190,7 +176,6 @@ window.addEventListener("load", () => {
         return;
     }
 
-    // Se já estiver logado, exibe direto o aplicativo
     if (loginScreen) loginScreen.style.display = "none";
     if (cadastroScreen) cadastroScreen.style.display = "none";
     if (app) app.style.display = "flex";
