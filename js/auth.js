@@ -8,30 +8,181 @@ const app = document.getElementById("app");
 
 let codigoEnviadoSMS = null;
 
-// FUNÇÃO DIRETA DE ALTERNÂNCIA DE ABAS
+// CONTROLE DO MODAL DE NOVO LANÇAMENTO
+function abrirModalLancamento() {
+    const modal = document.getElementById("modalNovoLancamento");
+    if (modal) modal.style.setProperty("display", "flex", "important");
+}
+
+function fecharModalLancamento() {
+    const modal = document.getElementById("modalNovoLancamento");
+    if (modal) modal.style.setProperty("display", "none", "important");
+}
+
+// SALVAR UM NOVO LANÇAMENTO
+function salvarNovoLancamento() {
+    const desc = document.getElementById("lancDescricao")?.value.trim();
+    const valor = parseFloat(document.getElementById("lancValor")?.value);
+    const tipo = document.getElementById("lancTipo")?.value;
+    const categoria = document.getElementById("lancCategoria")?.value;
+
+    if (!desc || isNaN(valor) || valor <= 0) {
+        alert("Preencha os campos de descrição e valor corretamente.");
+        return;
+    }
+
+    const usuarioAtual = localStorage.getItem("usuarioAtual");
+    if (!usuarioAtual) return;
+
+    let dados = JSON.parse(localStorage.getItem(`user_${usuarioAtual}`)) || {};
+    if (!dados.lancamentos) dados.lancamentos = [];
+
+    // Adiciona o novo item
+    const novoItem = {
+        descricao: desc,
+        valor: valor,
+        tipo: tipo,
+        categoria: categoria,
+        data: new Date().toLocaleDateString('pt-BR')
+    };
+
+    dados.lancamentos.unshift(novoItem);
+    localStorage.setItem(`user_${usuarioAtual}`, JSON.stringify(dados));
+
+    // Limpa campos e fecha o modal
+    document.getElementById("lancDescricao").value = "";
+    document.getElementById("lancValor").value = "";
+    fecharModalLancamento();
+
+    // Recarrega valores e listas
+    atualizarTudo(dados);
+    alert("Lançamento adicionado com sucesso!");
+}
+
+// SALVAR SALÁRIO
+function salvarSalario() {
+    const valorInput = parseFloat(document.getElementById("inputSalario")?.value);
+
+    if (isNaN(valorInput) || valorInput <= 0) {
+        alert("Por favor, informe um valor de salário válido.");
+        return;
+    }
+
+    const usuarioAtual = localStorage.getItem("usuarioAtual");
+    if (!usuarioAtual) return;
+
+    let dados = JSON.parse(localStorage.getItem(`user_${usuarioAtual}`)) || {};
+    dados.salario = valorInput;
+    localStorage.setItem(`user_${usuarioAtual}`, JSON.stringify(dados));
+
+    atualizarTudo(dados);
+    alert(`Salário de R$ ${valorInput.toLocaleString('pt-BR', {minimumFractionDigits: 2})} salvo!`);
+}
+
+// RECALCULA SALDOS E RECARREGA LISTAS
+function atualizarTudo(dados) {
+    const salario = dados.salario || 0;
+    const lista = dados.lancamentos || [];
+
+    let totalEntradas = salario;
+    let totalSaidas = 0;
+
+    lista.forEach(item => {
+        if (item.tipo === "entrada") totalEntradas += item.valor;
+        if (item.tipo === "saida") totalSaidas += item.valor;
+    });
+
+    const saldoDisponivel = totalEntradas - totalSaidas;
+
+    // Atualiza Cards
+    const elSaldo = document.getElementById("valSaldo");
+    const elEntradas = document.getElementById("valEntradas");
+    const elSaidas = document.getElementById("valSaidas");
+    const elInputSalario = document.getElementById("inputSalario");
+
+    if (elSaldo) elSaldo.innerHTML = `R$ ${saldoDisponivel.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    if (elEntradas) elEntradas.innerHTML = `R$ ${totalEntradas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    if (elSaidas) elSaidas.innerHTML = `R$ ${totalSaidas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
+    if (elInputSalario && salario > 0) elInputSalario.value = salario;
+
+    // Renderiza o Histórico da Dashboard
+    const containerHist = document.getElementById("containerHistorico");
+    if (containerHist) {
+        if (lista.length === 0 && salario === 0) {
+            containerHist.innerHTML = `<p style="color: #64748B;">Nenhum lançamento cadastrado.</p>`;
+        } else {
+            let htmlHist = "";
+            if (salario > 0) {
+                htmlHist += `
+                    <div class="lancamento">
+                        <div class="lancamento-info">
+                            <strong>Salário Base</strong>
+                            <span>Lançamento Fixo</span>
+                        </div>
+                        <span class="lancamento-valor valor-positivo">+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>`;
+            }
+            lista.forEach(item => {
+                const sinal = item.tipo === "entrada" ? "+" : "-";
+                const classeCor = item.tipo === "entrada" ? "valor-positivo" : "valor-negativo";
+                htmlHist += `
+                    <div class="lancamento">
+                        <div class="lancamento-info">
+                            <strong>${item.descricao}</strong>
+                            <span>${item.data} - ${item.categoria}</span>
+                        </div>
+                        <span class="lancamento-valor ${classeCor}">${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>`;
+            });
+            containerHist.innerHTML = htmlHist;
+        }
+    }
+
+    // Renderiza a Tabela da Aba Lançamentos
+    const corpoTabela = document.getElementById("tabelaLancamentosCorpo");
+    if (corpoTabela) {
+        if (lista.length === 0 && salario === 0) {
+            corpoTabela.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #64748B;">Nenhum lançamento registrado.</td></tr>`;
+        } else {
+            let htmlTab = "";
+            if (salario > 0) {
+                htmlTab += `
+                    <tr>
+                        <td>Salário Base</td>
+                        <td><span class="badge green">Fixo</span></td>
+                        <td><span class="badge green">Receita</span></td>
+                        <td class="valor-positivo"><strong>+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                    </tr>`;
+            }
+            lista.forEach(item => {
+                const sinal = item.tipo === "entrada" ? "+" : "-";
+                const classeCor = item.tipo === "entrada" ? "valor-positivo" : "valor-negativo";
+                const badgeCor = item.tipo === "entrada" ? "green" : "red";
+                htmlTab += `
+                    <tr>
+                        <td>${item.descricao}</td>
+                        <td><span class="badge orange">${item.categoria}</span></td>
+                        <td><span class="badge ${badgeCor}">${item.tipo === "entrada" ? "Receita" : "Despesa"}</span></td>
+                        <td class="${classeCor}"><strong>${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
+                    </tr>`;
+            });
+            corpoTabela.innerHTML = htmlTab;
+        }
+    }
+}
+
+// MUDAR ABAS DO MENU
 function mudarAba(nomeAba, elemento) {
-    // 1. Esconde todas as telas
     const abas = document.querySelectorAll('.view-aba');
-    abas.forEach(aba => {
-        aba.style.display = 'none';
-    });
+    abas.forEach(aba => aba.style.display = 'none');
 
-    // 2. Remove o destaque ativo do menu
     const botoesMenu = document.querySelectorAll('.item-menu');
-    botoesMenu.forEach(btn => {
-        btn.classList.remove('ativo');
-    });
+    botoesMenu.forEach(btn => btn.classList.remove('ativo'));
 
-    // 3. Exibe a tela desejada
     const abaAlvo = document.getElementById(nomeAba);
-    if (abaAlvo) {
-        abaAlvo.style.display = 'block';
-    }
+    if (abaAlvo) abaAlvo.style.display = 'block';
 
-    // 4. Ativa a marcação no menu
-    if (elemento) {
-        elemento.classList.add('ativo');
-    }
+    if (elemento) elemento.classList.add('ativo');
 }
 
 function abrirCadastro() {
@@ -65,7 +216,9 @@ function cadastrar() {
     localStorage.setItem(`user_${usuario}`, JSON.stringify({
         nome,
         usuario,
-        senha
+        senha,
+        salario: 0,
+        lancamentos: []
     }));
 
     alert("Conta criada com sucesso!");
@@ -78,9 +231,8 @@ function entrar() {
 
     let dados = JSON.parse(localStorage.getItem(`user_${usuario}`));
 
-    // Se for o primeiro acesso sem cadastro, permite entrar criando usuário temporário
     if (!dados) {
-        dados = { nome: usuario, usuario: usuario, senha: senha };
+        dados = { nome: usuario, usuario: usuario, senha: senha, salario: 0, lancamentos: [] };
         localStorage.setItem(`user_${usuario}`, JSON.stringify(dados));
     }
 
@@ -97,6 +249,8 @@ function entrar() {
 
     const nome = document.getElementById("nomeUsuario");
     if (nome) nome.innerHTML = `Olá, ${dados.nome || usuario} 👋`;
+
+    atualizarTudo(dados);
 }
 
 function sair() {
@@ -188,4 +342,6 @@ window.addEventListener("load", () => {
 
     const nome = document.getElementById("nomeUsuario");
     if (nome) nome.innerHTML = `Olá, ${dados.nome || usuarioSalvo} 👋`;
+
+    atualizarTudo(dados);
 });
