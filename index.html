@@ -87,31 +87,31 @@
             <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Informe seu telefone para receber o código.</p>
 
             <div id="passoTelefone">
-                <div class="campo">
+                <div class="campo" style="margin-bottom: 12px;">
                     <label>Telefone / Celular</label>
-                    <input type="tel" id="smsTelefone" placeholder="(11) 99999-9999">
+                    <input type="tel" id="smsTelefone" placeholder="(11) 99999-9999" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1;">
                 </div>
-                <button class="btn-primary" onclick="enviarCodigoSMS()">Enviar Código SMS</button>
+                <button class="btn-primary" onclick="enviarCodigoSMS()" style="width: 100%;">Enviar Código SMS</button>
             </div>
 
             <div id="passoCodigo" style="display: none;">
-                <div class="campo">
+                <div class="campo" style="margin-bottom: 12px;">
                     <label>Código recebido por SMS</label>
-                    <input type="text" id="smsCodigo" placeholder="Ex: 123456">
+                    <input type="text" id="smsCodigo" placeholder="Ex: 123456" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1;">
                 </div>
-                <div class="campo">
+                <div class="campo" style="margin-bottom: 12px;">
                     <label>Nova Senha</label>
-                    <input type="password" id="novaSenhaSMS" placeholder="Digite a nova senha">
+                    <input type="password" id="novaSenhaSMS" placeholder="Digite a nova senha" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1;">
                 </div>
-                <button class="btn-primary" onclick="validarEResetarSenha()">Redefinir Senha</button>
+                <button class="btn-primary" onclick="validarEResetarSenha()" style="width: 100%;">Redefinir Senha</button>
             </div>
 
-            <button class="btn-secondary" onclick="fecharEsqueciSenha()" style="margin-top: 10px;">Cancelar</button>
+            <button class="btn-secondary" onclick="fecharEsqueciSenha()" style="width: 100%; margin-top: 10px;">Cancelar</button>
         </div>
     </div>
 
     <!-- ==========================================================
-         MODAL DE NOVO LANÇAMENTO (DISPARADO PELO BOTÃO +)
+         MODAL DE NOVO LANÇAMENTO
     ========================================================== -->
     <div id="modalNovoLancamento" class="modal" style="display: none;">
         <div class="modal-box">
@@ -119,37 +119,38 @@
             <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Cadastre uma nova receita ou despesa.</p>
 
             <form onsubmit="event.preventDefault(); salvarNovoLancamento();">
-                <div class="campo">
-                    <label>Descrição</label>
-                    <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Uber, Freelance" required>
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Descrição</label>
+                    <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Uber, Freelance" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
                 </div>
 
-                <div class="campo">
-                    <label>Valor (R$)</label>
-                    <input type="number" step="0.01" id="lancValor" placeholder="0.00" required>
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Valor (R$)</label>
+                    <input type="number" step="0.01" id="lancValor" placeholder="0.00" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
                 </div>
 
-                <div class="campo">
-                    <label>Tipo de Movimentação</label>
-                    <select id="lancTipo" required style="width: 100%; height: 48px; border-radius: 12px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
+                <div class="campo" style="margin-bottom: 12px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Tipo de Movimentação</label>
+                    <select id="lancTipo" required style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
                         <option value="saida">Saída / Despesa 🔴</option>
                         <option value="entrada">Entrada / Receita 🟢</option>
                     </select>
                 </div>
 
-                <div class="campo">
-                    <label>Categoria</label>
-                    <select id="lancCategoria" style="width: 100%; height: 48px; border-radius: 12px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
+                <div class="campo" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Categoria</label>
+                    <select id="lancCategoria" style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
                         <option value="Alimentação">Alimentação 🍔</option>
                         <option value="Transporte">Transporte 🚗</option>
                         <option value="Moradia">Moradia 🏠</option>
+                        <option value="Cartão">Cartão de Crédito 💳</option>
                         <option value="Lazer">Lazer 🎮</option>
                         <option value="Outros">Outros 📦</option>
                     </select>
                 </div>
 
-                <button type="submit" class="btn-primary" style="margin-top: 15px;">Salvar Lançamento</button>
-                <button type="button" class="btn-secondary" onclick="fecharModalLancamento()" style="margin-top: 8px;">Cancelar</button>
+                <button type="submit" class="btn-primary" style="width: 100%; height: 46px; border-radius: 12px; font-weight: 600;">Salvar Lançamento</button>
+                <button type="button" class="btn-secondary" onclick="fecharModalLancamento()" style="width: 100%; height: 44px; border-radius: 12px; margin-top: 8px;">Cancelar</button>
             </form>
         </div>
     </div>
@@ -171,6 +172,9 @@
                     </li>
                     <li class="item-menu" id="btnMenuLancamentos" onclick="mudarAba('viewLancamentos', this)">
                         <i class="fas fa-exchange-alt"></i> Lançamentos
+                    </li>
+                    <li class="item-menu" id="btnMenuCartoes" onclick="mudarAba('viewCartoes', this)">
+                        <i class="fas fa-credit-card"></i> Cartões
                     </li>
                     <li class="item-menu" id="btnMenuCategorias" onclick="mudarAba('viewCategorias', this)">
                         <i class="fas fa-tags"></i> Categorias
@@ -283,7 +287,61 @@
                 </div>
             </div>
 
-            <!-- TELA 3: CATEGORIAS -->
+            <!-- TELA 3: CARTÕES DE CRÉDITO -->
+            <div id="viewCartoes" class="view-aba" style="display: none;">
+                <div class="panel">
+                    <h3>Meus Cartões de Crédito 💳</h3>
+                    <p style="color: #64748B; margin-bottom: 20px;">Acompanhe limites, faturas e vencimentos.</p>
+
+                    <div class="dashboard-grid">
+                        <div class="card" style="background: linear-gradient(135deg, #1E293B, #0F172A); color: #fff;">
+                            <div class="card-header">
+                                <span class="card-title" style="color: #94A3B8;">Cartão Principal</span>
+                                <i class="fab fa-cc-mastercard" style="font-size: 24px;"></i>
+                            </div>
+                            <div class="card-value" style="color: #fff; font-size: 20px; margin: 10px 0;">•••• •••• •••• 4829</div>
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #94A3B8;">
+                                <span>Fatura Atual: <strong style="color: #EF4444;">R$ 1.450,00</strong></span>
+                                <span>Limite: <strong>R$ 5.000,00</strong></span>
+                            </div>
+                        </div>
+
+                        <div class="card" style="background: linear-gradient(135deg, #2563EB, #1D4ED8); color: #fff;">
+                            <div class="card-header">
+                                <span class="card-title" style="color: #93C5FD;">Cartão Digital / Nubank</span>
+                                <i class="fab fa-cc-visa" style="font-size: 24px;"></i>
+                            </div>
+                            <div class="card-value" style="color: #fff; font-size: 20px; margin: 10px 0;">•••• •••• •••• 9102</div>
+                            <div style="display: flex; justify-content: space-between; font-size: 12px; color: #93C5FD;">
+                                <span>Fatura Atual: <strong style="color: #FCA5A5;">R$ 380,00</strong></span>
+                                <span>Limite: <strong>R$ 2.500,00</strong></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 20px;">
+                        <h4 style="margin-bottom: 12px; font-size: 16px;">Faturas e Vencimentos</h4>
+                        <div class="lista-lancamentos">
+                            <div class="lancamento">
+                                <div class="lancamento-info">
+                                    <strong>Fatura Mastercard Black</strong>
+                                    <span>Vence em: 10/08/2026</span>
+                                </div>
+                                <span class="lancamento-valor valor-negativo">R$ 1.450,00</span>
+                            </div>
+                            <div class="lancamento">
+                                <div class="lancamento-info">
+                                    <strong>Fatura Visa Platinum</strong>
+                                    <span>Vence em: 15/08/2026</span>
+                                </div>
+                                <span class="lancamento-valor valor-negativo">R$ 380,00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TELA 4: CATEGORIAS -->
             <div id="viewCategorias" class="view-aba" style="display: none;">
                 <div class="panel">
                     <h3>Minhas Categorias 🏷️</h3>
@@ -322,7 +380,7 @@
                 </div>
             </div>
 
-            <!-- TELA 4: METAS -->
+            <!-- TELA 5: METAS -->
             <div id="viewMetas" class="view-aba" style="display: none;">
                 <div class="panel">
                     <h3>Metas & Objetivos 🎯</h3>
@@ -356,7 +414,7 @@
 
         </main>
 
-        <!-- Botão Flutuante que abre o Modal de Novo Lançamento -->
+        <!-- Botão Flutuante de Adicionar Lançamento -->
         <button class="btn-add" onclick="abrirModalLancamento()">+</button>
     </div>
 
