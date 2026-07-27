@@ -1,6 +1,5 @@
 /* ==========================================================
    FINCONTROL - AUTH.JS
-   Autenticação e Navegação de Telas
 ========================================================== */
 
 const loginScreen = document.getElementById("loginScreen");
@@ -21,15 +20,15 @@ btnSalvarCadastro?.addEventListener("click", cadastrar);
 btnSair?.addEventListener("click", sair);
 
 function abrirCadastro() {
-    if (loginScreen) loginScreen.style.display = "none";
-    if (app) app.style.display = "none";
-    if (cadastroScreen) cadastroScreen.style.display = "flex";
+    if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
+    if (app) app.style.setProperty("display", "none", "important");
+    if (cadastroScreen) cadastroScreen.style.setProperty("display", "flex", "important");
 }
 
 function voltarLogin() {
-    if (cadastroScreen) cadastroScreen.style.display = "none";
-    if (app) app.style.display = "none";
-    if (loginScreen) loginScreen.style.display = "flex";
+    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+    if (app) app.style.setProperty("display", "none", "important");
+    if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
 }
 
 function cadastrar() {
@@ -48,18 +47,20 @@ function cadastrar() {
         return;
     }
 
-    if (Storage.usuarioExiste(usuario)) {
+    if (typeof Storage !== "undefined" && Storage.usuarioExiste && Storage.usuarioExiste(usuario)) {
         alert("Usuário já cadastrado.");
         return;
     }
 
-    Storage.salvarUsuario(usuario, {
-        nome,
-        usuario,
-        senha,
-        salario: 0,
-        lancamentos: []
-    });
+    if (typeof Storage !== "undefined" && Storage.salvarUsuario) {
+        Storage.salvarUsuario(usuario, {
+            nome,
+            usuario,
+            senha,
+            salario: 0,
+            lancamentos: []
+        });
+    }
 
     alert("Conta criada com sucesso!");
     voltarLogin();
@@ -69,7 +70,10 @@ function entrar() {
     const usuario = document.getElementById("loginUsuario")?.value.trim();
     const senha = document.getElementById("loginSenha")?.value;
 
-    const dados = Storage.carregarUsuario(usuario);
+    let dados = null;
+    if (typeof Storage !== "undefined" && Storage.carregarUsuario) {
+        dados = Storage.carregarUsuario(usuario);
+    }
 
     if (!dados) {
         alert("Usuário não encontrado.");
@@ -81,12 +85,14 @@ function entrar() {
         return;
     }
 
-    Storage.salvarUsuarioAtual(usuario);
+    if (typeof Storage !== "undefined" && Storage.salvarUsuarioAtual) {
+        Storage.salvarUsuarioAtual(usuario);
+    }
 
-    // ESCONDE O LOGIN E MOSTRA O APP (MUDANÇA DE TELA)
-    if (loginScreen) loginScreen.style.display = "none";
-    if (cadastroScreen) cadastroScreen.style.display = "none";
-    if (app) app.style.display = "flex";
+    // Oculta telas de login/cadastro e abre a Dashboard
+    if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
+    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+    if (app) app.style.setProperty("display", "flex", "important");
 
     const nome = document.getElementById("nomeUsuario");
     if (nome) nome.innerHTML = `Olá, ${dados.nome} 👋`;
@@ -96,16 +102,16 @@ function entrar() {
 }
 
 function sair() {
-    Storage.sair();
-    if (app) app.style.display = "none";
-    if (cadastroScreen) cadastroScreen.style.display = "none";
-    if (loginScreen) loginScreen.style.display = "flex";
+    if (typeof Storage !== "undefined" && Storage.sair) Storage.sair();
+    if (app) app.style.setProperty("display", "none", "important");
+    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+    if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
 }
 
 function abrirEsqueciSenha() {
     const modal = document.getElementById("modalEsqueciSenha");
     if (modal) {
-        modal.style.display = "flex";
+        modal.style.setProperty("display", "flex", "important");
         document.getElementById("passoTelefone").style.display = "block";
         document.getElementById("passoCodigo").style.display = "none";
     }
@@ -113,7 +119,7 @@ function abrirEsqueciSenha() {
 
 function fecharEsqueciSenha() {
     const modal = document.getElementById("modalEsqueciSenha");
-    if (modal) modal.style.display = "none";
+    if (modal) modal.style.setProperty("display", "none", "important");
 }
 
 function enviarCodigoSMS() {
@@ -125,7 +131,6 @@ function enviarCodigoSMS() {
     }
 
     codigoEnviadoSMS = Math.floor(100000 + Math.random() * 900000).toString();
-
     alert(`[SMS FINCONTROL] Código enviado para ${telefone}: ${codigoEnviadoSMS}`);
 
     document.getElementById("passoTelefone").style.display = "none";
@@ -147,38 +152,49 @@ function validarEResetarSenha() {
         return;
     }
 
-    const dados = Storage.carregarUsuario(usuario);
-    if (dados) {
-        dados.senha = novaSenha;
-        Storage.salvarUsuario(usuario, dados);
-        alert("Senha alterada com sucesso! Faça login com a nova senha.");
-        fecharEsqueciSenha();
-    } else {
-        alert("Preencha o campo Username na tela de login com seu usuário antes de redefinir.");
+    if (typeof Storage !== "undefined" && Storage.carregarUsuario) {
+        const dados = Storage.carregarUsuario(usuario);
+        if (dados) {
+            dados.senha = novaSenha;
+            Storage.salvarUsuario(usuario, dados);
+            alert("Senha alterada com sucesso! Faça login com a nova senha.");
+            fecharEsqueciSenha();
+        } else {
+            alert("Preencha o campo Username na tela de login com seu usuário antes de redefinir.");
+        }
     }
 }
 
+// INICIALIZAÇÃO FIXA NA TELA DE LOGIN (Salva sessão apenas se existente)
 window.addEventListener("load", () => {
-    const usuarioSalvo = Storage.obterUsuarioAtual();
+    let usuarioSalvo = null;
+    if (typeof Storage !== "undefined" && Storage.obterUsuarioAtual) {
+        usuarioSalvo = Storage.obterUsuarioAtual();
+    }
 
     if (!usuarioSalvo) {
-        if (app) app.style.display = "none";
-        if (cadastroScreen) cadastroScreen.style.display = "none";
-        if (loginScreen) loginScreen.style.display = "flex";
+        if (app) app.style.setProperty("display", "none", "important");
+        if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+        if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
         return;
     }
 
-    const dados = Storage.carregarUsuario(usuarioSalvo);
+    let dados = null;
+    if (typeof Storage !== "undefined" && Storage.carregarUsuario) {
+        dados = Storage.carregarUsuario(usuarioSalvo);
+    }
 
     if (!dados) {
-        if (app) app.style.display = "none";
-        if (loginScreen) loginScreen.style.display = "flex";
+        if (app) app.style.setProperty("display", "none", "important");
+        if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+        if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
         return;
     }
 
-    if (loginScreen) loginScreen.style.display = "none";
-    if (cadastroScreen) cadastroScreen.style.display = "none";
-    if (app) app.style.display = "flex";
+    // Se já estiver logado, exibe direto a Dashboard
+    if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
+    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+    if (app) app.style.setProperty("display", "flex", "important");
 
     const nome = document.getElementById("nomeUsuario");
     if (nome) nome.innerHTML = `Olá, ${dados.nome} 👋`;
