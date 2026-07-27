@@ -111,6 +111,50 @@
     </div>
 
     <!-- ==========================================================
+         MODAL DE NOVO LANÇAMENTO (DISPARADO PELO BOTÃO +)
+    ========================================================== -->
+    <div id="modalNovoLancamento" class="modal" style="display: none;">
+        <div class="modal-box">
+            <h3 style="margin-bottom: 8px;">Novo Lançamento ➕</h3>
+            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Cadastre uma nova receita ou despesa.</p>
+
+            <form onsubmit="event.preventDefault(); salvarNovoLancamento();">
+                <div class="campo">
+                    <label>Descrição</label>
+                    <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Uber, Freelance" required>
+                </div>
+
+                <div class="campo">
+                    <label>Valor (R$)</label>
+                    <input type="number" step="0.01" id="lancValor" placeholder="0.00" required>
+                </div>
+
+                <div class="campo">
+                    <label>Tipo de Movimentação</label>
+                    <select id="lancTipo" required style="width: 100%; height: 48px; border-radius: 12px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
+                        <option value="saida">Saída / Despesa 🔴</option>
+                        <option value="entrada">Entrada / Receita 🟢</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Categoria</label>
+                    <select id="lancCategoria" style="width: 100%; height: 48px; border-radius: 12px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
+                        <option value="Alimentação">Alimentação 🍔</option>
+                        <option value="Transporte">Transporte 🚗</option>
+                        <option value="Moradia">Moradia 🏠</option>
+                        <option value="Lazer">Lazer 🎮</option>
+                        <option value="Outros">Outros 📦</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-primary" style="margin-top: 15px;">Salvar Lançamento</button>
+                <button type="button" class="btn-secondary" onclick="fecharModalLancamento()" style="margin-top: 8px;">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==========================================================
          APLICATIVO (DASHBOARD PÓS-LOGIN)
     ========================================================== -->
     <div id="app" class="app" style="display: none;">
@@ -153,13 +197,24 @@
 
             <!-- TELA 1: DASHBOARD COMPLETA -->
             <div id="viewDash" class="view-aba">
+
+                <!-- CAIXA PARA LANÇAR O SALÁRIO -->
+                <div class="panel" style="margin-bottom: 20px; border-left: 6px solid var(--green, #22C55E);">
+                    <h3>Lançar Salário Mensal 💵</h3>
+                    <p style="color: #64748B; font-size: 13px; margin-bottom: 12px;">Informe seu salário base para calcular o saldo disponível.</p>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" id="inputSalario" placeholder="Ex: 5000.00" style="flex: 1; padding: 12px; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 15px;">
+                        <button class="btn-primary" onclick="salvarSalario()" style="width: auto; padding: 0 20px; white-space: nowrap;">Salvar Salário</button>
+                    </div>
+                </div>
+
                 <div class="dashboard-grid">
                     <div class="card saldo">
                         <div class="card-header">
                             <span class="card-title">Saldo Disponível</span>
                             <i class="fas fa-wallet"></i>
                         </div>
-                        <div class="card-value" id="valSaldo">R$ 5.420,00</div>
+                        <div class="card-value" id="valSaldo">R$ 0,00</div>
                     </div>
 
                     <div class="card entrada">
@@ -167,7 +222,7 @@
                             <span class="card-title">Receitas / Salário</span>
                             <i class="fas fa-arrow-up"></i>
                         </div>
-                        <div class="card-value" id="valEntradas">R$ 8.000,00</div>
+                        <div class="card-value" id="valEntradas">R$ 0,00</div>
                     </div>
 
                     <div class="card saida">
@@ -175,7 +230,7 @@
                             <span class="card-title">Despesas</span>
                             <i class="fas fa-arrow-down"></i>
                         </div>
-                        <div class="card-value" id="valSaidas">R$ 2.580,00</div>
+                        <div class="card-value" id="valSaidas">R$ 0,00</div>
                     </div>
 
                     <div class="card meta">
@@ -183,7 +238,7 @@
                             <span class="card-title">Metas Concluídas</span>
                             <i class="fas fa-bullseye"></i>
                         </div>
-                        <div class="card-value" id="valResumo">65%</div>
+                        <div class="card-value" id="valResumo">100%</div>
                     </div>
                 </div>
 
@@ -197,28 +252,8 @@
 
                     <div class="panel">
                         <h3>Histórico Recente</h3>
-                        <div class="lista-lancamentos">
-                            <div class="lancamento">
-                                <div class="lancamento-info">
-                                    <strong>Salário Mensal</strong>
-                                    <span>25/07/2026 - Depósito</span>
-                                </div>
-                                <span class="lancamento-valor valor-positivo">+ R$ 8.000,00</span>
-                            </div>
-                            <div class="lancamento">
-                                <div class="lancamento-info">
-                                    <strong>Supermercado</strong>
-                                    <span>26/07/2026 - Alimentação</span>
-                                </div>
-                                <span class="lancamento-valor valor-negativo">- R$ 1.250,00</span>
-                            </div>
-                            <div class="lancamento">
-                                <div class="lancamento-info">
-                                    <strong>Aluguel & Contas</strong>
-                                    <span>27/07/2026 - Moradia</span>
-                                </div>
-                                <span class="lancamento-valor valor-negativo">- R$ 1.330,00</span>
-                            </div>
+                        <div class="lista-lancamentos" id="containerHistorico">
+                            <p style="color: #64748B;">Nenhum lançamento cadastrado.</p>
                         </div>
                     </div>
                 </div>
@@ -235,32 +270,13 @@
                             <tr>
                                 <th>Descrição</th>
                                 <th>Categoria</th>
-                                <th>Data</th>
+                                <th>Tipo</th>
                                 <th>Valor</th>
-                                <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="tabelaLancamentosCorpo">
                             <tr>
-                                <td>Salário Mensal</td>
-                                <td><span class="badge green">Receita</span></td>
-                                <td>25/07/2026</td>
-                                <td class="valor-positivo"><strong>+ R$ 8.000,00</strong></td>
-                                <td><span class="badge green">Concluído</span></td>
-                            </tr>
-                            <tr>
-                                <td>Supermercado Central</td>
-                                <td><span class="badge red">Alimentação</span></td>
-                                <td>26/07/2026</td>
-                                <td class="valor-negativo"><strong>- R$ 1.250,00</strong></td>
-                                <td><span class="badge green">Pago</span></td>
-                            </tr>
-                            <tr>
-                                <td>Aluguel do Imóvel</td>
-                                <td><span class="badge orange">Moradia</span></td>
-                                <td>27/07/2026</td>
-                                <td class="valor-negativo"><strong>- R$ 1.330,00</strong></td>
-                                <td><span class="badge green">Pago</span></td>
+                                <td colspan="4" style="text-align: center; color: #64748B;">Nenhum lançamento registrado.</td>
                             </tr>
                         </tbody>
                     </table>
@@ -340,8 +356,8 @@
 
         </main>
 
-        <!-- Botão Flutuante de Adicionar Lançamento -->
-        <button class="btn-add" onclick="alert('Abrir formulário de novo lançamento!')">+</button>
+        <!-- Botão Flutuante que abre o Modal de Novo Lançamento -->
+        <button class="btn-add" onclick="abrirModalLancamento()">+</button>
     </div>
 
     <!-- Scripts JavaScript -->
