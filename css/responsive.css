@@ -2,7 +2,7 @@
    FINCONTROL - LOGIN GLASSMORPHISM + RESPONSIVO MOBILE
    ========================================================================== */
 
-/* ESTILO DA TELA DE LOGIN E CADASTRO DARK */
+/* 1. ESTILO DA TELA DE LOGIN DARK / CIRCULAR */
 .login-screen, 
 .register-screen,
 #loginScreen,
@@ -131,12 +131,7 @@
     text-decoration: none !important;
 }
 
-.login-options a:hover {
-    color: #FFFFFF !important;
-    text-decoration: underline !important;
-}
-
-/* REGRAS PARA O APP NO CELULAR (< 768px) */
+/* 2. REGRAS PARA O APP NO CELULAR (< 768px) */
 @media screen and (max-width: 768px) {
 
     * {
