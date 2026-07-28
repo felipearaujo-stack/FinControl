@@ -77,7 +77,7 @@
             padding-bottom: 90px;
         }
 
-        /* MENU SUPERIOR (TABS DE NAVEGAÇÃO IGUAL AO VÍDEO) */
+        /* MENU SUPERIOR (TABS DE NAVEGAÇÃO) */
         .menu-top {
             display: flex;
             gap: 8px;
@@ -113,7 +113,7 @@
             box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
         }
 
-        /* CABEÇALHO DO PERFIL */
+        /* CABEÇALHO DO PERFIL COM BOTÃO RESETAR */
         .header-perfil {
             background: #FFFFFF;
             padding: 16px 20px;
@@ -126,8 +126,25 @@
         }
         .header-perfil h3 { font-size: 18px; font-weight: 800; color: #0F172A; }
         .header-perfil span { font-size: 12px; color: #64748B; }
+        
+        .btn-reset {
+            background: #FEE2E2;
+            color: #DC2626;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-reset:hover { background: #FCA5A5; }
+
         .avatar-circle {
-            width: 40px; height: 40px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; justify-content: center; align-items: center; font-size: 18px; border: 1px solid #DBEAFE;
+            width: 40px; height: 40px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; justify-content: center; align-items: center; font-size: 18px; border: 1px solid #DBEAFE; cursor: pointer;
         }
 
         /* CARDS DE CONTEÚDO */
@@ -187,7 +204,6 @@
         }
         .modal-content h3 { font-size: 18px; font-weight: 800; color: #0F172A; text-align: center; margin-bottom: 4px; }
 
-        /* LISTA DE CATEGORIAS */
         .cat-item {
             background: #FFFFFF; padding: 16px; border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #F1F5F9;
         }
@@ -260,7 +276,12 @@
                 <h3 id="nomeUsuario">Olá, Usuário 👋</h3>
                 <span>Seu resumo financeiro</span>
             </div>
-            <div class="avatar-circle" onclick="sair()" title="Sair da conta"><i class="fas fa-user"></i></div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <button class="btn-reset" onclick="resetarDados()" title="Resetar todas as informações">
+                    <i class="fas fa-trash-alt"></i> Resetar
+                </button>
+                <div class="avatar-circle" onclick="sair()" title="Sair da conta"><i class="fas fa-user"></i></div>
+            </div>
         </div>
 
         <div id="viewDash" class="view-aba">
@@ -301,7 +322,7 @@
             <div class="card-stat">
                 <div>
                     <span>Metas Concluídas</span>
-                    <strong style="display: block; margin-top: 4px; color: #2563EB;">100%</strong>
+                    <strong id="valMetasConcluidas" style="display: block; margin-top: 4px; color: #2563EB;">0%</strong>
                 </div>
                 <div class="icon-box" style="background: #EFF6FF; color: #2563EB;"><i class="fas fa-bullseye"></i></div>
             </div>
