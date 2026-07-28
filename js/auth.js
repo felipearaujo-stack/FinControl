@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (PADRÃO TEMA CLARO / BANCO NUVEM)
+   FINCONTROL - AUTH.JS (SESSÃO LIMPA + SUPORTE ÀS 5 ABAS)
 ========================================================== */
 
 // CONFIGURAÇÃO OFICIAL DO SEU FIREBASE
@@ -27,7 +27,7 @@ const app = document.getElementById("app");
 let abaAtual = 'viewDash';
 let usuarioLogadoUid = null;
 
-// FECHA ABSOLUTAMENTE TODOS OS MODAIS DA TELA
+// FECHA TODOS OS MODAIS
 function fecharTodosModais() {
     const ids = ["modalNovoLancamento", "modalNovoCartao", "modalNovaMeta"];
     ids.forEach(id => {
@@ -36,7 +36,7 @@ function fecharTodosModais() {
     });
 }
 
-// FORÇA A EXIBIÇÃO APENAS DA TELA DE LOGIN
+// GARANTE QUE A PÁGINA ABRA SEMPRE NA TELA DE LOGIN
 function exibirLoginInicial() {
     fecharTodosModais();
     if (app) app.style.setProperty("display", "none", "important");
@@ -44,16 +44,15 @@ function exibirLoginInicial() {
     if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
 }
 
-// EXECUTA AO CARREGAR A PÁGINA: GARANTE LOGIN LIMPO
 exibirLoginInicial();
 
-// Helper para converter usuário em e-mail válido para o Firebase
+// Helper de e-mail do Firebase
 function usuarioParaEmail(usuario) {
     const userLimpo = usuario.trim().toLowerCase().replace(/\s+/g, '');
     return `${userLimpo}@fincontrol.app`;
 }
 
-// AÇÃO DO BOTÃO FLUTUANTE (+)
+// AÇÃO INTELIGENTE DO BOTÃO FLUTUANTE (+)
 function acaoBotaoAdd() {
     if (abaAtual === 'viewCartoes') {
         abrirModalCartao();
@@ -62,6 +61,23 @@ function acaoBotaoAdd() {
     } else {
         abrirModalLancamento();
     }
+}
+
+// NAVEGAÇÃO ENTRE AS 5 ABAS
+function mudarAba(nomeAba, elemento) {
+    fecharTodosModais();
+    abaAtual = nomeAba;
+
+    const abas = document.querySelectorAll('.view-aba');
+    abas.forEach(aba => aba.style.display = 'none');
+
+    const botoesTab = document.querySelectorAll('.item-tab');
+    botoesTab.forEach(btn => btn.classList.remove('ativo'));
+
+    const abaAlvo = document.getElementById(nomeAba);
+    if (abaAlvo) abaAlvo.style.display = 'block';
+
+    if (elemento) elemento.classList.add('ativo');
 }
 
 // CONTROLE DOS MODAIS
@@ -232,7 +248,7 @@ async function salvarSalario() {
     }
 }
 
-// ATUALIZA A TELA COM OS DADOS NUVEM (LAYOUT CLARO)
+// ATUALIZAR INTERFACE COM DADOS REAIS DO FIREBASE
 function atualizarTudo(dados = {}) {
     const salario = dados.salario || 0;
     const lista = dados.lancamentos || [];
@@ -259,67 +275,99 @@ function atualizarTudo(dados = {}) {
     if (elSaidas) elSaidas.innerHTML = `R$ ${totalSaidas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
     if (elInputSalario && salario > 0) elInputSalario.value = salario;
 
-    // Renderiza Histórico
+    // Renderiza Histórico do Dashboard
     const containerHist = document.getElementById("containerHistorico");
     if (containerHist) {
         if (lista.length === 0 && salario === 0) {
-            containerHist.innerHTML = `<p style="color: #64748B; padding: 16px;">Nenhum lançamento cadastrado.</p>`;
+            containerHist.innerHTML = `<p style="color: #64748B; font-size: 13px;">Nenhum lançamento cadastrado.</p>`;
         } else {
             let htmlHist = "";
             if (salario > 0) {
                 htmlHist += `
-                    <div class="lancamento">
-                        <div><strong>Salário Base</strong><br><span style="font-size:12px; color:#64748B;">Fixo</span></div>
-                        <span class="valor-positivo">+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #F1F5F9;">
+                        <div><strong style="font-size:14px; color:#0F172A;">Salário Base</strong><br><span style="font-size:12px; color:#64748B;">Lançamento Fixo</span></div>
+                        <span style="color:#16A34A; font-weight:700;">+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
                     </div>`;
             }
             lista.forEach(item => {
                 const sinal = item.tipo === "entrada" ? "+" : "-";
-                const classeCor = item.tipo === "entrada" ? "valor-positivo" : "valor-negativo";
+                const cor = item.tipo === "entrada" ? "#16A34A" : "#DC2626";
                 htmlHist += `
-                    <div class="lancamento">
-                        <div><strong>${item.descricao}</strong><br><span style="font-size:12px; color:#64748B;">${item.data} - ${item.categoria}</span></div>
-                        <span class="${classeCor}">${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; padding:12px 0; border-bottom:1px solid #F1F5F9;">
+                        <div><strong style="font-size:14px; color:#0F172A;">${item.descricao}</strong><br><span style="font-size:12px; color:#64748B;">${item.data} - ${item.categoria}</span></div>
+                        <span style="color:${cor}; font-weight:700;">${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
                     </div>`;
             });
             containerHist.innerHTML = htmlHist;
         }
     }
 
-    // Renderiza Cartões (Cards Claros)
+    // Renderiza Tabela de Lançamentos
+    const containerLanc = document.getElementById("containerLancamentosTabela");
+    if (containerLanc) {
+        if (lista.length === 0 && salario === 0) {
+            containerLanc.innerHTML = `<p style="color: #64748B; font-size: 13px;">Nenhum lançamento registrado.</p>`;
+        } else {
+            let htmlTab = "";
+            lista.forEach(item => {
+                const sinal = item.tipo === "entrada" ? "+" : "-";
+                const cor = item.tipo === "entrada" ? "#16A34A" : "#DC2626";
+                htmlTab += `
+                    <div style="background:#F8FAFC; padding:14px; border-radius:12px; margin-bottom:10px; border:1px solid #E2E8F0;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <strong style="color:#0F172A;">${item.descricao}</strong>
+                            <span style="color:${cor}; font-weight:800;">${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                        </div>
+                        <div style="font-size:12px; color:#64748B; margin-top:6px;">
+                            ${item.data} | Categoria: ${item.categoria} | Pagamento: ${item.formaPagamento || 'Pix'}
+                        </div>
+                    </div>`;
+            });
+            containerLanc.innerHTML = htmlTab;
+        }
+    }
+
+    // Renderiza Cartões
     const containerCartoes = document.getElementById("containerCartoes");
     if (containerCartoes) {
         if (cartoes.length === 0) {
-            containerCartoes.innerHTML = `<p style="color: #64748B;">Nenhum cartão cadastrado. Clique no + para adicionar.</p>`;
+            containerCartoes.innerHTML = `
+                <div style="background: #0F172A; color: #FFF; padding: 20px; border-radius: 16px; margin-bottom: 16px;">
+                    <span style="font-size: 12px; color: #94A3B8; text-transform: uppercase; font-weight: 700;">NENHUM CARTÃO CADASTRADO</span>
+                    <p style="font-size: 12px; color: #CBD5E1; margin-top: 8px;">Clique no botão + abaixo para cadastrar seu primeiro banco ou cartão.</p>
+                </div>`;
         } else {
             let htmlCartoes = "";
             cartoes.forEach(c => {
                 htmlCartoes += `
-                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
-                        <strong style="color: #2563EB; text-transform: uppercase;">${c.banco}</strong>
-                        <p style="font-size: 13px; color: #64748B; margin-top: 4px;">Tipo: ${c.tipo}</p>
-                        <p style="font-size: 15px; font-weight: 700; color: #16A34A; margin-top: 6px;">Saldo Débito: R$ ${c.saldoDebito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
-                        <p style="font-size: 13px; color: #0F172A; margin-top: 4px;">Limite Crédito: R$ ${c.limiteCredito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                    <div style="background: #0F172A; color: #FFF; padding: 20px; border-radius: 16px; margin-bottom: 16px;">
+                        <span style="font-size: 14px; color: #F59E0B; text-transform: uppercase; font-weight: 800;">${c.banco}</span>
+                        <p style="font-size: 12px; color: #94A3B8; margin-top: 4px;">Função: ${c.tipo}</p>
+                        <div style="font-size: 18px; font-weight: 800; color: #10B981; margin-top: 10px;">Saldo Débito: R$ ${c.saldoDebito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
+                        <div style="margin-top: 8px; font-size: 12px; color: #CBD5E1; display: flex; justify-content: space-between;">
+                            <span>Limite Crédito: R$ ${c.limiteCredito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                            <span>Vencimento: Dia ${c.vencimento}</span>
+                        </div>
                     </div>`;
             });
             containerCartoes.innerHTML = htmlCartoes;
         }
     }
 
-    // Renderiza Metas (Cards Claros)
+    // Renderiza Metas
     const containerMetas = document.getElementById("containerMetas");
     if (containerMetas) {
         if (metas.length === 0) {
-            containerMetas.innerHTML = `<p style="color: #64748B;">Nenhuma meta cadastrada. Clique no + para criar.</p>`;
+            containerMetas.innerHTML = `<p style="color: #64748B; font-size: 13px;">Nenhuma meta cadastrada. Clique no botão + para criar sua primeira meta!</p>`;
         } else {
             let htmlMetas = "";
             metas.forEach(m => {
                 const mensalidade = m.valorTotal / m.meses;
                 htmlMetas += `
-                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 16px; margin-bottom: 12px;">
                         <strong style="color: #0F172A;">🎯 ${m.nome}</strong>
-                        <p style="font-size: 13px; color: #64748B; margin-top: 6px;">Meta: R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
-                        <p style="font-size: 13px; color: #2563EB; margin-top: 4px; font-weight: 600;">Guardar: R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês em ${m.meses}x</p>
+                        <p style="font-size: 13px; color: #64748B; margin-top: 6px;">Meta Total: R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <p style="font-size: 13px; color: #2563EB; font-weight: 700; margin-top: 4px;">Guardar: R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês (${m.meses} meses)</p>
                     </div>`;
             });
             containerMetas.innerHTML = htmlMetas;
@@ -327,7 +375,7 @@ function atualizarTudo(dados = {}) {
     }
 }
 
-// LOGIN E CADASTRO
+// AUTENTICAÇÃO
 async function cadastrar() {
     const nome = document.getElementById("cadNome")?.value.trim();
     const usuario = document.getElementById("cadUsuario")?.value.trim();
@@ -386,7 +434,7 @@ function sair() {
     auth.signOut();
 }
 
-// OBSERVADOR DE AUTENTICAÇÃO DO FIREBASE
+// OBSERVADOR FIREBASE
 auth.onAuthStateChanged(async (user) => {
     if (user) {
         usuarioLogadoUid = user.uid;
@@ -408,21 +456,6 @@ auth.onAuthStateChanged(async (user) => {
         exibirLoginInicial();
     }
 });
-
-function mudarAba(nomeAba, elemento) {
-    fecharTodosModais();
-    abaAtual = nomeAba;
-    const abas = document.querySelectorAll('.view-aba');
-    abas.forEach(aba => aba.style.display = 'none');
-
-    const botoesMenu = document.querySelectorAll('.item-menu');
-    botoesMenu.forEach(btn => btn.classList.remove('ativo'));
-
-    const abaAlvo = document.getElementById(nomeAba);
-    if (abaAlvo) abaAlvo.style.display = 'block';
-
-    if (elemento) elemento.classList.add('ativo');
-}
 
 function abrirCadastro() {
     fecharTodosModais();
