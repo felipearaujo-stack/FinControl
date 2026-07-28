@@ -8,61 +8,131 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* CSS BASE DA APLICAÇÃO */
+        /* RESET BASE */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0F172A; color: #F8FAFC; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
+        
+        body { 
+            background-color: #0F172A; 
+            color: #F8FAFC; 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            padding: 16px;
+        }
 
-        /* TRAVA OBRIGATÓRIA: TODOS OS MODAIS E TELAS SECUNDÁRIAS INICIAM INVISÍVEIS */
+        /* TRAVA DE SEGURANÇA (ESCONDE TELAS E MODAIS SECUNDÁRIOS) */
         .modal, 
         .modal-overlay,
         #modalNovoLancamento, 
         #modalNovoCartao, 
         #modalNovaMeta, 
-        #modalEsqueciSenha,
         #cadastroScreen,
         #app {
             display: none !important;
         }
 
-        /* CONTAINER DE AUTENTICAÇÃO (LOGIN E CADASTRO) */
+        /* CARD DE AUTENTICAÇÃO (LOGIN E CADASTRO) - ENQUADRAMENTO PERFEITO */
         .auth-container {
             width: 100%;
             max-width: 400px;
-            padding: 30px 24px;
+            padding: 32px 24px;
             background: #1E293B;
             border-radius: 16px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.5);
             text-align: center;
+            display: flex !important;
+            flex-direction: column !important; /* CORREÇÃO: Força o alinhamento vertical */
+            align-items: stretch;
+            gap: 16px;
         }
 
-        .auth-container h2 { color: #3B82F6; margin-bottom: 8px; font-size: 26px; }
-        .auth-container p { color: #94A3B8; font-size: 14px; margin-bottom: 24px; }
+        .auth-container h2 { color: #3B82F6; font-size: 26px; }
+        .auth-container p { color: #94A3B8; font-size: 14px; margin-bottom: 8px; }
         
-        .form-group { text-align: left; margin-bottom: 16px; }
-        .form-group label { display: block; color: #94A3B8; font-size: 12px; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 12px 14px; background: #0F172A; border: 1px solid #334155; border-radius: 8px; color: #FFF; font-size: 14px; outline: none;
+        .form-group { 
+            text-align: left; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            width: 100%;
         }
+        
+        .form-group label { 
+            color: #94A3B8; 
+            font-size: 12px; 
+            font-weight: 600; 
+            text-transform: uppercase; 
+        }
+
+        .form-group input, .form-group select {
+            width: 100%; 
+            padding: 12px 14px; 
+            background: #0F172A; 
+            border: 1px solid #334155; 
+            border-radius: 8px; 
+            color: #FFF; 
+            font-size: 14px; 
+            outline: none;
+        }
+
         .form-group input:focus { border-color: #3B82F6; }
 
         .btn-primary {
-            width: 100%; padding: 12px; background: #2563EB; color: #FFF; border: none; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; margin-top: 10px;
+            width: 100%; 
+            padding: 14px; 
+            background: #2563EB; 
+            color: #FFF; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 700; 
+            font-size: 15px; 
+            cursor: pointer; 
+            transition: 0.2s;
+            margin-top: 8px;
         }
         .btn-primary:hover { background: #1D4ED8; }
 
         .btn-secondary {
-            width: 100%; padding: 12px; background: #334155; color: #FFF; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 8px;
+            width: 100%; 
+            padding: 12px; 
+            background: #334155; 
+            color: #FFF; 
+            border: none; 
+            border-radius: 8px; 
+            font-weight: 600; 
+            font-size: 14px; 
+            cursor: pointer; 
+            margin-top: 8px;
         }
 
-        .auth-link { color: #3B82F6; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-block; margin-top: 14px; }
+        .auth-link { 
+            color: #3B82F6; 
+            cursor: pointer; 
+            text-decoration: underline; 
+            font-size: 13px; 
+            display: inline-block; 
+            margin-top: 6px; 
+        }
 
-        /* ESTRUTURA PRINCIPAL DO APP */
+        /* ESTRUTURA DO DASHBOARD */
         #app {
-            width: 100%; max-width: 480px; min-height: 100vh; background: #0F172A; flex-direction: column; position: relative; padding-bottom: 80px;
+            width: 100%; 
+            max-width: 480px; 
+            min-height: 100vh; 
+            background: #0F172A; 
+            flex-direction: column; 
+            position: relative; 
+            padding-bottom: 80px;
         }
 
         .header-app {
-            background: #1E293B; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155;
+            background: #1E293B; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid #334155;
         }
 
         .cards-resumo { padding: 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
@@ -83,14 +153,13 @@
             position: fixed; bottom: 70px; right: 20px; width: 56px; height: 56px; background: #2563EB; border-radius: 50%; color: #FFF; font-size: 24px; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); cursor: pointer; display: flex; justify-content: center; align-items: center;
         }
 
-        /* ESTILO DOS MODAIS */
+        /* MODAIS */
         .modal {
             position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; z-index: 9999;
         }
         .modal-content {
-            background: #1E293B; width: 100%; max-width: 380px; padding: 24px; border-radius: 16px; text-align: center;
+            background: #1E293B; width: 100%; max-width: 380px; padding: 24px; border-radius: 16px; text-align: center; display: flex; flex-direction: column; gap: 12px;
         }
-        .modal-content h3 { color: #FFF; margin-bottom: 16px; }
 
         .lancamento { background: #1E293B; padding: 14px; border-radius: 10px; margin: 8px 16px; display: flex; justify-content: space-between; align-items: center; }
         .valor-positivo { color: #10B981; }
@@ -99,8 +168,8 @@
 </head>
 <body>
 
-    <!-- 1. TELA DE LOGIN (UNICA EXIBIDA DE INÍCIO) -->
-    <div id="loginScreen" class="auth-container" style="display: flex !important;">
+    <!-- 1. TELA DE LOGIN ENQUADRADA -->
+    <div id="loginScreen" class="auth-container">
         <h2>FinControl 🚀</h2>
         <p>Acesse sua conta financeira na nuvem</p>
 
@@ -118,7 +187,7 @@
         <span class="auth-link" onclick="abrirCadastro()">Não tem conta? Criar conta</span>
     </div>
 
-    <!-- 2. TELA DE CADASTRO -->
+    <!-- 2. TELA DE CADASTRO ENQUADRADA -->
     <div id="cadastroScreen" class="auth-container">
         <h2>Criar Conta 🎯</h2>
         <p>Cadastre-se para gerenciar suas finanças</p>
@@ -147,7 +216,7 @@
         <span class="auth-link" onclick="voltarLogin()">Já tenho conta. Fazer Login</span>
     </div>
 
-    <!-- 3. DASHBOARD E APLICAÇÃO PRINCIPAL -->
+    <!-- 3. DASHBOARD -->
     <div id="app">
         <div class="header-app">
             <div>
@@ -157,7 +226,6 @@
             <button onclick="sair()" style="background: none; border: none; color: #EF4444; cursor: pointer;"><i class="fas fa-sign-out-alt fa-lg"></i></button>
         </div>
 
-        <!-- ABA DASHBOARD -->
         <div id="viewDash" class="view-aba">
             <div class="cards-resumo">
                 <div class="card-val">
@@ -188,22 +256,18 @@
             <div id="containerHistorico"></div>
         </div>
 
-        <!-- ABA CARTÕES -->
         <div id="viewCartoes" class="view-aba" style="display: none; padding: 16px;">
             <h3 style="margin-bottom: 16px;">Seus Cartões e Bancos</h3>
             <div id="containerCartoes"></div>
         </div>
 
-        <!-- ABA METAS -->
         <div id="viewMetas" class="view-aba" style="display: none; padding: 16px;">
             <h3 style="margin-bottom: 16px;">Suas Metas</h3>
             <div id="containerMetas"></div>
         </div>
 
-        <!-- BOTÃO FLUTUANTE ADICIONAR -->
         <button class="btn-add-float" onclick="acaoBotaoAdd()">+</button>
 
-        <!-- MENU INFERIOR -->
         <div class="menu-bottom">
             <div class="item-menu ativo" onclick="mudarAba('viewDash', this)"><i class="fas fa-home"></i>Início</div>
             <div class="item-menu" onclick="mudarAba('viewCartoes', this)"><i class="fas fa-credit-card"></i>Cartões</div>
@@ -214,7 +278,7 @@
     <!-- MODAL NOVO LANÇAMENTO -->
     <div id="modalNovoLancamento" class="modal">
         <div class="modal-content">
-            <h3>Novo Lançamento 💸</h3>
+            <h3 style="color: #FFF;">Novo Lançamento 💸</h3>
             <div class="form-group">
                 <label>Descrição</label>
                 <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Lanche">
@@ -246,7 +310,7 @@
     <!-- MODAL NOVO CARTÃO -->
     <div id="modalNovoCartao" class="modal">
         <div class="modal-content">
-            <h3>Adicionar Cartão / Banco 💳</h3>
+            <h3 style="color: #FFF;">Adicionar Cartão / Banco 💳</h3>
             <div class="form-group">
                 <label>Banco/Instituição</label>
                 <input type="text" id="cardBanco" placeholder="Ex: Nubank, Itaú">
@@ -279,7 +343,7 @@
     <!-- MODAL NOVA META -->
     <div id="modalNovaMeta" class="modal">
         <div class="modal-content">
-            <h3>Criar Nova Meta 🎯</h3>
+            <h3 style="color: #FFF;">Criar Nova Meta 🎯</h3>
             <div class="form-group">
                 <label>Qual a Meta? (Objetivo)</label>
                 <input type="text" id="metaNome" placeholder="Ex: Viagem, Carro Novo">
@@ -302,7 +366,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
-    <!-- SCRIPT PRINCIPAL DA APLICAÇÃO -->
+    <!-- SCRIPT PRINCIPAL -->
     <script src="js/auth.js"></script>
 </body>
 </html>
