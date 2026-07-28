@@ -2,452 +2,307 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#000000">
-    <title>FinControl - App</title>
-
-    <!-- Fontes e Ícones -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinControl</title>
+    <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* CSS BASE DA APLICAÇÃO */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0F172A; color: #F8FAFC; min-height: 100vh; display: flex; justify-content: center; align-items: center; }
 
-    <!-- CSS do Projeto -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
+        /* TRAVA OBRIGATÓRIA: TODOS OS MODAIS E TELAS SECUNDÁRIAS INICIAM INVISÍVEIS */
+        .modal, 
+        .modal-overlay,
+        #modalNovoLancamento, 
+        #modalNovoCartao, 
+        #modalNovaMeta, 
+        #modalEsqueciSenha,
+        #cadastroScreen,
+        #app {
+            display: none !important;
+        }
+
+        /* CONTAINER DE AUTENTICAÇÃO (LOGIN E CADASTRO) */
+        .auth-container {
+            width: 100%;
+            max-width: 400px;
+            padding: 30px 24px;
+            background: #1E293B;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+
+        .auth-container h2 { color: #3B82F6; margin-bottom: 8px; font-size: 26px; }
+        .auth-container p { color: #94A3B8; font-size: 14px; margin-bottom: 24px; }
+        
+        .form-group { text-align: left; margin-bottom: 16px; }
+        .form-group label { display: block; color: #94A3B8; font-size: 12px; margin-bottom: 6px; font-weight: 600; text-transform: uppercase; }
+        .form-group input, .form-group select {
+            width: 100%; padding: 12px 14px; background: #0F172A; border: 1px solid #334155; border-radius: 8px; color: #FFF; font-size: 14px; outline: none;
+        }
+        .form-group input:focus { border-color: #3B82F6; }
+
+        .btn-primary {
+            width: 100%; padding: 12px; background: #2563EB; color: #FFF; border: none; border-radius: 8px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; margin-top: 10px;
+        }
+        .btn-primary:hover { background: #1D4ED8; }
+
+        .btn-secondary {
+            width: 100%; padding: 12px; background: #334155; color: #FFF; border: none; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 8px;
+        }
+
+        .auth-link { color: #3B82F6; cursor: pointer; text-decoration: underline; font-size: 13px; display: inline-block; margin-top: 14px; }
+
+        /* ESTRUTURA PRINCIPAL DO APP */
+        #app {
+            width: 100%; max-width: 480px; min-height: 100vh; background: #0F172A; flex-direction: column; position: relative; padding-bottom: 80px;
+        }
+
+        .header-app {
+            background: #1E293B; padding: 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #334155;
+        }
+
+        .cards-resumo { padding: 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+        .card-val { background: #1E293B; padding: 12px; border-radius: 10px; text-align: center; }
+        .card-val span { font-size: 11px; color: #94A3B8; display: block; margin-bottom: 4px; }
+        .card-val strong { font-size: 14px; color: #10B981; }
+
+        /* NAVEGAÇÃO INFERIOR */
+        .menu-bottom {
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #1E293B; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #334155;
+        }
+        .item-menu { color: #94A3B8; text-align: center; font-size: 12px; cursor: pointer; flex: 1; }
+        .item-menu.ativo { color: #3B82F6; font-weight: 700; }
+        .item-menu i { font-size: 18px; display: block; margin-bottom: 4px; }
+
+        /* BOTÃO FLUTUANTE (+) */
+        .btn-add-float {
+            position: fixed; bottom: 70px; right: 20px; width: 56px; height: 56px; background: #2563EB; border-radius: 50%; color: #FFF; font-size: 24px; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); cursor: pointer; display: flex; justify-content: center; align-items: center;
+        }
+
+        /* ESTILO DOS MODAIS */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; z-index: 9999;
+        }
+        .modal-content {
+            background: #1E293B; width: 100%; max-width: 380px; padding: 24px; border-radius: 16px; text-align: center;
+        }
+        .modal-content h3 { color: #FFF; margin-bottom: 16px; }
+
+        .lancamento { background: #1E293B; padding: 14px; border-radius: 10px; margin: 8px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .valor-positivo { color: #10B981; }
+        .valor-negativo { color: #EF4444; }
+    </style>
 </head>
 <body>
 
-    <!-- TELA DE LOGIN (DARK GLASSMORPHISM) -->
-    <div id="loginScreen" class="login-screen">
-        <div class="login-card-circle">
-            <h2 class="login-title">LOGIN</h2>
+    <!-- 1. TELA DE LOGIN (UNICA EXIBIDA DE INÍCIO) -->
+    <div id="loginScreen" class="auth-container" style="display: flex !important;">
+        <h2>FinControl 🚀</h2>
+        <p>Acesse sua conta financeira na nuvem</p>
 
-            <form id="formLogin" onsubmit="event.preventDefault(); entrar();">
-                <div class="input-group">
-                    <input type="text" id="loginUsuario" placeholder="Username" required autocomplete="off">
-                    <i class="fas fa-user input-icon"></i>
-                </div>
+        <div class="form-group">
+            <label>Usuário</label>
+            <input type="text" id="loginUsuario" placeholder="Digite seu usuário">
+        </div>
 
-                <div class="input-group">
-                    <input type="password" id="loginSenha" placeholder="••••••••••••" required>
-                    <i class="fas fa-lock input-icon"></i>
-                </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="loginSenha" placeholder="Digite sua senha">
+        </div>
 
-                <button type="submit" class="btn-login-dark" id="btnEntrar">LOGIN</button>
-            </form>
+        <button class="btn-primary" onclick="entrar()">Entrar no Sistema</button>
+        <span class="auth-link" onclick="abrirCadastro()">Não tem conta? Criar conta</span>
+    </div>
 
-            <div class="login-options">
-                <a href="#" id="btnAbrirCadastro" onclick="abrirCadastro()">Criar conta</a>
-                <a href="#" id="btnEsqueciSenha" onclick="abrirEsqueciSenha()">Esqueci a senha?</a>
+    <!-- 2. TELA DE CADASTRO -->
+    <div id="cadastroScreen" class="auth-container">
+        <h2>Criar Conta 🎯</h2>
+        <p>Cadastre-se para gerenciar suas finanças</p>
+
+        <div class="form-group">
+            <label>Nome Completo</label>
+            <input type="text" id="cadNome" placeholder="Seu nome">
+        </div>
+
+        <div class="form-group">
+            <label>Usuário de Acesso</label>
+            <input type="text" id="cadUsuario" placeholder="Ex: felipe">
+        </div>
+
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" id="cadSenha" placeholder="Crie uma senha">
+        </div>
+
+        <div class="form-group">
+            <label>Confirmar Senha</label>
+            <input type="password" id="cadConfirmar" placeholder="Repita a senha">
+        </div>
+
+        <button class="btn-primary" onclick="cadastrar()">Finalizar Cadastro</button>
+        <span class="auth-link" onclick="voltarLogin()">Já tenho conta. Fazer Login</span>
+    </div>
+
+    <!-- 3. DASHBOARD E APLICAÇÃO PRINCIPAL -->
+    <div id="app">
+        <div class="header-app">
+            <div>
+                <h3 id="nomeUsuario" style="color: #FFF;">Olá 👋</h3>
+                <span style="font-size: 12px; color: #94A3B8;">Visão Geral</span>
             </div>
+            <button onclick="sair()" style="background: none; border: none; color: #EF4444; cursor: pointer;"><i class="fas fa-sign-out-alt fa-lg"></i></button>
+        </div>
+
+        <!-- ABA DASHBOARD -->
+        <div id="viewDash" class="view-aba">
+            <div class="cards-resumo">
+                <div class="card-val">
+                    <span>Saldo</span>
+                    <strong id="valSaldo">R$ 0,00</strong>
+                </div>
+                <div class="card-val">
+                    <span>Entradas</span>
+                    <strong id="valEntradas" style="color: #10B981;">R$ 0,00</strong>
+                </div>
+                <div class="card-val">
+                    <span>Saídas</span>
+                    <strong id="valSaidas" style="color: #EF4444;">R$ 0,00</strong>
+                </div>
+            </div>
+
+            <div style="padding: 16px;">
+                <div class="form-group">
+                    <label>Salário / Renda Fixa Mensal</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input type="number" id="inputSalario" placeholder="Ex: 3000.00">
+                        <button class="btn-primary" onclick="salvarSalario()" style="width: auto; margin:0;">Salvar</button>
+                    </div>
+                </div>
+            </div>
+
+            <h4 style="padding: 0 16px; color: #94A3B8;">Histórico Recente</h4>
+            <div id="containerHistorico"></div>
+        </div>
+
+        <!-- ABA CARTÕES -->
+        <div id="viewCartoes" class="view-aba" style="display: none; padding: 16px;">
+            <h3 style="margin-bottom: 16px;">Seus Cartões e Bancos</h3>
+            <div id="containerCartoes"></div>
+        </div>
+
+        <!-- ABA METAS -->
+        <div id="viewMetas" class="view-aba" style="display: none; padding: 16px;">
+            <h3 style="margin-bottom: 16px;">Suas Metas</h3>
+            <div id="containerMetas"></div>
+        </div>
+
+        <!-- BOTÃO FLUTUANTE ADICIONAR -->
+        <button class="btn-add-float" onclick="acaoBotaoAdd()">+</button>
+
+        <!-- MENU INFERIOR -->
+        <div class="menu-bottom">
+            <div class="item-menu ativo" onclick="mudarAba('viewDash', this)"><i class="fas fa-home"></i>Início</div>
+            <div class="item-menu" onclick="mudarAba('viewCartoes', this)"><i class="fas fa-credit-card"></i>Cartões</div>
+            <div class="item-menu" onclick="mudarAba('viewMetas', this)"><i class="fas fa-bullseye"></i>Metas</div>
         </div>
     </div>
 
-    <!-- TELA DE CADASTRO -->
-    <div id="cadastroScreen" class="login-screen" style="display: none;">
-        <div class="login-card-circle">
-            <h2 class="login-title" style="font-size: 20px !important;">CRIAR CONTA</h2>
-
-            <form id="formCadastro" onsubmit="event.preventDefault(); cadastrar();" style="width: 100%;">
-                <div class="input-group">
-                    <input type="text" id="cadNome" placeholder="Nome Completo" required autocomplete="off">
-                    <i class="fas fa-id-card input-icon"></i>
-                </div>
-                <div class="input-group">
-                    <input type="text" id="cadUsuario" placeholder="Usuário" required autocomplete="off">
-                    <i class="fas fa-user input-icon"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="cadSenha" placeholder="Senha" required>
-                    <i class="fas fa-lock input-icon"></i>
-                </div>
-                <div class="input-group">
-                    <input type="password" id="cadConfirmar" placeholder="Confirmar Senha" required>
-                    <i class="fas fa-check-circle input-icon"></i>
-                </div>
-
-                <button type="submit" class="btn-login-dark" id="btnSalvarCadastro" style="width: 100% !important; border-radius: 12px !important;">CADASTRAR</button>
-            </form>
-
-            <div class="login-options" style="justify-content: center !important; margin-top: 15px;">
-                <a href="#" id="btnVoltarLogin" onclick="voltarLogin()">← Voltar ao Login</a>
+    <!-- MODAL NOVO LANÇAMENTO -->
+    <div id="modalNovoLancamento" class="modal">
+        <div class="modal-content">
+            <h3>Novo Lançamento 💸</h3>
+            <div class="form-group">
+                <label>Descrição</label>
+                <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Lanche">
             </div>
+            <div class="form-group">
+                <label>Valor (R$)</label>
+                <input type="number" id="lancValor" placeholder="Ex: 50.00">
+            </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                <select id="lancTipo">
+                    <option value="saida">Saída (Gasto)</option>
+                    <option value="entrada">Entrada (Receita)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Forma de Pagamento</label>
+                <input type="text" id="lancFormaPagamento" placeholder="Ex: Pix, Crédito">
+            </div>
+            <div class="form-group">
+                <label>Categoria</label>
+                <input type="text" id="lancCategoria" placeholder="Ex: Alimentação">
+            </div>
+            <button class="btn-primary" onclick="salvarNovoLancamento()">Salvar</button>
+            <button class="btn-secondary" onclick="fecharModalLancamento()">Cancelar</button>
         </div>
     </div>
 
-    <!-- MODAL ESQUECI A SENHA (SMS) -->
-    <div id="modalEsqueciSenha" class="modal" style="display: none;">
-        <div class="modal-box">
-            <h3 style="margin-bottom: 8px;">Recuperar Senha via SMS 📱</h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Informe seu telefone para receber o código.</p>
-
-            <div id="passoTelefone">
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label>Telefone / Celular</label>
-                    <input type="tel" id="smsTelefone" placeholder="(11) 99999-9999" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1;">
-                </div>
-                <button class="btn-primary" onclick="enviarCodigoSMS()" style="width: 100%;">Enviar Código SMS</button>
+    <!-- MODAL NOVO CARTÃO -->
+    <div id="modalNovoCartao" class="modal">
+        <div class="modal-content">
+            <h3>Adicionar Cartão / Banco 💳</h3>
+            <div class="form-group">
+                <label>Banco/Instituição</label>
+                <input type="text" id="cardBanco" placeholder="Ex: Nubank, Itaú">
             </div>
-
-            <div id="passoCodigo" style="display: none;">
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label>Código recebido por SMS</label>
-                    <input type="text" id="smsCodigo" placeholder="Ex: 123456" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1;">
-                </div>
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label>Nova Senha</label>
-                    <input type="password" id="novaSenhaSMS" placeholder="Digite a nova senha" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1;">
-                </div>
-                <button class="btn-primary" onclick="validarEResetarSenha()" style="width: 100%;">Redefinir Senha</button>
+            <div class="form-group">
+                <label>Tipo</label>
+                <select id="cardTipo">
+                    <option value="Crédito e Débito">Crédito e Débito</option>
+                    <option value="Apenas Crédito">Apenas Crédito</option>
+                    <option value="Apenas Débito">Apenas Débito</option>
+                </select>
             </div>
-
-            <button class="btn-secondary" onclick="fecharEsqueciSenha()" style="width: 100%; margin-top: 10px;">Cancelar</button>
+            <div class="form-group">
+                <label>Saldo Débito (R$)</label>
+                <input type="number" id="cardSaldoDebito" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>Limite Crédito (R$)</label>
+                <input type="number" id="cardLimiteCredito" placeholder="0.00">
+            </div>
+            <div class="form-group">
+                <label>Dia do Vencimento</label>
+                <input type="text" id="cardVencimento" placeholder="Ex: 10">
+            </div>
+            <button class="btn-primary" onclick="salvarNovoCartao()">Salvar Cartão</button>
+            <button class="btn-secondary" onclick="fecharModalCartao()">Cancelar</button>
         </div>
     </div>
 
-    <!-- MODAL 1: NOVO LANÇAMENTO (COM FORMA DE PAGAMENTO) -->
-    <div id="modalNovoLancamento" class="modal" style="display: none;">
-        <div class="modal-box">
-            <h3 style="margin-bottom: 8px;">Novo Lançamento ➕</h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Cadastre uma despesa ou receita.</p>
-
-            <form onsubmit="event.preventDefault(); salvarNovoLancamento();">
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Descrição</label>
-                    <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Uber, Salário Extra" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Valor (R$)</label>
-                    <input type="number" step="0.01" id="lancValor" placeholder="0.00" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Tipo de Movimentação</label>
-                    <select id="lancTipo" required style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
-                        <option value="saida">Saída / Despesa 🔴</option>
-                        <option value="entrada">Entrada / Receita 🟢</option>
-                    </select>
-                </div>
-
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Forma de Pagamento</label>
-                    <select id="lancFormaPagamento" required style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
-                        <option value="Pix">Pix ⚡</option>
-                        <option value="Cartão de Crédito">Cartão de Crédito 💳</option>
-                        <option value="Cartão de Débito">Cartão de Débito 💳</option>
-                        <option value="Dinheiro">Dinheiro Espécie 💵</option>
-                        <option value="Transferência/Boleto">Boleto / Transferência 📄</option>
-                    </select>
-                </div>
-
-                <div class="campo" style="margin-bottom: 16px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Categoria</label>
-                    <select id="lancCategoria" style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
-                        <option value="Alimentação">Alimentação 🍔</option>
-                        <option value="Transporte">Transporte 🚗</option>
-                        <option value="Moradia">Moradia 🏠</option>
-                        <option value="Lazer">Lazer 🎮</option>
-                        <option value="Outros">Outros 📦</option>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn-primary" style="width: 100%; height: 46px; border-radius: 12px; font-weight: 600;">Salvar Lançamento</button>
-                <button type="button" class="btn-secondary" onclick="fecharModalLancamento()" style="width: 100%; height: 44px; border-radius: 12px; margin-top: 8px;">Cancelar</button>
-            </form>
+    <!-- MODAL NOVA META -->
+    <div id="modalNovaMeta" class="modal">
+        <div class="modal-content">
+            <h3>Criar Nova Meta 🎯</h3>
+            <div class="form-group">
+                <label>Qual a Meta? (Objetivo)</label>
+                <input type="text" id="metaNome" placeholder="Ex: Viagem, Carro Novo">
+            </div>
+            <div class="form-group">
+                <label>Qual o Valor Total? (R$)</label>
+                <input type="number" id="metaValorTotal" placeholder="Ex: 10000.00">
+            </div>
+            <div class="form-group">
+                <label>Prazo (Em quantos meses?)</label>
+                <input type="number" id="metaMeses" placeholder="Ex: 12">
+            </div>
+            <button class="btn-primary" onclick="salvarNovaMeta()">Salvar Meta</button>
+            <button class="btn-secondary" onclick="fecharModalMeta()">Cancelar</button>
         </div>
     </div>
 
-    <!-- MODAL 2: NOVO CARTÃO / BANCO -->
-    <div id="modalNovoCartao" class="modal" style="display: none;">
-        <div class="modal-box">
-            <h3 style="margin-bottom: 8px;">Adicionar Cartão / Banco 💳</h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Cadastre os dados da sua conta e limites.</p>
-
-            <form onsubmit="event.preventDefault(); salvarNovoCartao();">
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Nome do Banco / Instituição</label>
-                    <input type="text" id="cardBanco" placeholder="Ex: Itaú, Nubank, Bradesco" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Tipo de Função</label>
-                    <select id="cardTipo" required style="width: 100%; height: 44px; border-radius: 10px; padding: 0 10px; border: 1px solid #CBD5E1; font-size: 15px; background: #fff;">
-                        <option value="Ambos">Crédito e Débito (Ambos) 🔄</option>
-                        <option value="Crédito">Apenas Crédito 💳</option>
-                        <option value="Débito">Apenas Débito (Conta) 💵</option>
-                    </select>
-                </div>
-
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Saldo em Débito / Conta (R$)</label>
-                    <input type="number" step="0.01" id="cardSaldoDebito" placeholder="0.00" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Limite de Crédito Total (R$)</label>
-                    <input type="number" step="0.01" id="cardLimiteCredito" placeholder="0.00" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <div class="campo" style="margin-bottom: 16px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Dia do Vencimento da Fatura</label>
-                    <input type="number" min="1" max="31" id="cardVencimento" placeholder="Ex: 10" style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <button type="submit" class="btn-primary" style="width: 100%; height: 46px; border-radius: 12px; font-weight: 600;">Salvar Cartão</button>
-                <button type="button" class="btn-secondary" onclick="fecharModalCartao()" style="width: 100%; height: 44px; border-radius: 12px; margin-top: 8px;">Cancelar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- MODAL 3: NOVA META -->
-    <div id="modalNovaMeta" class="modal" style="display: none;">
-        <div class="modal-box">
-            <h3 style="margin-bottom: 8px;">Criar Nova Meta 🎯</h3>
-            <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Defina seu objetivo e o prazo para alcançar.</p>
-
-            <form onsubmit="event.preventDefault(); salvarNovaMeta();">
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Qual a Meta? (Objetivo)</label>
-                    <input type="text" id="metaNome" placeholder="Ex: Viagem, Carro Novo, Reserva" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <div class="campo" style="margin-bottom: 12px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Qual o Valor Total? (R$)</label>
-                    <input type="number" step="0.01" id="metaValorTotal" placeholder="Ex: 10000.00" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <div class="campo" style="margin-bottom: 16px;">
-                    <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 4px;">Em quantos meses quer alcançar?</label>
-                    <input type="number" min="1" id="metaMeses" placeholder="Ex: 12" required style="width: 100%; height: 44px; padding: 0 12px; border-radius: 10px; border: 1px solid #CBD5E1; font-size: 15px;">
-                </div>
-
-                <button type="submit" class="btn-primary" style="width: 100%; height: 46px; border-radius: 12px; font-weight: 600;">Salvar Meta</button>
-                <button type="button" class="btn-secondary" onclick="fecharModalMeta()" style="width: 100%; height: 44px; border-radius: 12px; margin-top: 8px;">Cancelar</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- APLICATIVO (DASHBOARD PÓS-LOGIN) -->
-    <div id="app" class="app" style="display: none;">
-        <aside class="sidebar">
-            <div class="sidebar-logo">
-                <i class="fas fa-wallet"></i>
-                <span>FinControl</span>
-            </div>
-            <nav>
-                <ul id="menuNavegacao">
-                    <li class="item-menu ativo" id="btnMenuDash" onclick="mudarAba('viewDash', this)">
-                        <i class="fas fa-chart-line"></i> Dashboard
-                    </li>
-                    <li class="item-menu" id="btnMenuLancamentos" onclick="mudarAba('viewLancamentos', this)">
-                        <i class="fas fa-exchange-alt"></i> Lançamentos
-                    </li>
-                    <li class="item-menu" id="btnMenuCartoes" onclick="mudarAba('viewCartoes', this)">
-                        <i class="fas fa-credit-card"></i> Cartões
-                    </li>
-                    <li class="item-menu" id="btnMenuCategorias" onclick="mudarAba('viewCategorias', this)">
-                        <i class="fas fa-tags"></i> Categorias
-                    </li>
-                    <li class="item-menu" id="btnMenuMetas" onclick="mudarAba('viewMetas', this)">
-                        <i class="fas fa-bullseye"></i> Metas
-                    </li>
-                </ul>
-            </nav>
-            <button class="btn-sair" id="btnSair" onclick="sair()">Sair</button>
-        </aside>
-
-        <!-- Área Principal de Conteúdo -->
-        <main class="conteudo">
-            <div class="topo">
-                <div>
-                    <h2 id="nomeUsuario">Olá! 👋</h2>
-                    <span id="subtituloTela">Seu resumo financeiro</span>
-                </div>
-                <div class="perfil" onclick="sair()" title="Clique para Sair">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-            </div>
-
-            <!-- TELA 1: DASHBOARD COMPLETA -->
-            <div id="viewDash" class="view-aba">
-
-                <!-- CAIXA PARA LANÇAR O SALÁRIO -->
-                <div class="panel" style="margin-bottom: 20px; border-left: 6px solid var(--green, #22C55E);">
-                    <h3>Lançar Salário Mensal 💵</h3>
-                    <p style="color: #64748B; font-size: 13px; margin-bottom: 12px;">Informe seu salário base para calcular o saldo disponível.</p>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="number" id="inputSalario" placeholder="Ex: 5000.00" style="flex: 1; padding: 12px; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 15px;">
-                        <button class="btn-primary" onclick="salvarSalario()" style="width: auto; padding: 0 20px; white-space: nowrap;">Salvar Salário</button>
-                    </div>
-                </div>
-
-                <div class="dashboard-grid">
-                    <div class="card saldo">
-                        <div class="card-header">
-                            <span class="card-title">Saldo Disponível</span>
-                            <i class="fas fa-wallet"></i>
-                        </div>
-                        <div class="card-value" id="valSaldo">R$ 0,00</div>
-                    </div>
-
-                    <div class="card entrada">
-                        <div class="card-header">
-                            <span class="card-title">Receitas / Salário</span>
-                            <i class="fas fa-arrow-up"></i>
-                        </div>
-                        <div class="card-value" id="valEntradas">R$ 0,00</div>
-                    </div>
-
-                    <div class="card saida">
-                        <div class="card-header">
-                            <span class="card-title">Despesas</span>
-                            <i class="fas fa-arrow-down"></i>
-                        </div>
-                        <div class="card-value" id="valSaidas">R$ 0,00</div>
-                    </div>
-
-                    <div class="card meta">
-                        <div class="card-header">
-                            <span class="card-title">Metas Concluídas</span>
-                            <i class="fas fa-bullseye"></i>
-                        </div>
-                        <div class="card-value" id="valResumo">100%</div>
-                    </div>
-                </div>
-
-                <div class="dashboard-content">
-                    <div class="panel">
-                        <h3>Gráfico de Desempenho</h3>
-                        <div class="grafico">
-                            <p><i class="fas fa-chart-bar" style="font-size: 32px; margin-bottom: 8px;"></i><br>Visão Geral de Entradas vs Saídas</p>
-                        </div>
-                    </div>
-
-                    <div class="panel">
-                        <h3>Histórico Recente</h3>
-                        <div class="lista-lancamentos" id="containerHistorico">
-                            <p style="color: #64748B;">Nenhum lançamento cadastrado.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TELA 2: TABELA DETALHADA DE LANÇAMENTOS -->
-            <div id="viewLancamentos" class="view-aba" style="display: none;">
-                <div class="panel">
-                    <h3>Todos os Lançamentos 📑</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Gerencie e acompanhe o extrato de movimentações.</p>
-                    
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Descrição</th>
-                                <th>Forma Pagamento</th>
-                                <th>Categoria</th>
-                                <th>Tipo</th>
-                                <th>Valor</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tabelaLancamentosCorpo">
-                            <tr>
-                                <td colspan="5" style="text-align: center; color: #64748B;">Nenhum lançamento registrado.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- TELA 3: CARTÕES DE CRÉDITO & DÉBITO -->
-            <div id="viewCartoes" class="view-aba" style="display: none;">
-                <div class="panel" style="margin-bottom: 20px;">
-                    <h3>Meus Cartões & Bancos 💳</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Gerencie limites de crédito, saldo em conta e faturas. Clique no botão <strong>+</strong> para cadastrar um novo cartão.</p>
-
-                    <div class="dashboard-grid" id="containerCartoes">
-                        <!-- Renderizado via JavaScript dinamicamente -->
-                    </div>
-                </div>
-
-                <!-- PAINEL DE DICAS DE EDUCAÇÃO FINANCEIRA -->
-                <div class="panel" style="border-left: 6px solid #2563EB;">
-                    <h3 style="display: flex; align-items: center; gap: 8px;">
-                        <i class="fas fa-lightbulb" style="color: #EAB308;"></i> Dicas de Uso Consciente do Cartão
-                    </h3>
-                    <p style="color: #64748B; font-size: 13px; margin-bottom: 16px;">Mantenha sua saúde financeira no verde com estas boas práticas:</p>
-
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
-                            <strong style="color: #1E293B; font-size: 14px;">1. Pague sempre 100% da fatura 🎯</strong>
-                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Evite o pagamento mínimo para não cair no juro rotativo.</p>
-                        </div>
-
-                        <div style="background: #F8FAFC; padding: 12px; border-radius: 10px; border: 1px solid #E2E8F0;">
-                            <strong style="color: #1E293B; font-size: 14px;">2. Regra dos 30% do Limite 📊</strong>
-                            <p style="color: #64748B; font-size: 12px; margin-top: 4px;">Comprometa no máximo 30% da sua renda mensal total com parcelas.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TELA 4: CATEGORIAS -->
-            <div id="viewCategorias" class="view-aba" style="display: none;">
-                <div class="panel">
-                    <h3>Minhas Categorias 🏷️</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Separe seus orçamentos por grupos.</p>
-                    
-                    <div class="lista-lancamentos">
-                        <div class="lancamento">
-                            <div class="lancamento-info">
-                                <strong>🍔 Alimentação</strong>
-                                <span>Supermercado, Restaurantes, Feira e Delivery</span>
-                            </div>
-                            <span class="badge green">Orçamento: R$ 2.000</span>
-                        </div>
-                        <div class="lancamento">
-                            <div class="lancamento-info">
-                                <strong>🚗 Transporte</strong>
-                                <span>Combustível, Manutenção, Uber e Pedágio</span>
-                            </div>
-                            <span class="badge green">Orçamento: R$ 800</span>
-                        </div>
-                        <div class="lancamento">
-                            <div class="lancamento-info">
-                                <strong>🏠 Moradia</strong>
-                                <span>Aluguel, Condomínio, Luz, Água e Internet</span>
-                            </div>
-                            <span class="badge red">Orçamento: R$ 2.500</span>
-                        </div>
-                        <div class="lancamento">
-                            <div class="lancamento-info">
-                                <strong>🎮 Lazer & Viagens</strong>
-                                <span>Passeios, Cinema, Streaming e Hobbies</span>
-                            </div>
-                            <span class="badge orange">Orçamento: R$ 600</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TELA 5: METAS -->
-            <div id="viewMetas" class="view-aba" style="display: none;">
-                <div class="panel">
-                    <h3>Metas & Objetivos 🎯</h3>
-                    <p style="color: #64748B; margin-bottom: 20px;">Planeje seus objetivos. Clique no botão <strong>+</strong> para criar uma nova meta.</p>
-
-                    <div id="containerMetas">
-                        <!-- Renderizado via JavaScript dinamicamente -->
-                    </div>
-                </div>
-            </div>
-
-        </main>
-
-        <!-- BOTÃO CONTEXTUAL DE ADICIONAR (ALTERA AÇÃO CONFORME A ABA ATIVA) -->
-        <button class="btn-add" onclick="acaoBotaoAdd()">+</button>
-    </div>
-
-    <!-- Scripts JavaScript -->
-    <script src="js/storage.js"></script>
+    <!-- SCRIPTS FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- SCRIPT PRINCIPAL DA APLICAÇÃO -->
     <script src="js/auth.js"></script>
 </body>
 </html>
