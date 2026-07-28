@@ -12,8 +12,8 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         
         body { 
-            background-color: #0F172A; 
-            color: #F8FAFC; 
+            background-color: #F1F5F9; 
+            color: #0F172A; 
             min-height: 100vh; 
             display: flex; 
             justify-content: center; 
@@ -32,23 +32,24 @@
             display: none !important;
         }
 
-        /* CARD DE AUTENTICAÇÃO (LOGIN E CADASTRO) - ENQUADRAMENTO PERFEITO */
+        /* CARD DE AUTENTICAÇÃO (TEMA CLARO BRANCO) */
         .auth-container {
             width: 100%;
             max-width: 400px;
             padding: 32px 24px;
-            background: #1E293B;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
             border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
             text-align: center;
             display: flex !important;
-            flex-direction: column !important; /* CORREÇÃO: Força o alinhamento vertical */
+            flex-direction: column !important;
             align-items: stretch;
             gap: 16px;
         }
 
-        .auth-container h2 { color: #3B82F6; font-size: 26px; }
-        .auth-container p { color: #94A3B8; font-size: 14px; margin-bottom: 8px; }
+        .auth-container h2 { color: #2563EB; font-size: 26px; font-weight: 700; }
+        .auth-container p { color: #64748B; font-size: 14px; margin-bottom: 8px; }
         
         .form-group { 
             text-align: left; 
@@ -59,7 +60,7 @@
         }
         
         .form-group label { 
-            color: #94A3B8; 
+            color: #475569; 
             font-size: 12px; 
             font-weight: 600; 
             text-transform: uppercase; 
@@ -68,15 +69,15 @@
         .form-group input, .form-group select {
             width: 100%; 
             padding: 12px 14px; 
-            background: #0F172A; 
-            border: 1px solid #334155; 
+            background: #F8FAFC; 
+            border: 1px solid #CBD5E1; 
             border-radius: 8px; 
-            color: #FFF; 
+            color: #0F172A; 
             font-size: 14px; 
             outline: none;
         }
 
-        .form-group input:focus { border-color: #3B82F6; }
+        .form-group input:focus, .form-group select:focus { border-color: #2563EB; background: #FFFFFF; }
 
         .btn-primary {
             width: 100%; 
@@ -96,8 +97,8 @@
         .btn-secondary {
             width: 100%; 
             padding: 12px; 
-            background: #334155; 
-            color: #FFF; 
+            background: #E2E8F0; 
+            color: #334155; 
             border: none; 
             border-radius: 8px; 
             font-weight: 600; 
@@ -105,9 +106,10 @@
             cursor: pointer; 
             margin-top: 8px;
         }
+        .btn-secondary:hover { background: #CBD5E1; }
 
         .auth-link { 
-            color: #3B82F6; 
+            color: #2563EB; 
             cursor: pointer; 
             text-decoration: underline; 
             font-size: 13px; 
@@ -115,60 +117,68 @@
             margin-top: 6px; 
         }
 
-        /* ESTRUTURA DO DASHBOARD */
+        /* DASHBOARD PRINCIPAL (TEMA CLARO) */
         #app {
             width: 100%; 
             max-width: 480px; 
             min-height: 100vh; 
-            background: #0F172A; 
+            background: #F8FAFC; 
+            border: 1px solid #E2E8F0;
             flex-direction: column; 
             position: relative; 
             padding-bottom: 80px;
         }
 
         .header-app {
-            background: #1E293B; 
+            background: #FFFFFF; 
             padding: 20px; 
             display: flex; 
             justify-content: space-between; 
             align-items: center; 
-            border-bottom: 1px solid #334155;
+            border-bottom: 1px solid #E2E8F0;
         }
 
         .cards-resumo { padding: 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .card-val { background: #1E293B; padding: 12px; border-radius: 10px; text-align: center; }
-        .card-val span { font-size: 11px; color: #94A3B8; display: block; margin-bottom: 4px; }
-        .card-val strong { font-size: 14px; color: #10B981; }
+        .card-val { 
+            background: #FFFFFF; 
+            border: 1px solid #E2E8F0; 
+            padding: 12px; 
+            border-radius: 10px; 
+            text-align: center; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+        }
+        .card-val span { font-size: 11px; color: #64748B; display: block; margin-bottom: 4px; font-weight: 600; }
+        .card-val strong { font-size: 14px; color: #0F172A; }
 
         /* NAVEGAÇÃO INFERIOR */
         .menu-bottom {
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #1E293B; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #334155;
+            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #FFFFFF; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #E2E8F0; box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
         }
-        .item-menu { color: #94A3B8; text-align: center; font-size: 12px; cursor: pointer; flex: 1; }
-        .item-menu.ativo { color: #3B82F6; font-weight: 700; }
+        .item-menu { color: #64748B; text-align: center; font-size: 12px; cursor: pointer; flex: 1; }
+        .item-menu.ativo { color: #2563EB; font-weight: 700; }
         .item-menu i { font-size: 18px; display: block; margin-bottom: 4px; }
 
         /* BOTÃO FLUTUANTE (+) */
         .btn-add-float {
-            position: fixed; bottom: 70px; right: 20px; width: 56px; height: 56px; background: #2563EB; border-radius: 50%; color: #FFF; font-size: 24px; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4); cursor: pointer; display: flex; justify-content: center; align-items: center;
+            position: fixed; bottom: 70px; right: 20px; width: 56px; height: 56px; background: #2563EB; border-radius: 50%; color: #FFF; font-size: 24px; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); cursor: pointer; display: flex; justify-content: center; align-items: center;
         }
 
-        /* MODAIS */
+        /* MODAIS CLAROS */
         .modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); justify-content: center; align-items: center; padding: 20px; z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; padding: 20px; z-index: 9999;
         }
         .modal-content {
-            background: #1E293B; width: 100%; max-width: 380px; padding: 24px; border-radius: 16px; text-align: center; display: flex; flex-direction: column; gap: 12px;
+            background: #FFFFFF; width: 100%; max-width: 380px; padding: 24px; border-radius: 16px; text-align: center; display: flex; flex-direction: column; gap: 12px; border: 1px solid #E2E8F0; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
 
-        .lancamento { background: #1E293B; padding: 14px; border-radius: 10px; margin: 8px 16px; display: flex; justify-content: space-between; align-items: center; }
-        .valor-positivo { color: #10B981; }
-        .valor-negativo { color: #EF4444; }
+        .lancamento { background: #FFFFFF; border: 1px solid #E2E8F0; padding: 14px; border-radius: 10px; margin: 8px 16px; display: flex; justify-content: space-between; align-items: center; }
+        .valor-positivo { color: #16A34A; font-weight: 700; }
+        .valor-negativo { color: #DC2626; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <!-- 1. TELA DE LOGIN ENQUADRADA -->
+    <!-- 1. TELA DE LOGIN ENQUADRADA (BRANCA) -->
     <div id="loginScreen" class="auth-container">
         <h2>FinControl 🚀</h2>
         <p>Acesse sua conta financeira na nuvem</p>
@@ -187,7 +197,7 @@
         <span class="auth-link" onclick="abrirCadastro()">Não tem conta? Criar conta</span>
     </div>
 
-    <!-- 2. TELA DE CADASTRO ENQUADRADA -->
+    <!-- 2. TELA DE CADASTRO ENQUADRADA (BRANCA) -->
     <div id="cadastroScreen" class="auth-container">
         <h2>Criar Conta 🎯</h2>
         <p>Cadastre-se para gerenciar suas finanças</p>
@@ -220,10 +230,10 @@
     <div id="app">
         <div class="header-app">
             <div>
-                <h3 id="nomeUsuario" style="color: #FFF;">Olá 👋</h3>
-                <span style="font-size: 12px; color: #94A3B8;">Visão Geral</span>
+                <h3 id="nomeUsuario" style="color: #0F172A;">Olá 👋</h3>
+                <span style="font-size: 12px; color: #64748B;">Visão Geral</span>
             </div>
-            <button onclick="sair()" style="background: none; border: none; color: #EF4444; cursor: pointer;"><i class="fas fa-sign-out-alt fa-lg"></i></button>
+            <button onclick="sair()" style="background: none; border: none; color: #DC2626; cursor: pointer;"><i class="fas fa-sign-out-alt fa-lg"></i></button>
         </div>
 
         <div id="viewDash" class="view-aba">
@@ -234,11 +244,11 @@
                 </div>
                 <div class="card-val">
                     <span>Entradas</span>
-                    <strong id="valEntradas" style="color: #10B981;">R$ 0,00</strong>
+                    <strong id="valEntradas" style="color: #16A34A;">R$ 0,00</strong>
                 </div>
                 <div class="card-val">
                     <span>Saídas</span>
-                    <strong id="valSaidas" style="color: #EF4444;">R$ 0,00</strong>
+                    <strong id="valSaidas" style="color: #DC2626;">R$ 0,00</strong>
                 </div>
             </div>
 
@@ -252,17 +262,17 @@
                 </div>
             </div>
 
-            <h4 style="padding: 0 16px; color: #94A3B8;">Histórico Recente</h4>
+            <h4 style="padding: 0 16px; color: #64748B;">Histórico Recente</h4>
             <div id="containerHistorico"></div>
         </div>
 
         <div id="viewCartoes" class="view-aba" style="display: none; padding: 16px;">
-            <h3 style="margin-bottom: 16px;">Seus Cartões e Bancos</h3>
+            <h3 style="margin-bottom: 16px; color: #0F172A;">Seus Cartões e Bancos</h3>
             <div id="containerCartoes"></div>
         </div>
 
         <div id="viewMetas" class="view-aba" style="display: none; padding: 16px;">
-            <h3 style="margin-bottom: 16px;">Suas Metas</h3>
+            <h3 style="margin-bottom: 16px; color: #0F172A;">Suas Metas</h3>
             <div id="containerMetas"></div>
         </div>
 
@@ -278,7 +288,7 @@
     <!-- MODAL NOVO LANÇAMENTO -->
     <div id="modalNovoLancamento" class="modal">
         <div class="modal-content">
-            <h3 style="color: #FFF;">Novo Lançamento 💸</h3>
+            <h3 style="color: #0F172A;">Novo Lançamento 💸</h3>
             <div class="form-group">
                 <label>Descrição</label>
                 <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Lanche">
@@ -310,7 +320,7 @@
     <!-- MODAL NOVO CARTÃO -->
     <div id="modalNovoCartao" class="modal">
         <div class="modal-content">
-            <h3 style="color: #FFF;">Adicionar Cartão / Banco 💳</h3>
+            <h3 style="color: #0F172A;">Adicionar Cartão / Banco 💳</h3>
             <div class="form-group">
                 <label>Banco/Instituição</label>
                 <input type="text" id="cardBanco" placeholder="Ex: Nubank, Itaú">
@@ -343,7 +353,7 @@
     <!-- MODAL NOVA META -->
     <div id="modalNovaMeta" class="modal">
         <div class="modal-content">
-            <h3 style="color: #FFF;">Criar Nova Meta 🎯</h3>
+            <h3 style="color: #0F172A;">Criar Nova Meta 🎯</h3>
             <div class="form-group">
                 <label>Qual a Meta? (Objetivo)</label>
                 <input type="text" id="metaNome" placeholder="Ex: Viagem, Carro Novo">
