@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (SESSÃO LIMPA + SUPORTE ÀS 5 ABAS)
+   FINCONTROL - AUTH.JS (METAS INTERATIVAS + COMPARAÇÃO DE PARCELAS)
 ========================================================== */
 
 // CONFIGURAÇÃO OFICIAL DO SEU FIREBASE
@@ -63,7 +63,7 @@ function acaoBotaoAdd() {
     }
 }
 
-// NAVEGAÇÃO ENTRE AS 5 ABAS
+// NAVEGAÇÃO ENTRE AS ABAS
 function mudarAba(nomeAba, elemento) {
     fecharTodosModais();
     abaAtual = nomeAba;
@@ -112,6 +112,63 @@ function abrirModalMeta() {
 function fecharModalMeta() {
     const modal = document.getElementById("modalNovaMeta");
     if (modal) modal.style.setProperty("display", "none", "important");
+}
+
+// RESETAR TODOS OS DADOS DA CONTA
+async function resetarDados() {
+    if (!usuarioLogadoUid) return;
+
+    const confirmacao = confirm("⚠️ ATENÇÃO: Tem certeza que deseja apagar todos os lançamentos, salário, cartões e metas? Esta ação é irreversível!");
+    if (!confirmacao) return;
+
+    try {
+        const docRef = db.collection("usuarios").doc(usuarioLogadoUid);
+        await docRef.set({
+            salario: 0,
+            lancamentos: [],
+            cartoes: [],
+            metas: []
+        }, { merge: true });
+
+        const docSnap = await docRef.get();
+        atualizarTudo(docSnap.data());
+
+        const elInputSalario = document.getElementById("inputSalario");
+        if (elInputSalario) elInputSalario.value = "";
+
+        alert("Suas informações financeiras foram resetadas com sucesso!");
+    } catch (e) {
+        alert("Erro ao resetar dados: " + e.message);
+    }
+}
+
+// MARCAR OU DESMARCAR MÊS DA META
+async function marcarMesMeta(indexMeta, numeroMes) {
+    if (!usuarioLogadoUid) return;
+
+    try {
+        const docRef = db.collection("usuarios").doc(usuarioLogadoUid);
+        const docSnap = await docRef.get();
+        if (!docSnap.exists) return;
+
+        let dados = docSnap.data();
+        if (!dados.metas || !dados.metas[indexMeta]) return;
+
+        let meta = dados.metas[indexMeta];
+        let pagasAtuais = meta.pagas || 0;
+
+        // Se clicar no mês atual já marcado, volta 1. Senão avança até ele.
+        if (pagasAtuais === numeroMes) {
+            meta.pagas = numeroMes - 1;
+        } else {
+            meta.pagas = numeroMes;
+        }
+
+        await docRef.set(dados, { merge: true });
+        atualizarTudo(dados);
+    } catch (e) {
+        alert("Erro ao atualizar meta: " + e.message);
+    }
 }
 
 // SALVAR LANÇAMENTO NA NUVEM
@@ -211,7 +268,12 @@ async function salvarNovaMeta() {
 
         if (!dados.metas) dados.metas = [];
 
-        dados.metas.push({ nome: nomeMeta, valorTotal, meses, guardado: 0 });
+        dados.metas.push({ 
+            nome: nomeMeta, 
+            valorTotal: valorTotal, 
+            meses: meses, 
+            pagas: 0 
+        });
 
         await docRef.set(dados, { merge: true });
 
@@ -354,24 +416,81 @@ function atualizarTudo(dados = {}) {
         }
     }
 
-    // Renderiza Metas
+    // Renderiza Metas (Com Caixas de Meses e Barra de Progresso)
     const containerMetas = document.getElementById("containerMetas");
+    let somaPorcentagensMetas = 0;
+
     if (containerMetas) {
         if (metas.length === 0) {
             containerMetas.innerHTML = `<p style="color: #64748B; font-size: 13px;">Nenhuma meta cadastrada. Clique no botão + para criar sua primeira meta!</p>`;
         } else {
             let htmlMetas = "";
-            metas.forEach(m => {
-                const mensalidade = m.valorTotal / m.meses;
+            metas.forEach((m, index) => {
+                const mesesTotal = m.meses || 1;
+                const pagas = m.pagas || 0;
+                const mensalidade = m.valorTotal / mesesTotal;
+                const pct = Math.min(100, Math.round((pagas / mesesTotal) * 100));
+                somaPorcentagensMetas += pct;
+
+                // Cria as caixinhas de meses/parcelas
+                let caixinhasHtml = "";
+                for (let i = 1; i <= mesesTotal; i++) {
+                    const estaPago = i <= pagas;
+                    const bg = estaPago ? "#2563EB" : "#F1F5F9";
+                    const cor = estaPago ? "#FFFFFF" : "#64748B";
+                    const border = estaPago ? "1px solid #2563EB" : "1px solid #CBD5E1";
+
+                    caixinhasHtml += `
+                        <button onclick="marcarMesMeta(${index}, ${i})" style="
+                            background: ${bg}; 
+                            color: ${cor}; 
+                            border: ${border}; 
+                            padding: 6px 10px; 
+                            border-radius: 8px; 
+                            font-size: 11px; 
+                            font-weight: 700; 
+                            cursor: pointer; 
+                            transition: all 0.2s;
+                        ">
+                            ${i}º Mês ${estaPago ? '✓' : ''}
+                        </button>`;
+                }
+
                 htmlMetas += `
-                    <div style="background: #F8FAFC; border: 1px solid #E2E8F0; padding: 16px; border-radius: 16px; margin-bottom: 12px;">
-                        <strong style="color: #0F172A;">🎯 ${m.nome}</strong>
-                        <p style="font-size: 13px; color: #64748B; margin-top: 6px;">Meta Total: R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
-                        <p style="font-size: 13px; color: #2563EB; font-weight: 700; margin-top: 4px;">Guardar: R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês (${m.meses} meses)</p>
+                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 18px; border-radius: 16px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                            <strong style="color: #0F172A; font-size: 16px;">🎯 ${m.nome}</strong>
+                            <span style="font-size: 14px; font-weight: 800; color: #2563EB;">${pct}% Concluído</span>
+                        </div>
+                        
+                        <div style="width: 100%; background: #E2E8F0; height: 10px; border-radius: 10px; overflow: hidden; margin-bottom: 12px;">
+                            <div style="width: ${pct}%; background: #2563EB; height: 100%; border-radius: 10px; transition: width 0.3s ease;"></div>
+                        </div>
+
+                        <div style="font-size: 13px; color: #64748B; margin-bottom: 12px; display: flex; justify-content: space-between;">
+                            <span>Meta: <strong>R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></span>
+                            <span>Guardar: <strong style="color: #16A34A;">R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês</strong></span>
+                        </div>
+
+                        <div style="border-top: 1px solid #F1F5F9; padding-top: 12px;">
+                            <span style="font-size: 12px; font-weight: 700; color: #475569; display: block; margin-bottom: 8px;">
+                                Marcar Parcelas/Meses Pagos (${pagas}/${mesesTotal}):
+                            </span>
+                            <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                                ${caixinhasHtml}
+                            </div>
+                        </div>
                     </div>`;
             });
             containerMetas.innerHTML = htmlMetas;
         }
+    }
+
+    // Atualiza estatística de Metas no Dashboard
+    const elMetasPct = document.getElementById("valMetasConcluidas");
+    if (elMetasPct) {
+        const mediaGeral = metas.length > 0 ? Math.round(somaPorcentagensMetas / metas.length) : 0;
+        elMetasPct.innerHTML = `${mediaGeral}%`;
     }
 }
 
