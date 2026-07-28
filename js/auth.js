@@ -1,10 +1,10 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (SESSÃO LIMPA NA INICIALIZAÇÃO)
+   FINCONTROL - AUTH.JS (CHAVE DE API CORRIGIDA E ATUALIZADA)
 ========================================================== */
 
-// CONFIGURAÇÃO CONECTADA AO SEU PROJETO FIREBASE
+// CONFIGURAÇÃO OFICIAL DO SEU FIREBASE
 const firebaseConfig = {
-    apiKey: "AIzaSyAny6KFQqQGUqxXd1eaXJJAQHywvPktJk8",
+    apiKey: "AIzaSyANy6KfQqQGUqxXd1eaXJJAQHywvPktJk8",
     authDomain: "fincontrol-585a1.firebaseapp.com",
     projectId: "fincontrol-585a1",
     storageBucket: "fincontrol-585a1.firebasestorage.app",
