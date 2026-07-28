@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (SEMPRE INICIA NA TELA DE LOGIN)
+   FINCONTROL - AUTH.JS (FLUXO PRINCIPAL: TELA INICIAL DE LOGIN)
 ========================================================== */
 
 // 1. CONFIGURAÇÃO DO SEU PROJETO FIREBASE
@@ -20,11 +20,6 @@ if (!firebase.apps.length) {
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Configura a persistência para NENHUMA e desloga ao abrir o link
-// Isso garante que SEMPRE abrirá na tela de login ao acessar o link
-auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
-auth.signOut();
-
 const loginScreen = document.getElementById("loginScreen");
 const cadastroScreen = document.getElementById("cadastroScreen");
 const app = document.getElementById("app");
@@ -32,6 +27,16 @@ const app = document.getElementById("app");
 let codigoEnviadoSMS = null;
 let abaAtual = 'viewDash';
 let usuarioLogadoUid = null;
+
+// GARANTE QUE A PRIMEIRA TELA SEJA SEMPRE O LOGIN
+function exibirLoginInicial() {
+    if (app) app.style.setProperty("display", "none", "important");
+    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+    if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
+}
+
+// Executa imediatamente ao carregar o arquivo
+exibirLoginInicial();
 
 // Helper para converter usuário em e-mail válido para o Firebase
 function usuarioParaEmail(usuario) {
@@ -391,7 +396,7 @@ function atualizarTudo(dados = {}) {
 }
 
 // ----------------------------------------------------------
-// 8. AUTENTICAÇÃO FIREBASE
+// 8. AUTENTICAÇÃO E NAVEGAÇÃO ENTRE TELAS
 // ----------------------------------------------------------
 async function cadastrar() {
     const nome = document.getElementById("cadNome")?.value.trim();
@@ -423,7 +428,7 @@ async function cadastrar() {
             metas: []
         });
 
-        alert("Conta criada na nuvem com sucesso! Faça login para acessar.");
+        alert("Conta criada com sucesso! Faça login para acessar.");
         voltarLogin();
     } catch (e) {
         alert("Erro no cadastro: " + e.message);
@@ -469,9 +474,7 @@ auth.onAuthStateChanged(async (user) => {
         }
     } else {
         usuarioLogadoUid = null;
-        if (app) app.style.setProperty("display", "none", "important");
-        if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
-        if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
+        exibirLoginInicial();
     }
 });
 
@@ -489,16 +492,16 @@ function mudarAba(nomeAba, elemento) {
     if (elemento) elemento.classList.add('ativo');
 }
 
+// Ir para a tela de criar conta (se o usuário não tiver cadastro)
 function abrirCadastro() {
     if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
     if (app) app.style.setProperty("display", "none", "important");
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "flex", "important");
 }
 
+// Voltar para a tela de login
 function voltarLogin() {
-    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
-    if (app) app.style.setProperty("display", "none", "important");
-    if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
+    exibirLoginInicial();
 }
 
 function abrirEsqueciSenha() {
