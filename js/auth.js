@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (CHAVE DE API CORRIGIDA E ATUALIZADA)
+   FINCONTROL - AUTH.JS (PADRÃO TEMA CLARO / BANCO NUVEM)
 ========================================================== */
 
 // CONFIGURAÇÃO OFICIAL DO SEU FIREBASE
@@ -98,7 +98,7 @@ function fecharModalMeta() {
     if (modal) modal.style.setProperty("display", "none", "important");
 }
 
-// SALVAR LANÇAMENTO
+// SALVAR LANÇAMENTO NA NUVEM
 async function salvarNovoLancamento() {
     const desc = document.getElementById("lancDescricao")?.value.trim();
     const valor = parseFloat(document.getElementById("lancValor")?.value);
@@ -140,7 +140,7 @@ async function salvarNovoLancamento() {
     }
 }
 
-// SALVAR CARTÃO
+// SALVAR CARTÃO NA NUVEM
 async function salvarNovoCartao() {
     const banco = document.getElementById("cardBanco")?.value.trim();
     const tipo = document.getElementById("cardTipo")?.value;
@@ -177,7 +177,7 @@ async function salvarNovoCartao() {
     }
 }
 
-// SALVAR META
+// SALVAR META NA NUVEM
 async function salvarNovaMeta() {
     const nomeMeta = document.getElementById("metaNome")?.value.trim();
     const valorTotal = parseFloat(document.getElementById("metaValorTotal")?.value);
@@ -211,7 +211,7 @@ async function salvarNovaMeta() {
     }
 }
 
-// SALVAR SALÁRIO
+// SALVAR SALÁRIO NA NUVEM
 async function salvarSalario() {
     const valorInput = parseFloat(document.getElementById("inputSalario")?.value);
 
@@ -232,7 +232,7 @@ async function salvarSalario() {
     }
 }
 
-// ATUALIZA A TELA COM OS DADOS NUVEM
+// ATUALIZA A TELA COM OS DADOS NUVEM (LAYOUT CLARO)
 function atualizarTudo(dados = {}) {
     const salario = dados.salario || 0;
     const lista = dados.lancamentos || [];
@@ -269,7 +269,7 @@ function atualizarTudo(dados = {}) {
             if (salario > 0) {
                 htmlHist += `
                     <div class="lancamento">
-                        <div><strong>Salário Base</strong><br><span style="font-size:12px; color:#94A3B8;">Fixo</span></div>
+                        <div><strong>Salário Base</strong><br><span style="font-size:12px; color:#64748B;">Fixo</span></div>
                         <span class="valor-positivo">+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
                     </div>`;
             }
@@ -278,7 +278,7 @@ function atualizarTudo(dados = {}) {
                 const classeCor = item.tipo === "entrada" ? "valor-positivo" : "valor-negativo";
                 htmlHist += `
                     <div class="lancamento">
-                        <div><strong>${item.descricao}</strong><br><span style="font-size:12px; color:#94A3B8;">${item.data} - ${item.categoria}</span></div>
+                        <div><strong>${item.descricao}</strong><br><span style="font-size:12px; color:#64748B;">${item.data} - ${item.categoria}</span></div>
                         <span class="${classeCor}">${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
                     </div>`;
             });
@@ -286,7 +286,7 @@ function atualizarTudo(dados = {}) {
         }
     }
 
-    // Renderiza Cartões
+    // Renderiza Cartões (Cards Claros)
     const containerCartoes = document.getElementById("containerCartoes");
     if (containerCartoes) {
         if (cartoes.length === 0) {
@@ -295,18 +295,18 @@ function atualizarTudo(dados = {}) {
             let htmlCartoes = "";
             cartoes.forEach(c => {
                 htmlCartoes += `
-                    <div style="background: #1E293B; padding: 16px; border-radius: 12px; margin-bottom: 12px;">
-                        <strong style="color: #F59E0B; text-transform: uppercase;">${c.banco}</strong>
-                        <p style="font-size: 13px; color: #94A3B8; margin-top: 4px;">Tipo: ${c.tipo}</p>
-                        <p style="font-size: 15px; font-weight: 700; color: #10B981; margin-top: 6px;">Saldo Débito: R$ ${c.saldoDebito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
-                        <p style="font-size: 13px; color: #FFF; margin-top: 4px;">Limite Crédito: R$ ${c.limiteCredito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <strong style="color: #2563EB; text-transform: uppercase;">${c.banco}</strong>
+                        <p style="font-size: 13px; color: #64748B; margin-top: 4px;">Tipo: ${c.tipo}</p>
+                        <p style="font-size: 15px; font-weight: 700; color: #16A34A; margin-top: 6px;">Saldo Débito: R$ ${c.saldoDebito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <p style="font-size: 13px; color: #0F172A; margin-top: 4px;">Limite Crédito: R$ ${c.limiteCredito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
                     </div>`;
             });
             containerCartoes.innerHTML = htmlCartoes;
         }
     }
 
-    // Renderiza Metas
+    // Renderiza Metas (Cards Claros)
     const containerMetas = document.getElementById("containerMetas");
     if (containerMetas) {
         if (metas.length === 0) {
@@ -316,10 +316,10 @@ function atualizarTudo(dados = {}) {
             metas.forEach(m => {
                 const mensalidade = m.valorTotal / m.meses;
                 htmlMetas += `
-                    <div style="background: #1E293B; padding: 16px; border-radius: 12px; margin-bottom: 12px;">
-                        <strong>🎯 ${m.nome}</strong>
-                        <p style="font-size: 13px; color: #94A3B8; margin-top: 6px;">Meta: R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
-                        <p style="font-size: 13px; color: #3B82F6; margin-top: 4px;">Guardar: R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês em ${m.meses}x</p>
+                    <div style="background: #FFFFFF; border: 1px solid #E2E8F0; padding: 16px; border-radius: 12px; margin-bottom: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02);">
+                        <strong style="color: #0F172A;">🎯 ${m.nome}</strong>
+                        <p style="font-size: 13px; color: #64748B; margin-top: 6px;">Meta: R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <p style="font-size: 13px; color: #2563EB; margin-top: 4px; font-weight: 600;">Guardar: R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês em ${m.meses}x</p>
                     </div>`;
             });
             containerMetas.innerHTML = htmlMetas;
