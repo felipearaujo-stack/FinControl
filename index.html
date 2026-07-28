@@ -4,26 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FinControl</title>
-    <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* RESET BASE */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        /* RESET & TEMA BASE (CLARO / MODERNO) */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
         
         body { 
-            background-color: #F1F5F9; 
-            color: #0F172A; 
+            background-color: #F0F4F8; 
+            color: #1E293B; 
             min-height: 100vh; 
             display: flex; 
             justify-content: center; 
-            align-items: center;
-            padding: 16px;
+            align-items: flex-start;
+            padding: 12px;
         }
 
-        /* TRAVA DE SEGURANÇA (ESCONDE TELAS E MODAIS SECUNDÁRIOS) */
+        /* TRAVA DE SEGURANÇA DE TELAS E MODAIS */
         .modal, 
-        .modal-overlay,
         #modalNovoLancamento, 
         #modalNovoCartao, 
         #modalNovaMeta, 
@@ -32,153 +30,175 @@
             display: none !important;
         }
 
-        /* CARD DE AUTENTICAÇÃO (TEMA CLARO BRANCO) */
+        /* CARD DE AUTENTICAÇÃO (LOGIN / CADASTRO) */
         .auth-container {
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             padding: 32px 24px;
             background: #FFFFFF;
-            border: 1px solid #E2E8F0;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
             text-align: center;
             display: flex !important;
             flex-direction: column !important;
-            align-items: stretch;
             gap: 16px;
+            margin-top: 40px;
         }
 
-        .auth-container h2 { color: #2563EB; font-size: 26px; font-weight: 700; }
-        .auth-container p { color: #64748B; font-size: 14px; margin-bottom: 8px; }
+        .auth-container h2 { color: #2563EB; font-size: 26px; font-weight: 800; }
+        .auth-container p { color: #64748B; font-size: 14px; }
         
-        .form-group { 
-            text-align: left; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 6px; 
-            width: 100%;
-        }
-        
-        .form-group label { 
-            color: #475569; 
-            font-size: 12px; 
-            font-weight: 600; 
-            text-transform: uppercase; 
-        }
-
+        .form-group { text-align: left; display: flex; flex-direction: column; gap: 6px; width: 100%; }
+        .form-group label { color: #475569; font-size: 12px; font-weight: 700; text-transform: uppercase; }
         .form-group input, .form-group select {
-            width: 100%; 
-            padding: 12px 14px; 
-            background: #F8FAFC; 
-            border: 1px solid #CBD5E1; 
-            border-radius: 8px; 
-            color: #0F172A; 
-            font-size: 14px; 
-            outline: none;
+            width: 100%; padding: 14px; background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 12px; color: #0F172A; font-size: 14px; outline: none; transition: 0.2s;
         }
-
         .form-group input:focus, .form-group select:focus { border-color: #2563EB; background: #FFFFFF; }
 
         .btn-primary {
-            width: 100%; 
-            padding: 14px; 
-            background: #2563EB; 
-            color: #FFF; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 700; 
-            font-size: 15px; 
-            cursor: pointer; 
-            transition: 0.2s;
-            margin-top: 8px;
+            width: 100%; padding: 14px; background: #2563EB; color: #FFF; border: none; border-radius: 12px; font-weight: 700; font-size: 15px; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
         }
         .btn-primary:hover { background: #1D4ED8; }
 
         .btn-secondary {
-            width: 100%; 
-            padding: 12px; 
-            background: #E2E8F0; 
-            color: #334155; 
-            border: none; 
-            border-radius: 8px; 
-            font-weight: 600; 
-            font-size: 14px; 
-            cursor: pointer; 
-            margin-top: 8px;
-        }
-        .btn-secondary:hover { background: #CBD5E1; }
-
-        .auth-link { 
-            color: #2563EB; 
-            cursor: pointer; 
-            text-decoration: underline; 
-            font-size: 13px; 
-            display: inline-block; 
-            margin-top: 6px; 
+            width: 100%; padding: 12px; background: #F1F5F9; color: #475569; border: none; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer;
         }
 
-        /* DASHBOARD PRINCIPAL (TEMA CLARO) */
+        .auth-link { color: #2563EB; cursor: pointer; text-decoration: underline; font-size: 13px; font-weight: 600; }
+
+        /* CONTAINER DO APP COM MENU SUPERIOR EM ABAS */
         #app {
             width: 100%; 
-            max-width: 480px; 
+            max-width: 440px; 
             min-height: 100vh; 
-            background: #F8FAFC; 
-            border: 1px solid #E2E8F0;
+            background: #F0F4F8; 
             flex-direction: column; 
             position: relative; 
-            padding-bottom: 80px;
+            padding-bottom: 90px;
         }
 
-        .header-app {
-            background: #FFFFFF; 
-            padding: 20px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-bottom: 1px solid #E2E8F0;
+        /* MENU SUPERIOR (TABS DE NAVEGAÇÃO IGUAL AO VÍDEO) */
+        .menu-top {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 12px 4px;
+            background: #FFFFFF;
+            border-radius: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            scrollbar-width: none;
+        }
+        .menu-top::-webkit-scrollbar { display: none; }
+
+        .item-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #64748B;
+            cursor: pointer;
+            white-space: nowrap;
+            gap: 4px;
+            transition: all 0.2s ease;
+        }
+        .item-tab i { font-size: 16px; }
+        .item-tab.ativo {
+            background: #2563EB;
+            color: #FFFFFF;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
         }
 
-        .cards-resumo { padding: 16px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .card-val { 
-            background: #FFFFFF; 
-            border: 1px solid #E2E8F0; 
-            padding: 12px; 
-            border-radius: 10px; 
-            text-align: center; 
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02); 
+        /* CABEÇALHO DO PERFIL */
+        .header-perfil {
+            background: #FFFFFF;
+            padding: 16px 20px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
-        .card-val span { font-size: 11px; color: #64748B; display: block; margin-bottom: 4px; font-weight: 600; }
-        .card-val strong { font-size: 14px; color: #0F172A; }
+        .header-perfil h3 { font-size: 18px; font-weight: 800; color: #0F172A; }
+        .header-perfil span { font-size: 12px; color: #64748B; }
+        .avatar-circle {
+            width: 40px; height: 40px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; justify-content: center; align-items: center; font-size: 18px; border: 1px solid #DBEAFE;
+        }
 
-        /* NAVEGAÇÃO INFERIOR */
-        .menu-bottom {
-            position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; background: #FFFFFF; display: flex; justify-content: space-around; padding: 12px 0; border-top: 1px solid #E2E8F0; box-shadow: 0 -4px 10px rgba(0,0,0,0.03);
+        /* CARDS DE CONTEÚDO */
+        .card-box {
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            border: 1px solid #F1F5F9;
         }
-        .item-menu { color: #64748B; text-align: center; font-size: 12px; cursor: pointer; flex: 1; }
-        .item-menu.ativo { color: #2563EB; font-weight: 700; }
-        .item-menu i { font-size: 18px; display: block; margin-bottom: 4px; }
+        .card-box h4 { font-size: 16px; font-weight: 700; color: #0F172A; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+
+        .card-stat {
+            background: #FFFFFF;
+            padding: 16px 20px;
+            border-radius: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #F1F5F9;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+        .card-stat span { font-size: 13px; color: #64748B; font-weight: 600; }
+        .card-stat strong { font-size: 20px; font-weight: 800; color: #0F172A; }
+        .icon-box {
+            width: 38px; height: 38px; border-radius: 10px; display: flex; justify-content: center; align-items: center; font-size: 16px;
+        }
 
         /* BOTÃO FLUTUANTE (+) */
         .btn-add-float {
-            position: fixed; bottom: 70px; right: 20px; width: 56px; height: 56px; background: #2563EB; border-radius: 50%; color: #FFF; font-size: 24px; border: none; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); cursor: pointer; display: flex; justify-content: center; align-items: center;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 60px;
+            height: 60px;
+            background: #2563EB;
+            border-radius: 50%;
+            color: #FFF;
+            font-size: 28px;
+            border: none;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
         }
 
-        /* MODAIS CLAROS */
+        /* MODAIS POP-UP */
         .modal {
-            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; padding: 20px; z-index: 9999;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.5); backdrop-filter: blur(4px); justify-content: center; align-items: center; padding: 20px; z-index: 9999;
         }
         .modal-content {
-            background: #FFFFFF; width: 100%; max-width: 380px; padding: 24px; border-radius: 16px; text-align: center; display: flex; flex-direction: column; gap: 12px; border: 1px solid #E2E8F0; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background: #FFFFFF; width: 100%; max-width: 380px; padding: 24px; border-radius: 24px; text-align: left; display: flex; flex-direction: column; gap: 14px; box-shadow: 0 20px 30px rgba(0,0,0,0.15);
         }
+        .modal-content h3 { font-size: 18px; font-weight: 800; color: #0F172A; text-align: center; margin-bottom: 4px; }
 
-        .lancamento { background: #FFFFFF; border: 1px solid #E2E8F0; padding: 14px; border-radius: 10px; margin: 8px 16px; display: flex; justify-content: space-between; align-items: center; }
-        .valor-positivo { color: #16A34A; font-weight: 700; }
-        .valor-negativo { color: #DC2626; font-weight: 700; }
+        /* LISTA DE CATEGORIAS */
+        .cat-item {
+            background: #FFFFFF; padding: 16px; border-radius: 16px; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #F1F5F9;
+        }
+        .cat-info { display: flex; align-items: center; gap: 12px; }
+        .cat-info strong { font-size: 15px; color: #0F172A; }
+        .cat-info span { font-size: 12px; color: #64748B; }
+        .cat-val { font-size: 14px; font-weight: 700; color: #16A34A; }
     </style>
 </head>
 <body>
 
-    <!-- 1. TELA DE LOGIN ENQUADRADA (BRANCA) -->
     <div id="loginScreen" class="auth-container">
         <h2>FinControl 🚀</h2>
         <p>Acesse sua conta financeira na nuvem</p>
@@ -197,7 +217,6 @@
         <span class="auth-link" onclick="abrirCadastro()">Não tem conta? Criar conta</span>
     </div>
 
-    <!-- 2. TELA DE CADASTRO ENQUADRADA (BRANCA) -->
     <div id="cadastroScreen" class="auth-container">
         <h2>Criar Conta 🎯</h2>
         <p>Cadastre-se para gerenciar suas finanças</p>
@@ -226,123 +245,235 @@
         <span class="auth-link" onclick="voltarLogin()">Já tenho conta. Fazer Login</span>
     </div>
 
-    <!-- 3. DASHBOARD -->
     <div id="app">
-        <div class="header-app">
+        
+        <div class="menu-top">
+            <div class="item-tab ativo" onclick="mudarAba('viewDash', this)"><i class="fas fa-chart-line"></i>Dashboard</div>
+            <div class="item-tab" onclick="mudarAba('viewLancamentos', this)"><i class="fas fa-exchange-alt"></i>Lançamentos</div>
+            <div class="item-tab" onclick="mudarAba('viewCartoes', this)"><i class="fas fa-credit-card"></i>Cartões</div>
+            <div class="item-tab" onclick="mudarAba('viewCategorias', this)"><i class="fas fa-tags"></i>Categorias</div>
+            <div class="item-tab" onclick="mudarAba('viewMetas', this)"><i class="fas fa-bullseye"></i>Metas</div>
+        </div>
+
+        <div class="header-perfil">
             <div>
-                <h3 id="nomeUsuario" style="color: #0F172A;">Olá 👋</h3>
-                <span style="font-size: 12px; color: #64748B;">Visão Geral</span>
+                <h3 id="nomeUsuario">Olá, Usuário 👋</h3>
+                <span>Seu resumo financeiro</span>
             </div>
-            <button onclick="sair()" style="background: none; border: none; color: #DC2626; cursor: pointer;"><i class="fas fa-sign-out-alt fa-lg"></i></button>
+            <div class="avatar-circle" onclick="sair()" title="Sair da conta"><i class="fas fa-user"></i></div>
         </div>
 
         <div id="viewDash" class="view-aba">
-            <div class="cards-resumo">
-                <div class="card-val">
-                    <span>Saldo</span>
-                    <strong id="valSaldo">R$ 0,00</strong>
-                </div>
-                <div class="card-val">
-                    <span>Entradas</span>
-                    <strong id="valEntradas" style="color: #16A34A;">R$ 0,00</strong>
-                </div>
-                <div class="card-val">
-                    <span>Saídas</span>
-                    <strong id="valSaidas" style="color: #DC2626;">R$ 0,00</strong>
+            
+            <div class="card-box">
+                <h4>Lançar Salário Mensal 💵</h4>
+                <p style="font-size: 13px; color: #64748B; margin-bottom: 12px;">Informe seu salário base para calcular o saldo disponível.</p>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="inputSalario" placeholder="Ex: 5000.00" style="flex: 1; padding: 12px; border: 1.5px solid #E2E8F0; border-radius: 12px; outline: none;">
+                    <button class="btn-primary" onclick="salvarSalario()" style="width: auto; padding: 0 20px;">Salvar Salário</button>
                 </div>
             </div>
 
-            <div style="padding: 16px;">
-                <div class="form-group">
-                    <label>Salário / Renda Fixa Mensal</label>
-                    <div style="display: flex; gap: 8px;">
-                        <input type="number" id="inputSalario" placeholder="Ex: 3000.00">
-                        <button class="btn-primary" onclick="salvarSalario()" style="width: auto; margin:0;">Salvar</button>
+            <div class="card-stat">
+                <div>
+                    <span>Saldo Disponível</span>
+                    <strong id="valSaldo" style="display: block; margin-top: 4px;">R$ 0,00</strong>
+                </div>
+                <div class="icon-box" style="background: #EFF6FF; color: #2563EB;"><i class="fas fa-wallet"></i></div>
+            </div>
+
+            <div class="card-stat">
+                <div>
+                    <span>Receitas / Salário</span>
+                    <strong id="valEntradas" style="display: block; margin-top: 4px; color: #16A34A;">R$ 0,00</strong>
+                </div>
+                <div class="icon-box" style="background: #DCFCE7; color: #16A34A;"><i class="fas fa-arrow-up"></i></div>
+            </div>
+
+            <div class="card-stat">
+                <div>
+                    <span>Despesas</span>
+                    <strong id="valSaidas" style="display: block; margin-top: 4px; color: #DC2626;">R$ 0,00</strong>
+                </div>
+                <div class="icon-box" style="background: #FEE2E2; color: #DC2626;"><i class="fas fa-arrow-down"></i></div>
+            </div>
+
+            <div class="card-stat">
+                <div>
+                    <span>Metas Concluídas</span>
+                    <strong style="display: block; margin-top: 4px; color: #2563EB;">100%</strong>
+                </div>
+                <div class="icon-box" style="background: #EFF6FF; color: #2563EB;"><i class="fas fa-bullseye"></i></div>
+            </div>
+
+            <div class="card-box">
+                <h4>Gráfico de Desempenho</h4>
+                <div style="background: #F8FAFC; border: 2px dashed #E2E8F0; border-radius: 12px; padding: 24px; text-align: center; color: #64748B; font-size: 13px;">
+                    <i class="fas fa-chart-bar fa-2x" style="margin-bottom: 8px; display: block; color: #94A3B8;"></i>
+                    Visão Geral de Entradas vs Saídas
+                </div>
+            </div>
+
+            <div class="card-box">
+                <h4>Histórico Recente</h4>
+                <div id="containerHistorico">
+                    <p style="color: #64748B; font-size: 13px;">Nenhum lançamento cadastrado.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="viewLancamentos" class="view-aba" style="display: none;">
+            <div class="card-box">
+                <h4>Todos os Lançamentos 📑</h4>
+                <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Gerencie e acompanhe o extrato de movimentações.</p>
+                <div id="containerLancamentosTabela">
+                    <p style="color: #64748B; font-size: 13px;">Nenhum lançamento registrado.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="viewCartoes" class="view-aba" style="display: none;">
+            <div class="card-box">
+                <h4>Meus Cartões & Bancos 💳</h4>
+                <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Gerencie limites de crédito, saldo em conta e faturas. Clique no botão + para cadastrar um novo cartão.</p>
+                <div id="containerCartoes">
+                    <div style="background: #0F172A; color: #FFF; padding: 20px; border-radius: 16px; margin-bottom: 16px;">
+                        <span style="font-size: 12px; color: #94A3B8; text-transform: uppercase; font-weight: 700;">NENHUM CARTÃO CADASTRADO</span>
+                        <p style="font-size: 12px; color: #CBD5E1; margin-top: 8px;">Clique no botão + abaixo para cadastrar seu primeiro banco ou cartão.</p>
                     </div>
                 </div>
             </div>
 
-            <h4 style="padding: 0 16px; color: #64748B;">Histórico Recente</h4>
-            <div id="containerHistorico"></div>
+            <div class="card-box">
+                <h4>Dicas de Uso Consciente do Cartão 💡</h4>
+                <p style="font-size: 12px; color: #64748B; margin-bottom: 12px;">Mantenha sua saúde financeira no verde com estas boas práticas:</p>
+                <div style="font-size: 13px; line-height: 1.6; color: #334155;">
+                    <p style="margin-bottom: 8px;"><strong>1. Pague sempre 100% da fatura 🎯</strong><br><span style="color: #64748B; font-size: 12px;">Evite o pagamento mínimo para não cair no juro rotativo.</span></p>
+                    <p><strong>2. Regra dos 30% do Limite 📊</strong><br><span style="color: #64748B; font-size: 12px;">Comprometa no máximo 30% da sua renda mensal total com parcelas.</span></p>
+                </div>
+            </div>
         </div>
 
-        <div id="viewCartoes" class="view-aba" style="display: none; padding: 16px;">
-            <h3 style="margin-bottom: 16px; color: #0F172A;">Seus Cartões e Bancos</h3>
-            <div id="containerCartoes"></div>
+        <div id="viewCategorias" class="view-aba" style="display: none;">
+            <div class="card-box">
+                <h4>Minhas Categorias 🏷️</h4>
+                <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Separe seus orçamentos por grupos.</p>
+                
+                <div class="cat-item">
+                    <div class="cat-info">
+                        <span style="font-size: 24px;">🍔</span>
+                        <div><strong>Alimentação</strong><br><span>Supermercado, Feira, Delivery</span></div>
+                    </div>
+                    <div class="cat-val">R$ 2.000</div>
+                </div>
+
+                <div class="cat-item">
+                    <div class="cat-info">
+                        <span style="font-size: 24px;">🚗</span>
+                        <div><strong>Transporte</strong><br><span>Combustível, Uber, Pedágio</span></div>
+                    </div>
+                    <div class="cat-val">R$ 800</div>
+                </div>
+
+                <div class="cat-item">
+                    <div class="cat-info">
+                        <span style="font-size: 24px;">🏠</span>
+                        <div><strong>Moradia</strong><br><span>Aluguel, Luz, Água, Internet</span></div>
+                    </div>
+                    <div class="cat-val">R$ 2.500</div>
+                </div>
+
+                <div class="cat-item">
+                    <div class="cat-info">
+                        <span style="font-size: 24px;">🎟️</span>
+                        <div><strong>Lazer & Viagens</strong><br><span>Passeios, Cinema, Streaming</span></div>
+                    </div>
+                    <div class="cat-val">R$ 1.500</div>
+                </div>
+            </div>
         </div>
 
-        <div id="viewMetas" class="view-aba" style="display: none; padding: 16px;">
-            <h3 style="margin-bottom: 16px; color: #0F172A;">Suas Metas</h3>
-            <div id="containerMetas"></div>
+        <div id="viewMetas" class="view-aba" style="display: none;">
+            <div class="card-box">
+                <h4>Metas & Objetivos 🎯</h4>
+                <p style="font-size: 13px; color: #64748B; margin-bottom: 16px;">Planeje seus objetivos. Clique no botão + para criar uma nova meta.</p>
+                <div id="containerMetas">
+                    <p style="color: #64748B; font-size: 13px;">Nenhuma meta cadastrada. Clique no botão + para criar sua primeira meta!</p>
+                </div>
+            </div>
         </div>
 
         <button class="btn-add-float" onclick="acaoBotaoAdd()">+</button>
-
-        <div class="menu-bottom">
-            <div class="item-menu ativo" onclick="mudarAba('viewDash', this)"><i class="fas fa-home"></i>Início</div>
-            <div class="item-menu" onclick="mudarAba('viewCartoes', this)"><i class="fas fa-credit-card"></i>Cartões</div>
-            <div class="item-menu" onclick="mudarAba('viewMetas', this)"><i class="fas fa-bullseye"></i>Metas</div>
-        </div>
     </div>
 
-    <!-- MODAL NOVO LANÇAMENTO -->
     <div id="modalNovoLancamento" class="modal">
         <div class="modal-content">
-            <h3 style="color: #0F172A;">Novo Lançamento 💸</h3>
+            <h3>Novo Lançamento ➕</h3>
+            <p style="font-size: 12px; color: #64748B; text-align: center; margin-bottom: 4px;">Cadastre uma despesa ou receita.</p>
             <div class="form-group">
                 <label>Descrição</label>
-                <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Lanche">
+                <input type="text" id="lancDescricao" placeholder="Ex: Mercado, Uber, Salário Extra">
             </div>
             <div class="form-group">
                 <label>Valor (R$)</label>
-                <input type="number" id="lancValor" placeholder="Ex: 50.00">
+                <input type="number" id="lancValor" placeholder="0.00">
             </div>
             <div class="form-group">
-                <label>Tipo</label>
+                <label>Tipo de Movimentação</label>
                 <select id="lancTipo">
-                    <option value="saida">Saída (Gasto)</option>
-                    <option value="entrada">Entrada (Receita)</option>
+                    <option value="saida">Saída / Despesa 🔴</option>
+                    <option value="entrada">Entrada / Receita 🟢</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Forma de Pagamento</label>
-                <input type="text" id="lancFormaPagamento" placeholder="Ex: Pix, Crédito">
+                <select id="lancFormaPagamento">
+                    <option value="Pix">Pix ⚡</option>
+                    <option value="Cartão de Crédito">Cartão de Crédito 💳</option>
+                    <option value="Dinheiro">Dinheiro 💵</option>
+                </select>
             </div>
             <div class="form-group">
                 <label>Categoria</label>
-                <input type="text" id="lancCategoria" placeholder="Ex: Alimentação">
+                <select id="lancCategoria">
+                    <option value="Alimentação">Alimentação 🍔</option>
+                    <option value="Transporte">Transporte 🚗</option>
+                    <option value="Moradia">Moradia 🏠</option>
+                    <option value="Lazer">Lazer 🎟️</option>
+                    <option value="Outros">Outros 📦</option>
+                </select>
             </div>
-            <button class="btn-primary" onclick="salvarNovoLancamento()">Salvar</button>
+            <button class="btn-primary" onclick="salvarNovoLancamento()">Salvar Lançamento</button>
             <button class="btn-secondary" onclick="fecharModalLancamento()">Cancelar</button>
         </div>
     </div>
 
-    <!-- MODAL NOVO CARTÃO -->
     <div id="modalNovoCartao" class="modal">
         <div class="modal-content">
-            <h3 style="color: #0F172A;">Adicionar Cartão / Banco 💳</h3>
+            <h3>Adicionar Cartão / Banco 💳</h3>
+            <p style="font-size: 12px; color: #64748B; text-align: center; margin-bottom: 4px;">Cadastre os dados da sua conta e limites.</p>
             <div class="form-group">
-                <label>Banco/Instituição</label>
-                <input type="text" id="cardBanco" placeholder="Ex: Nubank, Itaú">
+                <label>Nome do Banco / Instituição</label>
+                <input type="text" id="cardBanco" placeholder="Ex: Itaú, Nubank, Bradesco">
             </div>
             <div class="form-group">
-                <label>Tipo</label>
+                <label>Tipo de Função</label>
                 <select id="cardTipo">
-                    <option value="Crédito e Débito">Crédito e Débito</option>
+                    <option value="Crédito e Débito (Ambos)">Crédito e Débito (Ambos)</option>
                     <option value="Apenas Crédito">Apenas Crédito</option>
                     <option value="Apenas Débito">Apenas Débito</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Saldo Débito (R$)</label>
+                <label>Saldo em Débito / Conta (R$)</label>
                 <input type="number" id="cardSaldoDebito" placeholder="0.00">
             </div>
             <div class="form-group">
-                <label>Limite Crédito (R$)</label>
+                <label>Limite de Crédito Total (R$)</label>
                 <input type="number" id="cardLimiteCredito" placeholder="0.00">
             </div>
             <div class="form-group">
-                <label>Dia do Vencimento</label>
+                <label>Dia do Vencimento da Fatura</label>
                 <input type="text" id="cardVencimento" placeholder="Ex: 10">
             </div>
             <button class="btn-primary" onclick="salvarNovoCartao()">Salvar Cartão</button>
@@ -350,20 +481,20 @@
         </div>
     </div>
 
-    <!-- MODAL NOVA META -->
     <div id="modalNovaMeta" class="modal">
         <div class="modal-content">
-            <h3 style="color: #0F172A;">Criar Nova Meta 🎯</h3>
+            <h3>Criar Nova Meta 🎯</h3>
+            <p style="font-size: 12px; color: #64748B; text-align: center; margin-bottom: 4px;">Defina seu objetivo e o prazo para alcançar.</p>
             <div class="form-group">
                 <label>Qual a Meta? (Objetivo)</label>
-                <input type="text" id="metaNome" placeholder="Ex: Viagem, Carro Novo">
+                <input type="text" id="metaNome" placeholder="Ex: Viagem, Carro Novo, Reserva">
             </div>
             <div class="form-group">
                 <label>Qual o Valor Total? (R$)</label>
                 <input type="number" id="metaValorTotal" placeholder="Ex: 10000.00">
             </div>
             <div class="form-group">
-                <label>Prazo (Em quantos meses?)</label>
+                <label>Em quantos meses quer alcançar?</label>
                 <input type="number" id="metaMeses" placeholder="Ex: 12">
             </div>
             <button class="btn-primary" onclick="salvarNovaMeta()">Salvar Meta</button>
@@ -371,12 +502,10 @@
         </div>
     </div>
 
-    <!-- SCRIPTS FIREBASE -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
     
-    <!-- SCRIPT PRINCIPAL -->
     <script src="js/auth.js"></script>
 </body>
 </html>
