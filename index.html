@@ -113,7 +113,7 @@
             box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
         }
 
-        /* CABEÇALHO DO PERFIL COM BOTÃO RESETAR */
+        /* CABEÇALHO DO PERFIL COM BOTÕES */
         .header-perfil {
             background: #FFFFFF;
             padding: 16px 20px;
@@ -143,9 +143,21 @@
         }
         .btn-reset:hover { background: #FCA5A5; }
 
-        .avatar-circle {
-            width: 40px; height: 40px; border-radius: 50%; background: #EFF6FF; color: #2563EB; display: flex; justify-content: center; align-items: center; font-size: 18px; border: 1px solid #DBEAFE; cursor: pointer;
+        .btn-logout {
+            background: #F1F5F9;
+            color: #475569;
+            border: 1px solid #CBD5E1;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: 0.2s;
         }
+        .btn-logout:hover { background: #E2E8F0; color: #0F172A; }
 
         /* CARDS DE CONTEÚDO */
         .card-box {
@@ -280,7 +292,9 @@
                 <button class="btn-reset" onclick="resetarDados()" title="Resetar todas as informações">
                     <i class="fas fa-trash-alt"></i> Resetar
                 </button>
-                <div class="avatar-circle" onclick="sair()" title="Sair da conta"><i class="fas fa-user"></i></div>
+                <button class="btn-logout" onclick="sair()" title="Sair da conta">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
             </div>
         </div>
 
