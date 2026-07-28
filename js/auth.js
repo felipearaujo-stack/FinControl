@@ -1,8 +1,8 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (CONECTADO AO FIREBASE FINCONTROL-585A1)
+   FINCONTROL - AUTH.JS (SEMPRE INICIA NA TELA DE LOGIN)
 ========================================================== */
 
-// 1. CONFIGURAÇÃO EXTRAÍDA DO SEU PROJETO FIREBASE
+// 1. CONFIGURAÇÃO DO SEU PROJETO FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyAny6KFQqQGUqxXd1eaXJJAQHywvPktJk8",
     authDomain: "fincontrol-585a1.firebaseapp.com",
@@ -19,6 +19,11 @@ if (!firebase.apps.length) {
 }
 const auth = firebase.auth();
 const db = firebase.firestore();
+
+// Configura a persistência para NENHUMA e desloga ao abrir o link
+// Isso garante que SEMPRE abrirá na tela de login ao acessar o link
+auth.setPersistence(firebase.auth.Auth.Persistence.NONE);
+auth.signOut();
 
 const loginScreen = document.getElementById("loginScreen");
 const cadastroScreen = document.getElementById("cadastroScreen");
@@ -81,7 +86,7 @@ function fecharModalMeta() {
 }
 
 // ----------------------------------------------------------
-// 3. SALVAR NOVO LANÇAMENTO
+// 3. SALVAR NOVO LANÇAMENTO NA NUVEM
 // ----------------------------------------------------------
 async function salvarNovoLancamento() {
     const desc = document.getElementById("lancDescricao")?.value.trim();
@@ -125,7 +130,7 @@ async function salvarNovoLancamento() {
 }
 
 // ----------------------------------------------------------
-// 4. SALVAR NOVO CARTÃO
+// 4. SALVAR NOVO CARTÃO NA NUVEM
 // ----------------------------------------------------------
 async function salvarNovoCartao() {
     const banco = document.getElementById("cardBanco")?.value.trim();
@@ -164,7 +169,7 @@ async function salvarNovoCartao() {
 }
 
 // ----------------------------------------------------------
-// 5. SALVAR NOVA META
+// 5. SALVAR NOVA META NA NUVEM
 // ----------------------------------------------------------
 async function salvarNovaMeta() {
     const nomeMeta = document.getElementById("metaNome")?.value.trim();
@@ -200,7 +205,7 @@ async function salvarNovaMeta() {
 }
 
 // ----------------------------------------------------------
-// 6. SALVAR SALÁRIO
+// 6. SALVAR SALÁRIO NA NUVEM
 // ----------------------------------------------------------
 async function salvarSalario() {
     const valorInput = parseFloat(document.getElementById("inputSalario")?.value);
@@ -223,7 +228,7 @@ async function salvarSalario() {
 }
 
 // ----------------------------------------------------------
-// 7. REFRESH DE DADOS
+// 7. ATUALIZAR INTERFACE COM DADOS DA NUVEM
 // ----------------------------------------------------------
 function atualizarTudo(dados = {}) {
     const salario = dados.salario || 0;
@@ -418,7 +423,7 @@ async function cadastrar() {
             metas: []
         });
 
-        alert("Conta criada na nuvem com sucesso!");
+        alert("Conta criada na nuvem com sucesso! Faça login para acessar.");
         voltarLogin();
     } catch (e) {
         alert("Erro no cadastro: " + e.message);
