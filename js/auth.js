@@ -1,8 +1,8 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (FORÇA A TELA DE LOGIN AO ABRIR O LINK)
+   FINCONTROL - AUTH.JS (SESSÃO LIMPA NA INICIALIZAÇÃO)
 ========================================================== */
 
-// 1. CONFIGURAÇÃO DO SEU PROJETO FIREBASE
+// CONFIGURAÇÃO CONECTADA AO SEU PROJETO FIREBASE
 const firebaseConfig = {
     apiKey: "AIzaSyAny6KFQqQGUqxXd1eaXJJAQHywvPktJk8",
     authDomain: "fincontrol-585a1.firebaseapp.com",
@@ -24,20 +24,19 @@ const loginScreen = document.getElementById("loginScreen");
 const cadastroScreen = document.getElementById("cadastroScreen");
 const app = document.getElementById("app");
 
-let codigoEnviadoSMS = null;
 let abaAtual = 'viewDash';
 let usuarioLogadoUid = null;
 
-// FECHA TODOS OS MODAIS DA TELA
+// FECHA ABSOLUTAMENTE TODOS OS MODAIS DA TELA
 function fecharTodosModais() {
-    const ids = ["modalNovoLancamento", "modalNovoCartao", "modalNovaMeta", "modalEsqueciSenha"];
+    const ids = ["modalNovoLancamento", "modalNovoCartao", "modalNovaMeta"];
     ids.forEach(id => {
         const modal = document.getElementById(id);
         if (modal) modal.style.setProperty("display", "none", "important");
     });
 }
 
-// GARANTE QUE A TELA INICIAL SEJA SEMPRE A DE LOGIN
+// FORÇA A EXIBIÇÃO APENAS DA TELA DE LOGIN
 function exibirLoginInicial() {
     fecharTodosModais();
     if (app) app.style.setProperty("display", "none", "important");
@@ -45,18 +44,8 @@ function exibirLoginInicial() {
     if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
 }
 
-// AO ABRIR O LINK, ENCERRA SESSÕES ANTERIORES E MOSTRA O LOGIN
-async function inicializarAplicacao() {
-    exibirLoginInicial();
-    try {
-        await auth.signOut();
-    } catch (e) {
-        console.log("Sessão inicial limpa.");
-    }
-}
-
-// Executa a limpeza imediatamente ao carregar a página
-inicializarAplicacao();
+// EXECUTA AO CARREGAR A PÁGINA: GARANTE LOGIN LIMPO
+exibirLoginInicial();
 
 // Helper para converter usuário em e-mail válido para o Firebase
 function usuarioParaEmail(usuario) {
@@ -64,9 +53,7 @@ function usuarioParaEmail(usuario) {
     return `${userLimpo}@fincontrol.app`;
 }
 
-// ----------------------------------------------------------
-// 1. AÇÃO INTELIGENTE DO BOTÃO FLUTUANTE (+)
-// ----------------------------------------------------------
+// AÇÃO DO BOTÃO FLUTUANTE (+)
 function acaoBotaoAdd() {
     if (abaAtual === 'viewCartoes') {
         abrirModalCartao();
@@ -77,9 +64,7 @@ function acaoBotaoAdd() {
     }
 }
 
-// ----------------------------------------------------------
-// 2. CONTROLE DOS MODAIS
-// ----------------------------------------------------------
+// CONTROLE DOS MODAIS
 function abrirModalLancamento() {
     fecharTodosModais();
     const modal = document.getElementById("modalNovoLancamento");
@@ -113,9 +98,7 @@ function fecharModalMeta() {
     if (modal) modal.style.setProperty("display", "none", "important");
 }
 
-// ----------------------------------------------------------
-// 3. SALVAR NOVO LANÇAMENTO NA NUVEM
-// ----------------------------------------------------------
+// SALVAR LANÇAMENTO
 async function salvarNovoLancamento() {
     const desc = document.getElementById("lancDescricao")?.value.trim();
     const valor = parseFloat(document.getElementById("lancValor")?.value);
@@ -157,9 +140,7 @@ async function salvarNovoLancamento() {
     }
 }
 
-// ----------------------------------------------------------
-// 4. SALVAR NOVO CARTÃO NA NUVEM
-// ----------------------------------------------------------
+// SALVAR CARTÃO
 async function salvarNovoCartao() {
     const banco = document.getElementById("cardBanco")?.value.trim();
     const tipo = document.getElementById("cardTipo")?.value;
@@ -196,9 +177,7 @@ async function salvarNovoCartao() {
     }
 }
 
-// ----------------------------------------------------------
-// 5. SALVAR NOVA META NA NUVEM
-// ----------------------------------------------------------
+// SALVAR META
 async function salvarNovaMeta() {
     const nomeMeta = document.getElementById("metaNome")?.value.trim();
     const valorTotal = parseFloat(document.getElementById("metaValorTotal")?.value);
@@ -232,9 +211,7 @@ async function salvarNovaMeta() {
     }
 }
 
-// ----------------------------------------------------------
-// 6. SALVAR SALÁRIO NA NUVEM
-// ----------------------------------------------------------
+// SALVAR SALÁRIO
 async function salvarSalario() {
     const valorInput = parseFloat(document.getElementById("inputSalario")?.value);
 
@@ -255,9 +232,7 @@ async function salvarSalario() {
     }
 }
 
-// ----------------------------------------------------------
-// 7. ATUALIZAR INTERFACE COM DADOS DA NUVEM
-// ----------------------------------------------------------
+// ATUALIZA A TELA COM OS DADOS NUVEM
 function atualizarTudo(dados = {}) {
     const salario = dados.salario || 0;
     const lista = dados.lancamentos || [];
@@ -288,17 +263,14 @@ function atualizarTudo(dados = {}) {
     const containerHist = document.getElementById("containerHistorico");
     if (containerHist) {
         if (lista.length === 0 && salario === 0) {
-            containerHist.innerHTML = `<p style="color: #64748B;">Nenhum lançamento cadastrado.</p>`;
+            containerHist.innerHTML = `<p style="color: #64748B; padding: 16px;">Nenhum lançamento cadastrado.</p>`;
         } else {
             let htmlHist = "";
             if (salario > 0) {
                 htmlHist += `
                     <div class="lancamento">
-                        <div class="lancamento-info">
-                            <strong>Salário Base</strong>
-                            <span>Lançamento Fixo</span>
-                        </div>
-                        <span class="lancamento-valor valor-positivo">+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                        <div><strong>Salário Base</strong><br><span style="font-size:12px; color:#94A3B8;">Fixo</span></div>
+                        <span class="valor-positivo">+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
                     </div>`;
             }
             lista.forEach(item => {
@@ -306,48 +278,11 @@ function atualizarTudo(dados = {}) {
                 const classeCor = item.tipo === "entrada" ? "valor-positivo" : "valor-negativo";
                 htmlHist += `
                     <div class="lancamento">
-                        <div class="lancamento-info">
-                            <strong>${item.descricao}</strong>
-                            <span>${item.data} - ${item.categoria} (${item.formaPagamento || 'Pix'})</span>
-                        </div>
-                        <span class="lancamento-valor ${classeCor}">${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                        <div><strong>${item.descricao}</strong><br><span style="font-size:12px; color:#94A3B8;">${item.data} - ${item.categoria}</span></div>
+                        <span class="${classeCor}">${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
                     </div>`;
             });
             containerHist.innerHTML = htmlHist;
-        }
-    }
-
-    // Renderiza Tabela
-    const corpoTabela = document.getElementById("tabelaLancamentosCorpo");
-    if (corpoTabela) {
-        if (lista.length === 0 && salario === 0) {
-            corpoTabela.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #64748B;">Nenhum lançamento registrado.</td></tr>`;
-        } else {
-            let htmlTab = "";
-            if (salario > 0) {
-                htmlTab += `
-                    <tr>
-                        <td>Salário Base</td>
-                        <td><span class="badge green">Depósito Fixo</span></td>
-                        <td><span class="badge green">Fixo</span></td>
-                        <td><span class="badge green">Receita</span></td>
-                        <td class="valor-positivo"><strong>+ R$ ${salario.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
-                    </tr>`;
-            }
-            lista.forEach(item => {
-                const sinal = item.tipo === "entrada" ? "+" : "-";
-                const classeCor = item.tipo === "entrada" ? "valor-positivo" : "valor-negativo";
-                const badgeCor = item.tipo === "entrada" ? "green" : "red";
-                htmlTab += `
-                    <tr>
-                        <td>${item.descricao}</td>
-                        <td><span class="badge blue">${item.formaPagamento || 'Pix'}</span></td>
-                        <td><span class="badge orange">${item.categoria}</span></td>
-                        <td><span class="badge ${badgeCor}">${item.tipo === "entrada" ? "Receita" : "Despesa"}</span></td>
-                        <td class="${classeCor}"><strong>${sinal} R$ ${item.valor.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong></td>
-                    </tr>`;
-            });
-            corpoTabela.innerHTML = htmlTab;
         }
     }
 
@@ -355,37 +290,16 @@ function atualizarTudo(dados = {}) {
     const containerCartoes = document.getElementById("containerCartoes");
     if (containerCartoes) {
         if (cartoes.length === 0) {
-            containerCartoes.innerHTML = `
-                <div class="card" style="background: linear-gradient(135deg, #1E293B, #0F172A); color: #fff;">
-                    <div class="card-header">
-                        <span class="card-title" style="color: #94A3B8; font-weight: 700;">NENHUM CARTÃO CADASTRADO</span>
-                        <i class="fas fa-credit-card" style="font-size: 24px; color: #94A3B8;"></i>
-                    </div>
-                    <p style="font-size: 13px; color: #94A3B8; margin-top: 10px;">Clique no botão + abaixo para cadastrar seu primeiro banco ou cartão.</p>
-                </div>`;
+            containerCartoes.innerHTML = `<p style="color: #64748B;">Nenhum cartão cadastrado. Clique no + para adicionar.</p>`;
         } else {
             let htmlCartoes = "";
             cartoes.forEach(c => {
                 htmlCartoes += `
-                    <div class="card" style="background: linear-gradient(135deg, #1E293B, #0F172A); color: #fff;">
-                        <div class="card-header">
-                            <span class="card-title" style="color: #94A3B8; font-weight: 700; text-transform: uppercase;">${c.banco}</span>
-                            <i class="fas fa-credit-card" style="font-size: 24px; color: #F59E0B;"></i>
-                        </div>
-                        <div style="margin: 10px 0;">
-                            <span style="font-size: 11px; color: #94A3B8; text-transform: uppercase;">Função: ${c.tipo}</span>
-                            <div style="font-size: 18px; font-weight: 700; color: #10B981;">Saldo Débito: R$ ${c.saldoDebito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</div>
-                        </div>
-                        <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 8px; font-size: 12px;">
-                            <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                                <span>Limite Crédito:</span>
-                                <strong>R$ ${c.limiteCredito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</strong>
-                            </div>
-                            <div style="display: flex; justify-content: space-between; color: #F59E0B; font-weight: 600;">
-                                <span>Vencimento da Fatura:</span>
-                                <span>Dia ${c.vencimento}</span>
-                            </div>
-                        </div>
+                    <div style="background: #1E293B; padding: 16px; border-radius: 12px; margin-bottom: 12px;">
+                        <strong style="color: #F59E0B; text-transform: uppercase;">${c.banco}</strong>
+                        <p style="font-size: 13px; color: #94A3B8; margin-top: 4px;">Tipo: ${c.tipo}</p>
+                        <p style="font-size: 15px; font-weight: 700; color: #10B981; margin-top: 6px;">Saldo Débito: R$ ${c.saldoDebito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <p style="font-size: 13px; color: #FFF; margin-top: 4px;">Limite Crédito: R$ ${c.limiteCredito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
                     </div>`;
             });
             containerCartoes.innerHTML = htmlCartoes;
@@ -396,21 +310,16 @@ function atualizarTudo(dados = {}) {
     const containerMetas = document.getElementById("containerMetas");
     if (containerMetas) {
         if (metas.length === 0) {
-            containerMetas.innerHTML = `<p style="color: #64748B;">Nenhuma meta cadastrada. Clique no botão <strong>+</strong> para criar sua primeira meta!</p>`;
+            containerMetas.innerHTML = `<p style="color: #64748B;">Nenhuma meta cadastrada. Clique no + para criar.</p>`;
         } else {
             let htmlMetas = "";
             metas.forEach(m => {
                 const mensalidade = m.valorTotal / m.meses;
                 htmlMetas += `
-                    <div class="meta-item" style="margin-bottom: 20px;">
-                        <div class="meta-header" style="margin-bottom: 6px;">
-                            <strong>🎯 ${m.nome}</strong>
-                            <span>Meta: R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
-                        </div>
-                        <p style="font-size: 12px; color: #64748B; margin-bottom: 8px;">
-                            Prazo: <strong>${m.meses} meses</strong> | Economia mensal recomendada: <strong style="color: #2563EB;">R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês</strong>
-                        </p>
-                        <div class="barra"><span style="width: 25%;"></span></div>
+                    <div style="background: #1E293B; padding: 16px; border-radius: 12px; margin-bottom: 12px;">
+                        <strong>🎯 ${m.nome}</strong>
+                        <p style="font-size: 13px; color: #94A3B8; margin-top: 6px;">Meta: R$ ${m.valorTotal.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</p>
+                        <p style="font-size: 13px; color: #3B82F6; margin-top: 4px;">Guardar: R$ ${mensalidade.toLocaleString('pt-BR', {minimumFractionDigits: 2})}/mês em ${m.meses}x</p>
                     </div>`;
             });
             containerMetas.innerHTML = htmlMetas;
@@ -418,9 +327,7 @@ function atualizarTudo(dados = {}) {
     }
 }
 
-// ----------------------------------------------------------
-// 8. AUTENTICAÇÃO E NAVEGAÇÃO ENTRE TELAS
-// ----------------------------------------------------------
+// LOGIN E CADASTRO
 async function cadastrar() {
     const nome = document.getElementById("cadNome")?.value.trim();
     const usuario = document.getElementById("cadUsuario")?.value.trim();
@@ -451,7 +358,7 @@ async function cadastrar() {
             metas: []
         });
 
-        alert("Conta criada com sucesso! Faça login para acessar.");
+        alert("Conta criada com sucesso! Faça login para entrar.");
         voltarLogin();
     } catch (e) {
         alert("Erro no cadastro: " + e.message);
@@ -479,11 +386,12 @@ function sair() {
     auth.signOut();
 }
 
-// OBSERVADOR DE SESSÃO DO FIREBASE
+// OBSERVADOR DE AUTENTICAÇÃO DO FIREBASE
 auth.onAuthStateChanged(async (user) => {
     if (user) {
         usuarioLogadoUid = user.uid;
 
+        fecharTodosModais();
         if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
         if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
         if (app) app.style.setProperty("display", "flex", "important");
@@ -525,39 +433,4 @@ function abrirCadastro() {
 
 function voltarLogin() {
     exibirLoginInicial();
-}
-
-function abrirEsqueciSenha() {
-    fecharTodosModais();
-    const modal = document.getElementById("modalEsqueciSenha");
-    if (modal) {
-        modal.style.setProperty("display", "flex", "important");
-        document.getElementById("passoTelefone").style.display = "block";
-        document.getElementById("passoCodigo").style.display = "none";
-    }
-}
-
-function fecharEsqueciSenha() {
-    const modal = document.getElementById("modalEsqueciSenha");
-    if (modal) modal.style.setProperty("display", "none", "important");
-}
-
-function enviarCodigoSMS() {
-    const telefone = document.getElementById("smsTelefone")?.value.trim();
-
-    if (!telefone) {
-        alert("Por favor, digite o número do celular.");
-        return;
-    }
-
-    codigoEnviadoSMS = Math.floor(100000 + Math.random() * 900000).toString();
-    alert(`[SMS FINCONTROL] Código enviado para ${telefone}: ${codigoEnviadoSMS}`);
-
-    document.getElementById("passoTelefone").style.display = "none";
-    document.getElementById("passoCodigo").style.display = "block";
-}
-
-function validarEResetarSenha() {
-    alert("Para redefinição real de senha na nuvem, utilize o e-mail cadastrado.");
-    fecharEsqueciSenha();
 }
