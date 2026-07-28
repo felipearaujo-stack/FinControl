@@ -1,5 +1,5 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (FLUXO PRINCIPAL: TELA INICIAL DE LOGIN)
+   FINCONTROL - AUTH.JS (FORÇA A TELA DE LOGIN AO ABRIR O LINK)
 ========================================================== */
 
 // 1. CONFIGURAÇÃO DO SEU PROJETO FIREBASE
@@ -28,15 +28,35 @@ let codigoEnviadoSMS = null;
 let abaAtual = 'viewDash';
 let usuarioLogadoUid = null;
 
-// GARANTE QUE A PRIMEIRA TELA SEJA SEMPRE O LOGIN
+// FECHA TODOS OS MODAIS DA TELA
+function fecharTodosModais() {
+    const ids = ["modalNovoLancamento", "modalNovoCartao", "modalNovaMeta", "modalEsqueciSenha"];
+    ids.forEach(id => {
+        const modal = document.getElementById(id);
+        if (modal) modal.style.setProperty("display", "none", "important");
+    });
+}
+
+// GARANTE QUE A TELA INICIAL SEJA SEMPRE A DE LOGIN
 function exibirLoginInicial() {
+    fecharTodosModais();
     if (app) app.style.setProperty("display", "none", "important");
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
     if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
 }
 
-// Executa imediatamente ao carregar o arquivo
-exibirLoginInicial();
+// AO ABRIR O LINK, ENCERRA SESSÕES ANTERIORES E MOSTRA O LOGIN
+async function inicializarAplicacao() {
+    exibirLoginInicial();
+    try {
+        await auth.signOut();
+    } catch (e) {
+        console.log("Sessão inicial limpa.");
+    }
+}
+
+// Executa a limpeza imediatamente ao carregar a página
+inicializarAplicacao();
 
 // Helper para converter usuário em e-mail válido para o Firebase
 function usuarioParaEmail(usuario) {
@@ -61,6 +81,7 @@ function acaoBotaoAdd() {
 // 2. CONTROLE DOS MODAIS
 // ----------------------------------------------------------
 function abrirModalLancamento() {
+    fecharTodosModais();
     const modal = document.getElementById("modalNovoLancamento");
     if (modal) modal.style.setProperty("display", "flex", "important");
 }
@@ -71,6 +92,7 @@ function fecharModalLancamento() {
 }
 
 function abrirModalCartao() {
+    fecharTodosModais();
     const modal = document.getElementById("modalNovoCartao");
     if (modal) modal.style.setProperty("display", "flex", "important");
 }
@@ -81,6 +103,7 @@ function fecharModalCartao() {
 }
 
 function abrirModalMeta() {
+    fecharTodosModais();
     const modal = document.getElementById("modalNovaMeta");
     if (modal) modal.style.setProperty("display", "flex", "important");
 }
@@ -479,6 +502,7 @@ auth.onAuthStateChanged(async (user) => {
 });
 
 function mudarAba(nomeAba, elemento) {
+    fecharTodosModais();
     abaAtual = nomeAba;
     const abas = document.querySelectorAll('.view-aba');
     abas.forEach(aba => aba.style.display = 'none');
@@ -492,19 +516,19 @@ function mudarAba(nomeAba, elemento) {
     if (elemento) elemento.classList.add('ativo');
 }
 
-// Ir para a tela de criar conta (se o usuário não tiver cadastro)
 function abrirCadastro() {
+    fecharTodosModais();
     if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
     if (app) app.style.setProperty("display", "none", "important");
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "flex", "important");
 }
 
-// Voltar para a tela de login
 function voltarLogin() {
     exibirLoginInicial();
 }
 
 function abrirEsqueciSenha() {
+    fecharTodosModais();
     const modal = document.getElementById("modalEsqueciSenha");
     if (modal) {
         modal.style.setProperty("display", "flex", "important");
