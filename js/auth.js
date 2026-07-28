@@ -1,13 +1,38 @@
 /* ==========================================================
-   FINCONTROL - AUTH.JS (SESSÃO, MODAIS CONTEXTUAIS E DADOS)
+   FINCONTROL - AUTH.JS (CONECTADO AO FIREBASE FINCONTROL-585A1)
 ========================================================== */
+
+// 1. CONFIGURAÇÃO EXTRAÍDA DO SEU PROJETO FIREBASE
+const firebaseConfig = {
+    apiKey: "AIzaSyAny6KFQqQGUqxXd1eaXJJAQHywvPktJk8",
+    authDomain: "fincontrol-585a1.firebaseapp.com",
+    projectId: "fincontrol-585a1",
+    storageBucket: "fincontrol-585a1.firebasestorage.app",
+    messagingSenderId: "5319046566",
+    appId: "1:5319046566:web:b8ff86c30b404dc15e4b67",
+    measurementId: "G-96GNY6VEDX"
+};
+
+// Inicializa o Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 const loginScreen = document.getElementById("loginScreen");
 const cadastroScreen = document.getElementById("cadastroScreen");
 const app = document.getElementById("app");
 
 let codigoEnviadoSMS = null;
-let abaAtual = 'viewDash'; // Controla qual aba está ativa no momento
+let abaAtual = 'viewDash';
+let usuarioLogadoUid = null;
+
+// Helper para converter usuário em e-mail válido para o Firebase
+function usuarioParaEmail(usuario) {
+    const userLimpo = usuario.trim().toLowerCase().replace(/\s+/g, '');
+    return `${userLimpo}@fincontrol.app`;
+}
 
 // ----------------------------------------------------------
 // 1. AÇÃO INTELIGENTE DO BOTÃO FLUTUANTE (+)
@@ -18,12 +43,12 @@ function acaoBotaoAdd() {
     } else if (abaAtual === 'viewMetas') {
         abrirModalMeta();
     } else {
-        abrirModalLancamento(); // Padrão para Dashboard, Lançamentos e Categorias
+        abrirModalLancamento();
     }
 }
 
 // ----------------------------------------------------------
-// 2. CONTROLE DO MODAL DE LANÇAMENTOS (RECEITA/DESPESA)
+// 2. CONTROLE DOS MODAIS
 // ----------------------------------------------------------
 function abrirModalLancamento() {
     const modal = document.getElementById("modalNovoLancamento");
@@ -35,47 +60,6 @@ function fecharModalLancamento() {
     if (modal) modal.style.setProperty("display", "none", "important");
 }
 
-function salvarNovoLancamento() {
-    const desc = document.getElementById("lancDescricao")?.value.trim();
-    const valor = parseFloat(document.getElementById("lancValor")?.value);
-    const tipo = document.getElementById("lancTipo")?.value;
-    const formaPagamento = document.getElementById("lancFormaPagamento")?.value;
-    const categoria = document.getElementById("lancCategoria")?.value;
-
-    if (!desc || isNaN(valor) || valor <= 0) {
-        alert("Preencha a descrição e o valor corretamente.");
-        return;
-    }
-
-    const usuarioAtual = localStorage.getItem("usuarioAtual");
-    if (!usuarioAtual) return;
-
-    let dados = JSON.parse(localStorage.getItem(`user_${usuarioAtual}`)) || {};
-    if (!dados.lancamentos) dados.lancamentos = [];
-
-    const novoItem = {
-        descricao: desc,
-        valor: valor,
-        tipo: tipo,
-        formaPagamento: formaPagamento,
-        categoria: categoria,
-        data: new Date().toLocaleDateString('pt-BR')
-    };
-
-    dados.lancamentos.unshift(novoItem);
-    localStorage.setItem(`user_${usuarioAtual}`, JSON.stringify(dados));
-
-    document.getElementById("lancDescricao").value = "";
-    document.getElementById("lancValor").value = "";
-    fecharModalLancamento();
-
-    atualizarTudo(dados);
-    alert("Lançamento cadastrado com sucesso!");
-}
-
-// ----------------------------------------------------------
-// 3. CONTROLE DO MODAL DE CARTÕES / BANCOS
-// ----------------------------------------------------------
 function abrirModalCartao() {
     const modal = document.getElementById("modalNovoCartao");
     if (modal) modal.style.setProperty("display", "flex", "important");
@@ -86,47 +70,6 @@ function fecharModalCartao() {
     if (modal) modal.style.setProperty("display", "none", "important");
 }
 
-function salvarNovoCartao() {
-    const banco = document.getElementById("cardBanco")?.value.trim();
-    const tipo = document.getElementById("cardTipo")?.value;
-    const saldoDebito = parseFloat(document.getElementById("cardSaldoDebito")?.value) || 0;
-    const limiteCredito = parseFloat(document.getElementById("cardLimiteCredito")?.value) || 0;
-    const vencimento = document.getElementById("cardVencimento")?.value || "--";
-
-    if (!banco) {
-        alert("Informe o nome do Banco ou Instituição.");
-        return;
-    }
-
-    const usuarioAtual = localStorage.getItem("usuarioAtual");
-    if (!usuarioAtual) return;
-
-    let dados = JSON.parse(localStorage.getItem(`user_${usuarioAtual}`)) || {};
-    if (!dados.cartoes) dados.cartoes = [];
-
-    dados.cartoes.push({
-        banco,
-        tipo,
-        saldoDebito,
-        limiteCredito,
-        vencimento
-    });
-
-    localStorage.setItem(`user_${usuarioAtual}`, JSON.stringify(dados));
-
-    document.getElementById("cardBanco").value = "";
-    document.getElementById("cardSaldoDebito").value = "";
-    document.getElementById("cardLimiteCredito").value = "";
-    document.getElementById("cardVencimento").value = "";
-
-    fecharModalCartao();
-    atualizarTudo(dados);
-    alert("Novo Cartão / Banco cadastrado com sucesso!");
-}
-
-// ----------------------------------------------------------
-// 4. CONTROLE DO MODAL DE METAS
-// ----------------------------------------------------------
 function abrirModalMeta() {
     const modal = document.getElementById("modalNovaMeta");
     if (modal) modal.style.setProperty("display", "flex", "important");
@@ -137,63 +80,152 @@ function fecharModalMeta() {
     if (modal) modal.style.setProperty("display", "none", "important");
 }
 
-function salvarNovaMeta() {
+// ----------------------------------------------------------
+// 3. SALVAR NOVO LANÇAMENTO
+// ----------------------------------------------------------
+async function salvarNovoLancamento() {
+    const desc = document.getElementById("lancDescricao")?.value.trim();
+    const valor = parseFloat(document.getElementById("lancValor")?.value);
+    const tipo = document.getElementById("lancTipo")?.value;
+    const formaPagamento = document.getElementById("lancFormaPagamento")?.value;
+    const categoria = document.getElementById("lancCategoria")?.value;
+
+    if (!desc || isNaN(valor) || valor <= 0 || !usuarioLogadoUid) {
+        alert("Preencha a descrição e o valor corretamente.");
+        return;
+    }
+
+    try {
+        const docRef = db.collection("usuarios").doc(usuarioLogadoUid);
+        const docSnap = await docRef.get();
+        let dados = docSnap.exists ? docSnap.data() : {};
+
+        if (!dados.lancamentos) dados.lancamentos = [];
+
+        dados.lancamentos.unshift({
+            descricao: desc,
+            valor: valor,
+            tipo: tipo,
+            formaPagamento: formaPagamento,
+            categoria: categoria,
+            data: new Date().toLocaleDateString('pt-BR')
+        });
+
+        await docRef.set(dados, { merge: true });
+
+        document.getElementById("lancDescricao").value = "";
+        document.getElementById("lancValor").value = "";
+        fecharModalLancamento();
+
+        atualizarTudo(dados);
+        alert("Lançamento salvo na nuvem!");
+    } catch (e) {
+        alert("Erro ao salvar no Firebase: " + e.message);
+    }
+}
+
+// ----------------------------------------------------------
+// 4. SALVAR NOVO CARTÃO
+// ----------------------------------------------------------
+async function salvarNovoCartao() {
+    const banco = document.getElementById("cardBanco")?.value.trim();
+    const tipo = document.getElementById("cardTipo")?.value;
+    const saldoDebito = parseFloat(document.getElementById("cardSaldoDebito")?.value) || 0;
+    const limiteCredito = parseFloat(document.getElementById("cardLimiteCredito")?.value) || 0;
+    const vencimento = document.getElementById("cardVencimento")?.value || "--";
+
+    if (!banco || !usuarioLogadoUid) {
+        alert("Informe o nome do Banco ou Instituição.");
+        return;
+    }
+
+    try {
+        const docRef = db.collection("usuarios").doc(usuarioLogadoUid);
+        const docSnap = await docRef.get();
+        let dados = docSnap.exists ? docSnap.data() : {};
+
+        if (!dados.cartoes) dados.cartoes = [];
+
+        dados.cartoes.push({ banco, tipo, saldoDebito, limiteCredito, vencimento });
+
+        await docRef.set(dados, { merge: true });
+
+        document.getElementById("cardBanco").value = "";
+        document.getElementById("cardSaldoDebito").value = "";
+        document.getElementById("cardLimiteCredito").value = "";
+        document.getElementById("cardVencimento").value = "";
+
+        fecharModalCartao();
+        atualizarTudo(dados);
+        alert("Cartão salvo na nuvem!");
+    } catch (e) {
+        alert("Erro ao salvar cartão: " + e.message);
+    }
+}
+
+// ----------------------------------------------------------
+// 5. SALVAR NOVA META
+// ----------------------------------------------------------
+async function salvarNovaMeta() {
     const nomeMeta = document.getElementById("metaNome")?.value.trim();
     const valorTotal = parseFloat(document.getElementById("metaValorTotal")?.value);
     const meses = parseInt(document.getElementById("metaMeses")?.value);
 
-    if (!nomeMeta || isNaN(valorTotal) || isNaN(meses) || meses <= 0) {
-        alert("Preencha o objetivo, o valor e o prazo em meses corretamente.");
+    if (!nomeMeta || isNaN(valorTotal) || isNaN(meses) || meses <= 0 || !usuarioLogadoUid) {
+        alert("Preencha todos os campos da meta.");
         return;
     }
 
-    const usuarioAtual = localStorage.getItem("usuarioAtual");
-    if (!usuarioAtual) return;
+    try {
+        const docRef = db.collection("usuarios").doc(usuarioLogadoUid);
+        const docSnap = await docRef.get();
+        let dados = docSnap.exists ? docSnap.data() : {};
 
-    let dados = JSON.parse(localStorage.getItem(`user_${usuarioAtual}`)) || {};
-    if (!dados.metas) dados.metas = [];
+        if (!dados.metas) dados.metas = [];
 
-    dados.metas.push({
-        nome: nomeMeta,
-        valorTotal: valorTotal,
-        meses: meses,
-        guardado: 0
-    });
+        dados.metas.push({ nome: nomeMeta, valorTotal, meses, guardado: 0 });
 
-    localStorage.setItem(`user_${usuarioAtual}`, JSON.stringify(dados));
+        await docRef.set(dados, { merge: true });
 
-    document.getElementById("metaNome").value = "";
-    document.getElementById("metaValorTotal").value = "";
-    document.getElementById("metaMeses").value = "";
+        document.getElementById("metaNome").value = "";
+        document.getElementById("metaValorTotal").value = "";
+        document.getElementById("metaMeses").value = "";
 
-    fecharModalMeta();
-    atualizarTudo(dados);
-    alert("Nova Meta criada com sucesso!");
+        fecharModalMeta();
+        atualizarTudo(dados);
+        alert("Meta salva na nuvem!");
+    } catch (e) {
+        alert("Erro ao salvar meta: " + e.message);
+    }
 }
 
 // ----------------------------------------------------------
-// 5. SALVAR SALÁRIO E ATUALIZAR INTERFACE
+// 6. SALVAR SALÁRIO
 // ----------------------------------------------------------
-function salvarSalario() {
+async function salvarSalario() {
     const valorInput = parseFloat(document.getElementById("inputSalario")?.value);
 
-    if (isNaN(valorInput) || valorInput <= 0) {
+    if (isNaN(valorInput) || valorInput <= 0 || !usuarioLogadoUid) {
         alert("Por favor, informe um valor de salário válido.");
         return;
     }
 
-    const usuarioAtual = localStorage.getItem("usuarioAtual");
-    if (!usuarioAtual) return;
+    try {
+        const docRef = db.collection("usuarios").doc(usuarioLogadoUid);
+        await docRef.set({ salario: valorInput }, { merge: true });
 
-    let dados = JSON.parse(localStorage.getItem(`user_${usuarioAtual}`)) || {};
-    dados.salario = valorInput;
-    localStorage.setItem(`user_${usuarioAtual}`, JSON.stringify(dados));
-
-    atualizarTudo(dados);
-    alert(`Salário de R$ ${valorInput.toLocaleString('pt-BR', {minimumFractionDigits: 2})} salvo!`);
+        const docSnap = await docRef.get();
+        atualizarTudo(docSnap.data());
+        alert(`Salário de R$ ${valorInput.toLocaleString('pt-BR', {minimumFractionDigits: 2})} salvo na nuvem!`);
+    } catch (e) {
+        alert("Erro ao salvar salário: " + e.message);
+    }
 }
 
-function atualizarTudo(dados) {
+// ----------------------------------------------------------
+// 7. REFRESH DE DADOS
+// ----------------------------------------------------------
+function atualizarTudo(dados = {}) {
     const salario = dados.salario || 0;
     const lista = dados.lancamentos || [];
     const cartoes = dados.cartoes || [];
@@ -209,7 +241,6 @@ function atualizarTudo(dados) {
 
     const saldoDisponivel = totalEntradas - totalSaidas;
 
-    // Atualiza Valores do Dashboard
     const elSaldo = document.getElementById("valSaldo");
     const elEntradas = document.getElementById("valEntradas");
     const elSaidas = document.getElementById("valSaidas");
@@ -220,7 +251,7 @@ function atualizarTudo(dados) {
     if (elSaidas) elSaidas.innerHTML = `R$ ${totalSaidas.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
     if (elInputSalario && salario > 0) elInputSalario.value = salario;
 
-    // 1. Renderiza Histórico na Dashboard
+    // Renderiza Histórico
     const containerHist = document.getElementById("containerHistorico");
     if (containerHist) {
         if (lista.length === 0 && salario === 0) {
@@ -253,7 +284,7 @@ function atualizarTudo(dados) {
         }
     }
 
-    // 2. Renderiza Tabela na Aba Lançamentos
+    // Renderiza Tabela
     const corpoTabela = document.getElementById("tabelaLancamentosCorpo");
     if (corpoTabela) {
         if (lista.length === 0 && salario === 0) {
@@ -287,7 +318,7 @@ function atualizarTudo(dados) {
         }
     }
 
-    // 3. Renderiza Cartões Dinâmicos
+    // Renderiza Cartões
     const containerCartoes = document.getElementById("containerCartoes");
     if (containerCartoes) {
         if (cartoes.length === 0) {
@@ -328,7 +359,7 @@ function atualizarTudo(dados) {
         }
     }
 
-    // 4. Renderiza Metas Dinâmicas
+    // Renderiza Metas
     const containerMetas = document.getElementById("containerMetas");
     if (containerMetas) {
         if (metas.length === 0) {
@@ -355,37 +386,9 @@ function atualizarTudo(dados) {
 }
 
 // ----------------------------------------------------------
-// 6. ALTERNÂNCIA DE ABAS DO MENU
+// 8. AUTENTICAÇÃO FIREBASE
 // ----------------------------------------------------------
-function mudarAba(nomeAba, elemento) {
-    abaAtual = nomeAba; // Atualiza a aba ativa
-
-    const abas = document.querySelectorAll('.view-aba');
-    abas.forEach(aba => aba.style.display = 'none');
-
-    const botoesMenu = document.querySelectorAll('.item-menu');
-    botoesMenu.forEach(btn => btn.classList.remove('ativo'));
-
-    const abaAlvo = document.getElementById(nomeAba);
-    if (abaAlvo) abaAlvo.style.display = 'block';
-
-    if (elemento) elemento.classList.add('ativo');
-}
-
-// NAVEGAÇÃO DE CADASTRO E LOGIN
-function abrirCadastro() {
-    if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
-    if (app) app.style.setProperty("display", "none", "important");
-    if (cadastroScreen) cadastroScreen.style.setProperty("display", "flex", "important");
-}
-
-function voltarLogin() {
-    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
-    if (app) app.style.setProperty("display", "none", "important");
-    if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
-}
-
-function cadastrar() {
+async function cadastrar() {
     const nome = document.getElementById("cadNome")?.value.trim();
     const usuario = document.getElementById("cadUsuario")?.value.trim();
     const senha = document.getElementById("cadSenha")?.value;
@@ -401,52 +404,95 @@ function cadastrar() {
         return;
     }
 
-    localStorage.setItem(`user_${usuario}`, JSON.stringify({
-        nome,
-        usuario,
-        senha,
-        salario: 0,
-        lancamentos: [],
-        cartoes: [],
-        metas: []
-    }));
+    try {
+        const email = usuarioParaEmail(usuario);
+        const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
+        const user = userCredential.user;
 
-    alert("Conta criada com sucesso!");
-    voltarLogin();
+        await db.collection("usuarios").doc(user.uid).set({
+            nome: nome,
+            usuario: usuario,
+            salario: 0,
+            lancamentos: [],
+            cartoes: [],
+            metas: []
+        });
+
+        alert("Conta criada na nuvem com sucesso!");
+        voltarLogin();
+    } catch (e) {
+        alert("Erro no cadastro: " + e.message);
+    }
 }
 
-function entrar() {
+async function entrar() {
     const usuario = document.getElementById("loginUsuario")?.value.trim();
     const senha = document.getElementById("loginSenha")?.value;
 
-    let dados = JSON.parse(localStorage.getItem(`user_${usuario}`));
-
-    if (!dados) {
-        dados = { nome: usuario, usuario: usuario, senha: senha, salario: 0, lancamentos: [], cartoes: [], metas: [] };
-        localStorage.setItem(`user_${usuario}`, JSON.stringify(dados));
-    }
-
-    if (dados.senha !== senha) {
-        alert("Senha incorreta.");
+    if (!usuario || !senha) {
+        alert("Digite seu usuário e senha.");
         return;
     }
 
-    localStorage.setItem("usuarioAtual", usuario);
-
-    if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
-    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
-    if (app) app.style.setProperty("display", "flex", "important");
-
-    const nome = document.getElementById("nomeUsuario");
-    if (nome) nome.innerHTML = `Olá, ${dados.nome || usuario} 👋`;
-
-    atualizarTudo(dados);
+    try {
+        const email = usuarioParaEmail(usuario);
+        await auth.signInWithEmailAndPassword(email, senha);
+    } catch (e) {
+        alert("Falha no login: Usuário ou senha incorretos.");
+    }
 }
 
 function sair() {
-    localStorage.removeItem("usuarioAtual");
+    auth.signOut();
+}
+
+// OBSERVADOR DE SESSÃO DO FIREBASE
+auth.onAuthStateChanged(async (user) => {
+    if (user) {
+        usuarioLogadoUid = user.uid;
+
+        if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
+        if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+        if (app) app.style.setProperty("display", "flex", "important");
+
+        const docSnap = await db.collection("usuarios").doc(user.uid).get();
+        if (docSnap.exists) {
+            const dados = docSnap.data();
+            const elNome = document.getElementById("nomeUsuario");
+            if (elNome) elNome.innerHTML = `Olá, ${dados.nome || dados.usuario} 👋`;
+            atualizarTudo(dados);
+        }
+    } else {
+        usuarioLogadoUid = null;
+        if (app) app.style.setProperty("display", "none", "important");
+        if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+        if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
+    }
+});
+
+function mudarAba(nomeAba, elemento) {
+    abaAtual = nomeAba;
+    const abas = document.querySelectorAll('.view-aba');
+    abas.forEach(aba => aba.style.display = 'none');
+
+    const botoesMenu = document.querySelectorAll('.item-menu');
+    botoesMenu.forEach(btn => btn.classList.remove('ativo'));
+
+    const abaAlvo = document.getElementById(nomeAba);
+    if (abaAlvo) abaAlvo.style.display = 'block';
+
+    if (elemento) elemento.classList.add('ativo');
+}
+
+function abrirCadastro() {
+    if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
     if (app) app.style.setProperty("display", "none", "important");
+    if (cadastroScreen) cadastroScreen.style.setProperty("display", "flex", "important");
+}
+
+function voltarLogin() {
     if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
+    if (app) app.style.setProperty("display", "none", "important");
     if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
 }
 
@@ -480,58 +526,6 @@ function enviarCodigoSMS() {
 }
 
 function validarEResetarSenha() {
-    const codigoDig = document.getElementById("smsCodigo")?.value.trim();
-    const novaSenha = document.getElementById("novaSenhaSMS")?.value;
-    const usuario = document.getElementById("loginUsuario")?.value.trim();
-
-    if (codigoDig !== codigoEnviadoSMS) {
-        alert("Código de verificação incorreto!");
-        return;
-    }
-
-    if (!novaSenha) {
-        alert("Digite a nova senha.");
-        return;
-    }
-
-    let dados = JSON.parse(localStorage.getItem(`user_${usuario}`));
-
-    if (dados) {
-        dados.senha = novaSenha;
-        localStorage.setItem(`user_${usuario}`, JSON.stringify(dados));
-        alert("Senha alterada com sucesso! Faça login com a nova senha.");
-        fecharEsqueciSenha();
-    } else {
-        alert("Preencha o campo Username com seu usuário antes de redefinir.");
-    }
+    alert("Para redefinição real de senha na nuvem, utilize o e-mail cadastrado.");
+    fecharEsqueciSenha();
 }
-
-// INICIALIZAÇÃO AUTOMÁTICA
-window.addEventListener("load", () => {
-    const usuarioSalvo = localStorage.getItem("usuarioAtual");
-
-    if (!usuarioSalvo) {
-        if (app) app.style.setProperty("display", "none", "important");
-        if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
-        if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
-        return;
-    }
-
-    const dados = JSON.parse(localStorage.getItem(`user_${usuarioSalvo}`));
-
-    if (!dados) {
-        if (app) app.style.setProperty("display", "none", "important");
-        if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
-        if (loginScreen) loginScreen.style.setProperty("display", "flex", "important");
-        return;
-    }
-
-    if (loginScreen) loginScreen.style.setProperty("display", "none", "important");
-    if (cadastroScreen) cadastroScreen.style.setProperty("display", "none", "important");
-    if (app) app.style.setProperty("display", "flex", "important");
-
-    const nome = document.getElementById("nomeUsuario");
-    if (nome) nome.innerHTML = `Olá, ${dados.nome || usuarioSalvo} 👋`;
-
-    atualizarTudo(dados);
-});
